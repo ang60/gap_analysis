@@ -252,62 +252,6 @@ export default function RisksPage() {
         </div>
       </div>
 
-      {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Risks</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{risks.length}</div>
-            <p className="text-xs text-muted-foreground">
-              {activeRisks.length} active risks
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">High/Critical Risks</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">{highRisks.length}</div>
-            <p className="text-xs text-muted-foreground">
-              Require immediate attention
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Mitigated Risks</CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              {risks.filter(r => r.status === 'MITIGATED').length}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Successfully addressed
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Risk Trend</CardTitle>
-            <TrendingDown className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">-12%</div>
-            <p className="text-xs text-muted-foreground">
-              From last month
-            </p>
-          </CardContent>
-        </Card>
-      </div>
 
       {/* Filters */}
       <Card>
@@ -325,35 +269,35 @@ export default function RisksPage() {
                  placeholder="Search risks..."
                  value={searchTerm}
                  onChange={(e) => setSearchTerm(e.target.value)}
-                 className="pl-10 border-black text-black"
+                 className="pl-10"
                />
             </div>
              <Select value={filterStatus} onValueChange={setFilterStatus}>
-               <SelectTrigger className="border-black text-black">
+               <SelectTrigger>
                  <SelectValue placeholder="Status" />
                </SelectTrigger>
-               <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                 <SelectItem value="all" className="text-black hover:bg-gray-100">All Status</SelectItem>
-                 <SelectItem value="ACTIVE" className="text-black hover:bg-gray-100">Active</SelectItem>
-                 <SelectItem value="MITIGATED" className="text-black hover:bg-gray-100">Mitigated</SelectItem>
-                 <SelectItem value="ACCEPTED" className="text-black hover:bg-gray-100">Accepted</SelectItem>
-                 <SelectItem value="CLOSED" className="text-black hover:bg-gray-100">Closed</SelectItem>
+               <SelectContent>
+                 <SelectItem value="all">All Status</SelectItem>
+                 <SelectItem value="ACTIVE">Active</SelectItem>
+                 <SelectItem value="MITIGATED">Mitigated</SelectItem>
+                 <SelectItem value="ACCEPTED">Accepted</SelectItem>
+                 <SelectItem value="CLOSED">Closed</SelectItem>
                </SelectContent>
              </Select>
              <Select value={filterRiskLevel} onValueChange={setFilterRiskLevel}>
-               <SelectTrigger className="border-black text-black">
+               <SelectTrigger>
                  <SelectValue placeholder="Risk Level" />
                </SelectTrigger>
-               <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                 <SelectItem value="all" className="text-black hover:bg-gray-100">All Risk Levels</SelectItem>
-                 <SelectItem value="CRITICAL" className="text-black hover:bg-gray-100">Critical</SelectItem>
-                 <SelectItem value="HIGH" className="text-black hover:bg-gray-100">High</SelectItem>
-                 <SelectItem value="MEDIUM" className="text-black hover:bg-gray-100">Medium</SelectItem>
-                 <SelectItem value="LOW" className="text-black hover:bg-gray-100">Low</SelectItem>
-                 <SelectItem value="VERY_LOW" className="text-black hover:bg-gray-100">Very Low</SelectItem>
+               <SelectContent>
+                 <SelectItem value="all">All Risk Levels</SelectItem>
+                 <SelectItem value="CRITICAL">Critical</SelectItem>
+                 <SelectItem value="HIGH">High</SelectItem>
+                 <SelectItem value="MEDIUM">Medium</SelectItem>
+                 <SelectItem value="LOW">Low</SelectItem>
+                 <SelectItem value="VERY_LOW">Very Low</SelectItem>
                </SelectContent>
              </Select>
-             <Button variant="outline" onClick={fetchRisks} className="border-black text-black hover:bg-black hover:text-white">
+             <Button variant="outline" onClick={fetchRisks}>
                Refresh
              </Button>
           </div>

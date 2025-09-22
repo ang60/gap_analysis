@@ -334,12 +334,12 @@ function DashboardPage() {
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: `p-3 rounded-lg bg-${metric.color}-100`,
+                                    className: `p-3 rounded-lg ${metric.color === 'blue' ? 'bg-blue-100' : metric.color === 'orange' ? 'bg-orange-100' : metric.color === 'green' ? 'bg-green-100' : metric.color === 'red' ? 'bg-red-100' : 'bg-gray-100'}`,
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(metric.icon, {
-                                        className: `h-6 w-6 text-${metric.color}-600`
+                                        className: `h-6 w-6 ${metric.color === 'blue' ? 'text-blue-600' : metric.color === 'orange' ? 'text-orange-600' : metric.color === 'green' ? 'text-green-600' : metric.color === 'red' ? 'text-red-600' : 'text-gray-600'}`
                                     }, void 0, false, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                        lineNumber: 218,
+                                        lineNumber: 223,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
@@ -371,7 +371,7 @@ function DashboardPage() {
                         children: "Quick Actions"
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                        lineNumber: 227,
+                        lineNumber: 237,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -383,17 +383,17 @@ function DashboardPage() {
                                     className: "flex items-center space-x-3",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: `p-2 rounded-lg bg-${action.color}-100`,
+                                            className: `p-2 rounded-lg ${action.color === 'blue' ? 'bg-blue-100' : action.color === 'green' ? 'bg-green-100' : action.color === 'red' ? 'bg-red-100' : action.color === 'purple' ? 'bg-purple-100' : 'bg-gray-100'}`,
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(action.icon, {
-                                                className: `h-5 w-5 text-${action.color}-600`
+                                                className: `h-5 w-5 ${action.color === 'blue' ? 'text-blue-600' : action.color === 'green' ? 'text-green-600' : action.color === 'red' ? 'text-red-600' : action.color === 'purple' ? 'text-purple-600' : 'text-gray-600'}`
                                             }, void 0, false, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                lineNumber: 237,
+                                                lineNumber: 252,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                            lineNumber: 236,
+                                            lineNumber: 246,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -404,7 +404,7 @@ function DashboardPage() {
                                                     children: action.name
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                    lineNumber: 240,
+                                                    lineNumber: 260,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -412,42 +412,42 @@ function DashboardPage() {
                                                     children: action.description
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                    lineNumber: 243,
+                                                    lineNumber: 263,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                            lineNumber: 239,
+                                            lineNumber: 259,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$arrow$2d$right$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ArrowRight$3e$__["ArrowRight"], {
                                             className: "h-4 w-4 text-gray-400 group-hover:text-gray-600"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                            lineNumber: 245,
+                                            lineNumber: 265,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                    lineNumber: 235,
+                                    lineNumber: 245,
                                     columnNumber: 15
                                 }, this)
                             }, action.name, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                lineNumber: 230,
+                                lineNumber: 240,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                        lineNumber: 228,
+                        lineNumber: 238,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                lineNumber: 226,
+                lineNumber: 236,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -461,7 +461,7 @@ function DashboardPage() {
                                 children: "Recent Activity"
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                lineNumber: 255,
+                                lineNumber: 275,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -475,12 +475,12 @@ function DashboardPage() {
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                    lineNumber: 260,
+                                                    lineNumber: 280,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                lineNumber: 259,
+                                                lineNumber: 279,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -491,7 +491,7 @@ function DashboardPage() {
                                                         children: activity.title
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                        lineNumber: 263,
+                                                        lineNumber: 283,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -499,7 +499,7 @@ function DashboardPage() {
                                                         children: activity.description
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                        lineNumber: 264,
+                                                        lineNumber: 284,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -507,24 +507,24 @@ function DashboardPage() {
                                                         children: activity.time
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                        lineNumber: 265,
+                                                        lineNumber: 285,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                lineNumber: 262,
+                                                lineNumber: 282,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, activity.id, true, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                        lineNumber: 258,
+                                        lineNumber: 278,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                lineNumber: 256,
+                                lineNumber: 276,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -535,18 +535,18 @@ function DashboardPage() {
                                     children: "View all activity →"
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                    lineNumber: 271,
+                                    lineNumber: 291,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                lineNumber: 270,
+                                lineNumber: 290,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                        lineNumber: 254,
+                        lineNumber: 274,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -557,7 +557,7 @@ function DashboardPage() {
                                 children: "Upcoming Schedules"
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                lineNumber: 282,
+                                lineNumber: 302,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -573,7 +573,7 @@ function DashboardPage() {
                                                         children: schedule.title
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                        lineNumber: 287,
+                                                        lineNumber: 307,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -581,13 +581,13 @@ function DashboardPage() {
                                                         children: schedule.branch
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                        lineNumber: 288,
+                                                        lineNumber: 308,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                lineNumber: 286,
+                                                lineNumber: 306,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -598,7 +598,7 @@ function DashboardPage() {
                                                         children: schedule.priority
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                        lineNumber: 291,
+                                                        lineNumber: 311,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -606,24 +606,24 @@ function DashboardPage() {
                                                         children: schedule.dueDate
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                        lineNumber: 294,
+                                                        lineNumber: 314,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                lineNumber: 290,
+                                                lineNumber: 310,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, schedule.id, true, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                        lineNumber: 285,
+                                        lineNumber: 305,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                lineNumber: 283,
+                                lineNumber: 303,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -634,24 +634,24 @@ function DashboardPage() {
                                     children: "View all schedules →"
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                    lineNumber: 300,
+                                    lineNumber: 320,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                lineNumber: 299,
+                                lineNumber: 319,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                        lineNumber: 281,
+                        lineNumber: 301,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                lineNumber: 252,
+                lineNumber: 272,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -662,7 +662,7 @@ function DashboardPage() {
                         children: "ISO 27001:2022 Compliance Overview"
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                        lineNumber: 312,
+                        lineNumber: 332,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -678,7 +678,7 @@ function DashboardPage() {
                                                 children: item.clause
                                             }, void 0, false, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                lineNumber: 317,
+                                                lineNumber: 337,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -689,13 +689,13 @@ function DashboardPage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                                lineNumber: 318,
+                                                lineNumber: 338,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                        lineNumber: 316,
+                                        lineNumber: 336,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -707,23 +707,23 @@ function DashboardPage() {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                            lineNumber: 321,
+                                            lineNumber: 341,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                        lineNumber: 320,
+                                        lineNumber: 340,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, item.clause, true, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                                lineNumber: 315,
+                                lineNumber: 335,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                        lineNumber: 313,
+                        lineNumber: 333,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -734,18 +734,18 @@ function DashboardPage() {
                             children: "View detailed compliance report →"
                         }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                            lineNumber: 330,
+                            lineNumber: 350,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                        lineNumber: 329,
+                        lineNumber: 349,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/page.tsx",
-                lineNumber: 311,
+                lineNumber: 331,
                 columnNumber: 7
             }, this)
         ]

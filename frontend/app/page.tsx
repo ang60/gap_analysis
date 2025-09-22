@@ -10,7 +10,7 @@ export default function Home() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <Shield className="h-8 w-8 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900">GapAnalysis Pro</span>
+              <span className="text-xl font-bold text-gray-900">GapAnalysis</span>
             </div>
             <div className="flex items-center space-x-4">
               <Link

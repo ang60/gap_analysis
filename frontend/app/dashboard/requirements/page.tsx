@@ -208,32 +208,32 @@ export default function RequirementsPage() {
                 placeholder="Search requirements..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 border-black text-black"
+                className="pl-10"
               />
             </div>
             <Select value={filterCategory} onValueChange={setFilterCategory}>
-              <SelectTrigger className="border-black text-black">
+              <SelectTrigger>
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
-              <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                <SelectItem value="all" className="text-black hover:bg-gray-100">All Categories</SelectItem>
-                <SelectItem value="ISO 27001" className="text-black hover:bg-gray-100">ISO 27001</SelectItem>
-                <SelectItem value="CBK" className="text-black hover:bg-gray-100">CBK Guidelines</SelectItem>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="ISO 27001">ISO 27001</SelectItem>
+                <SelectItem value="CBK">CBK Guidelines</SelectItem>
               </SelectContent>
             </Select>
             <Select value={filterPriority} onValueChange={setFilterPriority}>
-              <SelectTrigger className="border-black text-black">
+              <SelectTrigger>
                 <SelectValue placeholder="Priority" />
               </SelectTrigger>
-              <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                <SelectItem value="all" className="text-black hover:bg-gray-100">All Priorities</SelectItem>
-                <SelectItem value="CRITICAL" className="text-black hover:bg-gray-100">Critical</SelectItem>
-                <SelectItem value="HIGH" className="text-black hover:bg-gray-100">High</SelectItem>
-                <SelectItem value="MEDIUM" className="text-black hover:bg-gray-100">Medium</SelectItem>
-                <SelectItem value="LOW" className="text-black hover:bg-gray-100">Low</SelectItem>
+              <SelectContent>
+                <SelectItem value="all">All Priorities</SelectItem>
+                <SelectItem value="CRITICAL">Critical</SelectItem>
+                <SelectItem value="HIGH">High</SelectItem>
+                <SelectItem value="MEDIUM">Medium</SelectItem>
+                <SelectItem value="LOW">Low</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" onClick={fetchRequirements} className="border-black text-black hover:bg-black hover:text-white">
+            <Button variant="outline" onClick={fetchRequirements}>
               Refresh
             </Button>
           </div>

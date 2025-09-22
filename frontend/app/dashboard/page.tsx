@@ -214,8 +214,18 @@ export default function DashboardPage() {
                   {metric.change}
                 </p>
               </div>
-              <div className={`p-3 rounded-lg bg-${metric.color}-100`}>
-                <metric.icon className={`h-6 w-6 text-${metric.color}-600`} />
+              <div className={`p-3 rounded-lg ${
+                metric.color === 'blue' ? 'bg-blue-100' :
+                metric.color === 'orange' ? 'bg-orange-100' :
+                metric.color === 'green' ? 'bg-green-100' :
+                metric.color === 'red' ? 'bg-red-100' : 'bg-gray-100'
+              }`}>
+                <metric.icon className={`h-6 w-6 ${
+                  metric.color === 'blue' ? 'text-blue-600' :
+                  metric.color === 'orange' ? 'text-orange-600' :
+                  metric.color === 'green' ? 'text-green-600' :
+                  metric.color === 'red' ? 'text-red-600' : 'text-gray-600'
+                }`} />
               </div>
             </div>
           </div>
@@ -233,8 +243,18 @@ export default function DashboardPage() {
               className="p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors group"
             >
               <div className="flex items-center space-x-3">
-                <div className={`p-2 rounded-lg bg-${action.color}-100`}>
-                  <action.icon className={`h-5 w-5 text-${action.color}-600`} />
+                <div className={`p-2 rounded-lg ${
+                  action.color === 'blue' ? 'bg-blue-100' :
+                  action.color === 'green' ? 'bg-green-100' :
+                  action.color === 'red' ? 'bg-red-100' :
+                  action.color === 'purple' ? 'bg-purple-100' : 'bg-gray-100'
+                }`}>
+                  <action.icon className={`h-5 w-5 ${
+                    action.color === 'blue' ? 'text-blue-600' :
+                    action.color === 'green' ? 'text-green-600' :
+                    action.color === 'red' ? 'text-red-600' :
+                    action.color === 'purple' ? 'text-purple-600' : 'text-gray-600'
+                  }`} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 group-hover:text-gray-700">

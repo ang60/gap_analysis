@@ -278,47 +278,47 @@ export default function SchedulesPage() {
                  placeholder="Search schedules..."
                  value={searchTerm}
                  onChange={(e) => setSearchTerm(e.target.value)}
-                 className="pl-10 border-black text-black"
+                 className="pl-10"
                />
             </div>
              <Select value={filterStatus} onValueChange={setFilterStatus}>
-               <SelectTrigger className="border-black text-black">
+               <SelectTrigger>
                  <SelectValue placeholder="Status" />
                </SelectTrigger>
-               <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                 <SelectItem value="all" className="text-black hover:bg-gray-100">All Status</SelectItem>
-                 <SelectItem value="PENDING" className="text-black hover:bg-gray-100">Pending</SelectItem>
-                 <SelectItem value="IN_PROGRESS" className="text-black hover:bg-gray-100">In Progress</SelectItem>
-                 <SelectItem value="COMPLETED" className="text-black hover:bg-gray-100">Completed</SelectItem>
-                 <SelectItem value="OVERDUE" className="text-black hover:bg-gray-100">Overdue</SelectItem>
+               <SelectContent>
+                 <SelectItem value="all">All Status</SelectItem>
+                 <SelectItem value="PENDING">Pending</SelectItem>
+                 <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+                 <SelectItem value="COMPLETED">Completed</SelectItem>
+                 <SelectItem value="OVERDUE">Overdue</SelectItem>
                </SelectContent>
              </Select>
              <Select value={filterType} onValueChange={setFilterType}>
-               <SelectTrigger className="border-black text-black">
+               <SelectTrigger>
                  <SelectValue placeholder="Type" />
                </SelectTrigger>
-               <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                 <SelectItem value="all" className="text-black hover:bg-gray-100">All Types</SelectItem>
-                 <SelectItem value="RISK_ASSESSMENT" className="text-black hover:bg-gray-100">Risk Assessment</SelectItem>
-                 <SelectItem value="COMPLIANCE_REVIEW" className="text-black hover:bg-gray-100">Compliance Review</SelectItem>
-                 <SelectItem value="AUDIT" className="text-black hover:bg-gray-100">Audit</SelectItem>
-                 <SelectItem value="TRAINING" className="text-black hover:bg-gray-100">Training</SelectItem>
-                 <SelectItem value="MAINTENANCE" className="text-black hover:bg-gray-100">Maintenance</SelectItem>
+               <SelectContent>
+                 <SelectItem value="all">All Types</SelectItem>
+                 <SelectItem value="RISK_ASSESSMENT">Risk Assessment</SelectItem>
+                 <SelectItem value="COMPLIANCE_REVIEW">Compliance Review</SelectItem>
+                 <SelectItem value="AUDIT">Audit</SelectItem>
+                 <SelectItem value="TRAINING">Training</SelectItem>
+                 <SelectItem value="MAINTENANCE">Maintenance</SelectItem>
                </SelectContent>
              </Select>
              <Select value={filterPriority} onValueChange={setFilterPriority}>
-               <SelectTrigger className="border-black text-black">
+               <SelectTrigger>
                  <SelectValue placeholder="Priority" />
                </SelectTrigger>
-               <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                 <SelectItem value="all" className="text-black hover:bg-gray-100">All Priorities</SelectItem>
-                 <SelectItem value="CRITICAL" className="text-black hover:bg-gray-100">Critical</SelectItem>
-                 <SelectItem value="HIGH" className="text-black hover:bg-gray-100">High</SelectItem>
-                 <SelectItem value="MEDIUM" className="text-black hover:bg-gray-100">Medium</SelectItem>
-                 <SelectItem value="LOW" className="text-black hover:bg-gray-100">Low</SelectItem>
+               <SelectContent>
+                 <SelectItem value="all">All Priorities</SelectItem>
+                 <SelectItem value="CRITICAL">Critical</SelectItem>
+                 <SelectItem value="HIGH">High</SelectItem>
+                 <SelectItem value="MEDIUM">Medium</SelectItem>
+                 <SelectItem value="LOW">Low</SelectItem>
                </SelectContent>
              </Select>
-             <Button variant="outline" onClick={fetchSchedules} className="border-black text-black hover:bg-black hover:text-white">
+             <Button variant="outline" onClick={fetchSchedules}>
                Refresh
              </Button>
           </div>

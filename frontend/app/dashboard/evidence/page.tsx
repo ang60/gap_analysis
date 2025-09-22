@@ -302,36 +302,36 @@ export default function EvidencePage() {
                  placeholder="Search evidence..."
                  value={searchTerm}
                  onChange={(e) => setSearchTerm(e.target.value)}
-                 className="pl-10 border-black text-black"
+                 className="pl-10"
                />
             </div>
              <Select value={filterType} onValueChange={setFilterType}>
-               <SelectTrigger className="border-black text-black">
+               <SelectTrigger>
                  <SelectValue placeholder="Type" />
                </SelectTrigger>
-               <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                 <SelectItem value="all" className="text-black hover:bg-gray-100">All Types</SelectItem>
-                 <SelectItem value="DOCUMENT" className="text-black hover:bg-gray-100">Document</SelectItem>
-                 <SelectItem value="SCREENSHOT" className="text-black hover:bg-gray-100">Screenshot</SelectItem>
-                 <SelectItem value="POLICY" className="text-black hover:bg-gray-100">Policy</SelectItem>
-                 <SelectItem value="PROCEDURE" className="text-black hover:bg-gray-100">Procedure</SelectItem>
-                 <SelectItem value="TRAINING_RECORD" className="text-black hover:bg-gray-100">Training Record</SelectItem>
-                 <SelectItem value="AUDIT_REPORT" className="text-black hover:bg-gray-100">Audit Report</SelectItem>
-                 <SelectItem value="OTHER" className="text-black hover:bg-gray-100">Other</SelectItem>
+               <SelectContent>
+                 <SelectItem value="all">All Types</SelectItem>
+                 <SelectItem value="DOCUMENT">Document</SelectItem>
+                 <SelectItem value="SCREENSHOT">Screenshot</SelectItem>
+                 <SelectItem value="POLICY">Policy</SelectItem>
+                 <SelectItem value="PROCEDURE">Procedure</SelectItem>
+                 <SelectItem value="TRAINING_RECORD">Training Record</SelectItem>
+                 <SelectItem value="AUDIT_REPORT">Audit Report</SelectItem>
+                 <SelectItem value="OTHER">Other</SelectItem>
                </SelectContent>
              </Select>
              <Select value={filterStatus} onValueChange={setFilterStatus}>
-               <SelectTrigger className="border-black text-black">
+               <SelectTrigger>
                  <SelectValue placeholder="Status" />
                </SelectTrigger>
-               <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                 <SelectItem value="all" className="text-black hover:bg-gray-100">All Status</SelectItem>
-                 <SelectItem value="PENDING" className="text-black hover:bg-gray-100">Pending Review</SelectItem>
-                 <SelectItem value="APPROVED" className="text-black hover:bg-gray-100">Approved</SelectItem>
-                 <SelectItem value="REJECTED" className="text-black hover:bg-gray-100">Rejected</SelectItem>
+               <SelectContent>
+                 <SelectItem value="all">All Status</SelectItem>
+                 <SelectItem value="PENDING">Pending Review</SelectItem>
+                 <SelectItem value="APPROVED">Approved</SelectItem>
+                 <SelectItem value="REJECTED">Rejected</SelectItem>
                </SelectContent>
              </Select>
-             <Button variant="outline" onClick={fetchEvidence} className="border-black text-black hover:bg-black hover:text-white">
+             <Button variant="outline" onClick={fetchEvidence}>
                Refresh
              </Button>
           </div>

@@ -248,34 +248,34 @@ export default function GapAnalysisPage() {
                  placeholder="Search assessments..."
                  value={searchTerm}
                  onChange={(e) => setSearchTerm(e.target.value)}
-                 className="pl-10 border-black text-black"
+                 className="pl-10"
                />
             </div>
              <Select value={filterStatus} onValueChange={setFilterStatus}>
-               <SelectTrigger className="border-black text-black">
+               <SelectTrigger>
                  <SelectValue placeholder="Status" />
                </SelectTrigger>
-               <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                 <SelectItem value="all" className="text-black hover:bg-gray-100">All Status</SelectItem>
-                 <SelectItem value="0" className="text-black hover:bg-gray-100">Not Implemented</SelectItem>
-                 <SelectItem value="1" className="text-black hover:bg-gray-100">Partially</SelectItem>
-                 <SelectItem value="2" className="text-black hover:bg-gray-100">Mostly</SelectItem>
-                 <SelectItem value="3" className="text-black hover:bg-gray-100">Fully</SelectItem>
+               <SelectContent>
+                 <SelectItem value="all">All Status</SelectItem>
+                 <SelectItem value="0">Not Implemented</SelectItem>
+                 <SelectItem value="1">Partially</SelectItem>
+                 <SelectItem value="2">Mostly</SelectItem>
+                 <SelectItem value="3">Fully</SelectItem>
                </SelectContent>
              </Select>
              <Select value={filterRisk} onValueChange={setFilterRisk}>
-               <SelectTrigger className="border-black text-black">
+               <SelectTrigger>
                  <SelectValue placeholder="Risk Level" />
                </SelectTrigger>
-               <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                 <SelectItem value="all" className="text-black hover:bg-gray-100">All Risk Levels</SelectItem>
-                 <SelectItem value="0" className="text-black hover:bg-gray-100">Low</SelectItem>
-                 <SelectItem value="1" className="text-black hover:bg-gray-100">Medium</SelectItem>
-                 <SelectItem value="2" className="text-black hover:bg-gray-100">High</SelectItem>
-                 <SelectItem value="3" className="text-black hover:bg-gray-100">Critical</SelectItem>
+               <SelectContent>
+                 <SelectItem value="all">All Risk Levels</SelectItem>
+                 <SelectItem value="0">Low</SelectItem>
+                 <SelectItem value="1">Medium</SelectItem>
+                 <SelectItem value="2">High</SelectItem>
+                 <SelectItem value="3">Critical</SelectItem>
                </SelectContent>
              </Select>
-             <Button variant="outline" onClick={fetchAssessments} className="border-black text-black hover:bg-black hover:text-white">
+             <Button variant="outline" onClick={fetchAssessments}>
                Refresh
              </Button>
           </div>
