@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { 
   Shield, 
   Building, 
@@ -83,6 +85,28 @@ export default function SuperAdminPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'organizations' | 'users'>('overview');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  
+  // View/Edit modals state
+  const [selectedOrganization, setSelectedOrganization] = useState<Organization | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [showOrgModal, setShowOrgModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  
+  // Form state for editing
+  const [editOrgData, setEditOrgData] = useState({
+    name: '',
+    domain: '',
+    subdomain: '',
+    isActive: true
+  });
+  const [editUserData, setEditUserData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    role: '',
+    isActive: true
+  });
 
   useEffect(() => {
     fetchSystemData();
@@ -98,7 +122,7 @@ export default function SuperAdminPage() {
       ]);
       
       setSystemStats(dashboardResponse.data.statistics);
-      setOrganizations(dashboardResponse.data.recentOrganizations);
+      setOrganizations(organizationsResponse.data);
       setUsers(usersResponse.data);
     } catch (error) {
       console.error('Failed to fetch system data:', error);
@@ -127,6 +151,57 @@ export default function SuperAdminPage() {
       'STAFF': 'bg-gray-100 text-gray-800'
     };
     return colorMap[role] || 'bg-gray-100 text-gray-800';
+  };
+
+  // Organization handlers
+  const handleViewOrganization = (org: Organization) => {
+    setSelectedOrganization(org);
+    setIsEditing(false);
+    setShowOrgModal(true);
+  };
+
+  const handleEditOrganization = (org: Organization) => {
+    setSelectedOrganization(org);
+    setEditOrgData({
+      name: org.name,
+      domain: org.domain,
+      subdomain: org.subdomain || '',
+      isActive: org.isActive
+    });
+    setIsEditing(true);
+    setShowOrgModal(true);
+  };
+
+  const handleCloseOrgModal = () => {
+    setShowOrgModal(false);
+    setSelectedOrganization(null);
+    setIsEditing(false);
+  };
+
+  // User handlers
+  const handleViewUser = (user: User) => {
+    setSelectedUser(user);
+    setIsEditing(false);
+    setShowUserModal(true);
+  };
+
+  const handleEditUser = (user: User) => {
+    setSelectedUser(user);
+    setEditUserData({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role,
+      isActive: user.isActive
+    });
+    setIsEditing(true);
+    setShowUserModal(true);
+  };
+
+  const handleCloseUserModal = () => {
+    setShowUserModal(false);
+    setSelectedUser(null);
+    setIsEditing(false);
   };
 
   const filteredOrganizations = organizations.filter(org => {
@@ -317,7 +392,7 @@ export default function SuperAdminPage() {
                         <Badge className={org.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}>
                           {org.isActive ? 'Active' : 'Inactive'}
                         </Badge>
-                        <span className="text-sm text-gray-600">{org._count.users} users</span>
+                        <span className="text-sm text-gray-600">{org._count?.users || 0} users</span>
                       </div>
                     </div>
                   ))}
@@ -385,20 +460,28 @@ export default function SuperAdminPage() {
                       </div>
                       <div className="flex items-center space-x-4">
                         <div className="text-right">
-                          <p className="text-sm text-gray-600">{org._count.users} users</p>
+                          <p className="text-sm text-gray-600">{org._count?.users || 0} users</p>
                           <p className="text-xs text-gray-500">
-                            {org._count.requirements} requirements
+                            {org._count?.requirements || 0} requirements
                           </p>
                         </div>
                         <Badge className={org.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}>
                           {org.isActive ? 'Active' : 'Inactive'}
                         </Badge>
                         <div className="flex space-x-2">
-                          <Button size="sm" variant="outline">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleViewOrganization(org)}
+                          >
                             <Eye className="h-4 w-4 mr-1" />
                             View
                           </Button>
-                          <Button size="sm" variant="outline">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleEditOrganization(org)}
+                          >
                             <Edit className="h-4 w-4 mr-1" />
                             Edit
                           </Button>
@@ -463,11 +546,19 @@ export default function SuperAdminPage() {
                           {getRoleDisplayName(user.role)}
                         </Badge>
                         <div className="flex space-x-2">
-                          <Button size="sm" variant="outline">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleViewUser(user)}
+                          >
                             <Eye className="h-4 w-4 mr-1" />
                             View
                           </Button>
-                          <Button size="sm" variant="outline">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleEditUser(user)}
+                          >
                             <Edit className="h-4 w-4 mr-1" />
                             Edit
                           </Button>
@@ -480,6 +571,232 @@ export default function SuperAdminPage() {
             </Card>
           </div>
         )}
+
+        {/* Organization Modal */}
+        <Dialog open={showOrgModal} onOpenChange={setShowOrgModal}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>
+                {isEditing ? 'Edit Organization' : 'View Organization'}
+              </DialogTitle>
+              <DialogDescription>
+                {isEditing ? 'Update organization details' : 'View organization information'}
+              </DialogDescription>
+            </DialogHeader>
+            {selectedOrganization && (
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  {isEditing ? (
+                    <Input
+                      id="name"
+                      value={editOrgData.name}
+                      onChange={(e) => setEditOrgData({...editOrgData, name: e.target.value})}
+                      className="col-span-3"
+                    />
+                  ) : (
+                    <span className="col-span-3 text-sm">{selectedOrganization.name}</span>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="domain" className="text-right">
+                    Domain
+                  </Label>
+                  {isEditing ? (
+                    <Input
+                      id="domain"
+                      value={editOrgData.domain}
+                      onChange={(e) => setEditOrgData({...editOrgData, domain: e.target.value})}
+                      className="col-span-3"
+                    />
+                  ) : (
+                    <span className="col-span-3 text-sm">{selectedOrganization.domain}</span>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="subdomain" className="text-right">
+                    Subdomain
+                  </Label>
+                  {isEditing ? (
+                    <Input
+                      id="subdomain"
+                      value={editOrgData.subdomain}
+                      onChange={(e) => setEditOrgData({...editOrgData, subdomain: e.target.value})}
+                      className="col-span-3"
+                    />
+                  ) : (
+                    <span className="col-span-3 text-sm">{selectedOrganization.subdomain || 'N/A'}</span>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="status" className="text-right">
+                    Status
+                  </Label>
+                  {isEditing ? (
+                    <Select 
+                      value={editOrgData.isActive ? 'active' : 'inactive'}
+                      onValueChange={(value) => setEditOrgData({...editOrgData, isActive: value === 'active'})}
+                    >
+                      <SelectTrigger className="col-span-3 bg-white text-gray-900 border-gray-300">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border border-gray-300">
+                        <SelectItem value="active" className="text-gray-900 hover:bg-gray-100">Active</SelectItem>
+                        <SelectItem value="inactive" className="text-gray-900 hover:bg-gray-100">Inactive</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Badge className={selectedOrganization.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}>
+                      {selectedOrganization.isActive ? 'Active' : 'Inactive'}
+                    </Badge>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label className="text-right">Statistics</Label>
+                  <div className="col-span-3 text-sm space-y-1">
+                    <p>Users: {selectedOrganization._count?.users || 0}</p>
+                    <p>Requirements: {selectedOrganization._count?.requirements || 0}</p>
+                    <p>Gap Assessments: {selectedOrganization._count?.gapAssessments || 0}</p>
+                    <p>Action Plans: {selectedOrganization._count?.actionPlans || 0}</p>
+                    <p>Risks: {selectedOrganization._count?.risks || 0}</p>
+                    <p>Schedules: {selectedOrganization._count?.schedules || 0}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+            <DialogFooter>
+              {isEditing && (
+                <Button type="submit" onClick={() => {
+                  console.log('Saving organization changes:', editOrgData);
+                  // TODO: Implement API call to save changes
+                  alert('Organization changes saved! (This is a demo - no actual changes were made)');
+                  handleCloseOrgModal();
+                }}>
+                  Save Changes
+                </Button>
+              )}
+              <Button variant="outline" onClick={handleCloseOrgModal}>
+                {isEditing ? 'Cancel' : 'Close'}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* User Modal */}
+        <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>
+                {isEditing ? 'Edit User' : 'View User'}
+              </DialogTitle>
+              <DialogDescription>
+                {isEditing ? 'Update user details' : 'View user information'}
+              </DialogDescription>
+            </DialogHeader>
+            {selectedUser && (
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="firstName" className="text-right">
+                    First Name
+                  </Label>
+                  {isEditing ? (
+                    <Input
+                      id="firstName"
+                      value={editUserData.firstName}
+                      onChange={(e) => setEditUserData({...editUserData, firstName: e.target.value})}
+                      className="col-span-3"
+                    />
+                  ) : (
+                    <span className="col-span-3 text-sm">{selectedUser.firstName}</span>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="lastName" className="text-right">
+                    Last Name
+                  </Label>
+                  {isEditing ? (
+                    <Input
+                      id="lastName"
+                      value={editUserData.lastName}
+                      onChange={(e) => setEditUserData({...editUserData, lastName: e.target.value})}
+                      className="col-span-3"
+                    />
+                  ) : (
+                    <span className="col-span-3 text-sm">{selectedUser.lastName}</span>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="email" className="text-right">
+                    Email
+                  </Label>
+                  {isEditing ? (
+                    <Input
+                      id="email"
+                      value={editUserData.email}
+                      onChange={(e) => setEditUserData({...editUserData, email: e.target.value})}
+                      className="col-span-3"
+                    />
+                  ) : (
+                    <span className="col-span-3 text-sm">{selectedUser.email}</span>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="role" className="text-right">
+                    Role
+                  </Label>
+                  {isEditing ? (
+                    <Select 
+                      value={editUserData.role}
+                      onValueChange={(value) => setEditUserData({...editUserData, role: value})}
+                    >
+                      <SelectTrigger className="col-span-3 bg-white text-gray-900 border-gray-300">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border border-gray-300">
+                        <SelectItem value="SUPER_ADMIN" className="text-gray-900 hover:bg-gray-100">Super Admin</SelectItem>
+                        <SelectItem value="ADMIN" className="text-gray-900 hover:bg-gray-100">Admin</SelectItem>
+                        <SelectItem value="MANAGER" className="text-gray-900 hover:bg-gray-100">Manager</SelectItem>
+                        <SelectItem value="COMPLIANCE_OFFICER" className="text-gray-900 hover:bg-gray-100">Compliance Officer</SelectItem>
+                        <SelectItem value="STAFF" className="text-gray-900 hover:bg-gray-100">Staff</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Badge className={getRoleColor(selectedUser.role)}>
+                      {getRoleDisplayName(selectedUser.role)}
+                    </Badge>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label className="text-right">Organization</Label>
+                  <span className="col-span-3 text-sm">{selectedUser.organization.name}</span>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label className="text-right">Status</Label>
+                  <Badge className={selectedUser.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}>
+                    {selectedUser.isActive ? 'Active' : 'Inactive'}
+                  </Badge>
+                </div>
+              </div>
+            )}
+            <DialogFooter>
+              {isEditing && (
+                <Button type="submit" onClick={() => {
+                  console.log('Saving user changes:', editUserData);
+                  // TODO: Implement API call to save changes
+                  alert('User changes saved! (This is a demo - no actual changes were made)');
+                  handleCloseUserModal();
+                }}>
+                  Save Changes
+                </Button>
+              )}
+              <Button variant="outline" onClick={handleCloseUserModal}>
+                {isEditing ? 'Cancel' : 'Close'}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </RoleBasedComponent>
   );

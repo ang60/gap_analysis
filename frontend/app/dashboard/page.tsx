@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { 
   Shield, 
   TrendingUp, 
@@ -18,6 +20,26 @@ import { useAuth } from '@/contexts/AuthContext';
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const router = useRouter();
+
+  // Redirect Super Admin to Super Admin dashboard
+  useEffect(() => {
+    if (user?.role === 'SUPER_ADMIN') {
+      router.push('/dashboard/super-admin');
+    }
+  }, [user, router]);
+
+  // Don't render the regular dashboard for Super Admin
+  if (user?.role === 'SUPER_ADMIN') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Redirecting to System Administration...</p>
+        </div>
+      </div>
+    );
+  }
   
   const metrics = [
     {

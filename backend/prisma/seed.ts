@@ -1089,6 +1089,10 @@ async function main() {
   }
 
   console.log('🎉 Database seeding completed successfully!');
+  console.log('\n📋 System Credentials:');
+  console.log('\n🔐 Super Admin (System-wide access):');
+  console.log('  Email: superadmin@gapanalysis.com');
+  console.log('  Password: SuperAdmin@123');
   console.log('\n📋 Multi-Tenant Test Credentials:');
   console.log('\n🏦 Equity Bank Kenya:');
   console.log('  Admin: admin@equitybank.co.ke / EquityAdmin123');

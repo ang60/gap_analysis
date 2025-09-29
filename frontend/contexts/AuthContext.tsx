@@ -44,6 +44,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (authService.isAuthenticated()) {
           const userData = await authService.getCurrentUser();
           setUser(userData);
+          
+          // Redirect Super Admin to Super Admin dashboard if they're on the regular dashboard
+          if (userData.role === 'SUPER_ADMIN' && window.location.pathname === '/dashboard') {
+            router.push('/dashboard/super-admin');
+          }
         }
       } catch (error) {
         console.error('Auth check failed:', error);
@@ -56,7 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     checkAuth();
-  }, []);
+  }, [router]);
 
   const login = async (credentials: LoginCredentials) => {
     try {
@@ -64,7 +69,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setError(null);
       const response = await authService.login(credentials);
       setUser(response.user);
-      router.push('/dashboard');
+      
+      // Redirect based on user role
+      if (response.user.role === 'SUPER_ADMIN') {
+        router.push('/dashboard/super-admin');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
       setError(errorMessage);
@@ -80,7 +91,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setError(null);
       const response = await authService.register(userData);
       setUser(response.user);
-      router.push('/dashboard');
+      
+      // Redirect based on user role
+      if (response.user.role === 'SUPER_ADMIN') {
+        router.push('/dashboard/super-admin');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.';
       setError(errorMessage);
