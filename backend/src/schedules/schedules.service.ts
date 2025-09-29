@@ -9,7 +9,7 @@ import { Schedule, ScheduleType, ScheduleStatus, ScheduleFrequency, Priority } f
 export class SchedulesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: CreateScheduleDto, createdById: number): Promise<Schedule> {
+  async create(organizationId: number, data: CreateScheduleDto, createdById: number): Promise<Schedule> {
     const dueDate = new Date(data.dueDate);
     let nextDueDate: Date | null = null;
 
@@ -19,6 +19,7 @@ export class SchedulesService {
 
     return this.prisma.schedule.create({
       data: {
+        organizationId,
         ...data,
         dueDate,
         nextDueDate,
@@ -32,8 +33,8 @@ export class SchedulesService {
     });
   }
 
-  async createRecurring(data: CreateScheduleDto, createdById: number): Promise<Schedule> {
-    return this.create({ ...data, isRecurring: true }, createdById);
+  async createRecurring(organizationId: number, data: CreateScheduleDto, createdById: number): Promise<Schedule> {
+    return this.create(organizationId, { ...data, isRecurring: true }, createdById);
   }
 
   async findAll(): Promise<Schedule[]> {

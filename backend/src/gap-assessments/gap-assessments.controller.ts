@@ -15,31 +15,35 @@ import { GapAssessmentsService } from './gap-assessments.service';
 import { CreateGapAssessmentDto } from './dto/create-gap-assessment.dto';
 import { UpdateGapAssessmentDto } from './dto/update-gap-assessment.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { TenantRoleGuard } from '../auth/guards/tenant-role.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
-import { User } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiTags('gap-assessments')
 @Controller('gap-assessments')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, TenantRoleGuard)
 @ApiBearerAuth()
 export class GapAssessmentsController {
   constructor(private readonly gapAssessmentsService: GapAssessmentsService) {}
 
   @Post()
+  @Roles(UserRole.COMPLIANCE_OFFICER)
   @ApiOperation({ summary: 'Create a new gap assessment' })
   @ApiResponse({ status: 201, description: 'Gap assessment created successfully' })
   async create(
     @Body() createGapAssessmentDto: CreateGapAssessmentDto,
     @CurrentUser() user: User
   ) {
-    return this.gapAssessmentsService.create(createGapAssessmentDto, user.id);
+    return this.gapAssessmentsService.create(user.organizationId, createGapAssessmentDto, user.id);
   }
 
   @Get()
+  @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.COMPLIANCE_OFFICER, UserRole.STAFF)
   @ApiOperation({ summary: 'Get all gap assessments' })
   @ApiResponse({ status: 200, description: 'List of gap assessments' })
-  async findAll() {
-    return this.gapAssessmentsService.findAll();
+  async findAll(@CurrentUser() user: User) {
+    return this.gapAssessmentsService.findAll(user.organizationId);
   }
 
   @Get('branch/:branchId')
@@ -79,6 +83,7 @@ export class GapAssessmentsController {
   }
 
   @Put(':id')
+  @Roles(UserRole.COMPLIANCE_OFFICER)
   @ApiOperation({ summary: 'Update gap assessment' })
   @ApiResponse({ status: 200, description: 'Gap assessment updated successfully' })
   async update(
@@ -89,6 +94,7 @@ export class GapAssessmentsController {
   }
 
   @Delete(':id')
+  @Roles(UserRole.COMPLIANCE_OFFICER)
   @ApiOperation({ summary: 'Delete gap assessment' })
   @ApiResponse({ status: 200, description: 'Gap assessment deleted successfully' })
   async delete(@Param('id', ParseIntPipe) id: number) {

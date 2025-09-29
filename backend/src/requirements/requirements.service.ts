@@ -8,9 +8,10 @@ import { Requirement, Priority } from '@prisma/client';
 export class RequirementsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: CreateRequirementDto, createdById: number): Promise<Requirement> {
+  async create(organizationId: number, data: CreateRequirementDto, createdById: number): Promise<Requirement> {
     return this.prisma.requirement.create({
       data: {
+        organizationId,
         ...data,
         createdById,
       },

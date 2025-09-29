@@ -3,6 +3,16 @@ import api from './api';
 export interface LoginCredentials {
   email: string;
   password: string;
+  organizationId?: number;
+  domain?: string;
+}
+
+export interface Organization {
+  id: number;
+  name: string;
+  domain: string;
+  subdomain?: string;
+  isActive: boolean;
 }
 
 export interface RegisterData {
@@ -20,7 +30,20 @@ export interface User {
   firstName: string;
   lastName: string;
   role: string;
+  isActive: boolean;
+  organizationId: number;
+  organization?: {
+    id: number;
+    name: string;
+    domain: string;
+    subdomain?: string;
+  };
   branchId?: number;
+  branch?: {
+    id: number;
+    name: string;
+    region: string;
+  };
   createdAt: string;
   updatedAt: string;
 }
@@ -32,7 +55,7 @@ export interface AuthResponse {
 }
 
 export const authService = {
-  // Login user
+  // Login user (standard login)
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     const response = await api.post('/auth/login', credentials);
     
@@ -55,9 +78,63 @@ export const authService = {
     };
   },
 
+  // Login to specific organization
+  async loginToOrganization(credentials: LoginCredentials): Promise<AuthResponse> {
+    const response = await api.post('/auth/login/organization', credentials);
+    
+    const accessToken = response.data.accessToken;
+    const refreshToken = response.data.refreshToken;
+
+    if (accessToken) {
+      localStorage.setItem('accessToken', accessToken);
+    }
+    if (refreshToken) {
+      localStorage.setItem('refreshToken', refreshToken);
+    }
+
+    return {
+      user: response.data.user,
+      accessToken: accessToken || '',
+      refreshToken: refreshToken || '',
+    };
+  },
+
+  // Login by domain
+  async loginByDomain(credentials: LoginCredentials): Promise<AuthResponse> {
+    const response = await api.post('/auth/login/domain', credentials);
+    
+    const accessToken = response.data.accessToken;
+    const refreshToken = response.data.refreshToken;
+
+    if (accessToken) {
+      localStorage.setItem('accessToken', accessToken);
+    }
+    if (refreshToken) {
+      localStorage.setItem('refreshToken', refreshToken);
+    }
+
+    return {
+      user: response.data.user,
+      accessToken: accessToken || '',
+      refreshToken: refreshToken || '',
+    };
+  },
+
+  // Get available organizations
+  async getOrganizations(): Promise<Organization[]> {
+    const response = await api.get('/organizations');
+    return response.data;
+  },
+
+  // Get organization by domain
+  async getOrganizationByDomain(domain: string): Promise<Organization> {
+    const response = await api.get(`/organizations/domain/${domain}`);
+    return response.data;
+  },
+
   // Register new user
   async register(userData: RegisterData): Promise<AuthResponse> {
-    const response = await api.post('/users', userData);
+    const response = await api.post('/auth/register', userData);
     
     // Get tokens from response data (backend now returns them)
     const accessToken = response.data.accessToken;
@@ -81,11 +158,20 @@ export const authService = {
   // Logout user
   async logout(): Promise<void> {
     try {
+      // Try to call logout endpoint if it exists
       await api.post('/auth/logout');
-    } catch (error) {
-      console.error('Logout error:', error);
+    } catch (error: unknown) {
+      // If logout endpoint doesn't exist (404) or any other error, 
+      // just log it but don't throw - logout should always succeed client-side
+      if (error && typeof error === 'object' && 'response' in error && 
+          error.response && typeof error.response === 'object' && 'status' in error.response &&
+          error.response.status === 404) {
+        console.log('Logout endpoint not available, proceeding with client-side logout');
+      } else {
+        console.error('Logout error:', error);
+      }
     } finally {
-      // Clear tokens from localStorage
+      // Always clear tokens from localStorage regardless of backend response
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
     }

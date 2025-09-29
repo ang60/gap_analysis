@@ -38,6 +38,7 @@ export class AuthService {
 
     const tokenPayload: TokenPayload = {
       userId: user.id.toString(),
+      organizationId: user.organizationId.toString(),
     };
 
     const accessToken = this.jwtService.sign(tokenPayload, {
@@ -52,7 +53,7 @@ export class AuthService {
 
     await this.usersService.update(user.id, {
       refreshToken: await hash(refreshToken, 10),
-    });
+    }, user.organizationId);
 
     // Set cookies for httpOnly access
     response.cookie('Authentication', accessToken, {
@@ -80,9 +81,17 @@ export class AuthService {
     }
   }
 
-  async verifyUser(email: string, password: string) {
+  async verifyUser(email: string, password: string, organizationId?: number) {
     try {
-      const user = await this.usersService.findByEmail(email);
+      // If organizationId is not provided, try to find user by email only
+      // This allows the system to automatically detect the user's organization
+      let user;
+      if (organizationId) {
+        user = await this.usersService.findByEmail(email, organizationId);
+      } else {
+        user = await this.usersService.findByEmail(email);
+      }
+      
       if (!user) {
         throw new UnauthorizedException();
       }
@@ -96,9 +105,9 @@ export class AuthService {
     }
   }
 
-  async verifyUserRefreshToken(refreshToken: string, userId: string) {
+  async verifyUserRefreshToken(refreshToken: string, userId: string, organizationId: string) {
     try {
-      const user = await this.usersService.findById(parseInt(userId));
+      const user = await this.usersService.findById(parseInt(userId), parseInt(organizationId));
       if (!user.refreshToken) {
         throw new UnauthorizedException();
       }
@@ -110,5 +119,9 @@ export class AuthService {
     } catch (error) {
       throw new UnauthorizedException('Refresh token is not valid');
     }
+  }
+
+  async findOrganizationByDomain(domain: string) {
+    return this.usersService.findOrganizationByDomain(domain);
   }
 }

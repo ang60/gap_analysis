@@ -343,20 +343,20 @@ export default function RisksPage() {
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
-                      <span className="text-gray-500">Likelihood:</span>
-                      <div className="font-medium">{getLikelihoodLabel(risk.likelihood)}</div>
+                      <span className="text-gray-700 font-medium">Likelihood:</span>
+                      <div className="font-medium text-gray-900">{getLikelihoodLabel(risk.likelihood)}</div>
                     </div>
                     <div>
-                      <span className="text-gray-500">Impact:</span>
-                      <div className="font-medium">{getImpactLabel(risk.impact)}</div>
+                      <span className="text-gray-700 font-medium">Impact:</span>
+                      <div className="font-medium text-gray-900">{getImpactLabel(risk.impact)}</div>
                     </div>
                     <div>
-                      <span className="text-gray-500">Risk Score:</span>
-                      <div className="font-medium">{riskLevel.score}/25</div>
+                      <span className="text-gray-700 font-medium">Risk Score:</span>
+                      <div className="font-medium text-gray-900">{riskLevel.score}/25</div>
                     </div>
                     <div>
-                      <span className="text-gray-500">Created:</span>
-                      <div className="font-medium">
+                      <span className="text-gray-700 font-medium">Created:</span>
+                      <div className="font-medium text-gray-900">
                         {new Date(risk.createdAt).toLocaleDateString()}
                       </div>
                     </div>

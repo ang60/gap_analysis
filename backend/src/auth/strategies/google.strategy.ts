@@ -25,6 +25,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
       firstName: profile.name?.givenName || 'Google',
       lastName: profile.name?.familyName || 'User',
       role: 'STAFF' as any,
-    });
+    }, 1); // Default organization for now
   }
 }

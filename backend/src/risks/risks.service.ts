@@ -8,9 +8,12 @@ import { Risk, RiskStatus } from '@prisma/client';
 export class RisksService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: CreateRiskDto): Promise<Risk> {
+  async create(organizationId: number, data: CreateRiskDto): Promise<Risk> {
     return this.prisma.risk.create({
-      data,
+      data: {
+        ...data,
+        organizationId,
+      },
       include: {
         owner: true,
         branch: true,

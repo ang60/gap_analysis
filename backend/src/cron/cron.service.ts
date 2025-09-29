@@ -44,7 +44,7 @@ export class CronService {
       });
 
       // Send notification
-      await this.notificationService.create({
+      await this.notificationService.create(1, {
         message: `Schedule "${schedule.title}" is overdue`,
         userId: schedule.responsibleId,
       });
@@ -91,7 +91,7 @@ export class CronService {
 
     for (const schedule of schedulesDueTomorrow) {
       // Send notification
-      await this.notificationService.create({
+      await this.notificationService.create(1, {
         message: `Schedule "${schedule.title}" is due tomorrow`,
         userId: schedule.responsibleId,
       });

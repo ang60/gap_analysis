@@ -7,9 +7,12 @@ import { Notification, NotificationStatus, NotificationType } from '@prisma/clie
 export class NotificationsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: CreateNotificationDto): Promise<Notification> {
+  async create(organizationId: number, data: CreateNotificationDto): Promise<Notification> {
     return this.prisma.notification.create({
-      data,
+      data: {
+        ...data,
+        organizationId,
+      },
       include: {
         user: true,
       },

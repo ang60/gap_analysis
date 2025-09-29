@@ -72,6 +72,12 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   handler satisfies AppPageConfig<"/dashboard">
 }
 
+// Validate ../../app/dashboard/profile/page.tsx
+{
+  const handler = {} as typeof import("../../app/dashboard/profile/page.js")
+  handler satisfies AppPageConfig<"/dashboard/profile">
+}
+
 // Validate ../../app/dashboard/requirements/page.tsx
 {
   const handler = {} as typeof import("../../app/dashboard/requirements/page.js")
@@ -88,6 +94,18 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
 {
   const handler = {} as typeof import("../../app/dashboard/schedules/page.js")
   handler satisfies AppPageConfig<"/dashboard/schedules">
+}
+
+// Validate ../../app/dashboard/super-admin/page.tsx
+{
+  const handler = {} as typeof import("../../app/dashboard/super-admin/page.js")
+  handler satisfies AppPageConfig<"/dashboard/super-admin">
+}
+
+// Validate ../../app/dashboard/user-management/page.tsx
+{
+  const handler = {} as typeof import("../../app/dashboard/user-management/page.js")
+  handler satisfies AppPageConfig<"/dashboard/user-management">
 }
 
 // Validate ../../app/page.tsx

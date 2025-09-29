@@ -1,0 +1,17 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico",
+  "/auth/login/page": "/auth/login",
+  "/auth/register/page": "/auth/register",
+  "/page": "/",
+  "/dashboard/action-plans/page": "/dashboard/action-plans",
+  "/dashboard/gap-analysis/page": "/dashboard/gap-analysis",
+  "/dashboard/page": "/dashboard",
+  "/dashboard/evidence/page": "/dashboard/evidence",
+  "/dashboard/profile/page": "/dashboard/profile",
+  "/dashboard/requirements/page": "/dashboard/requirements",
+  "/dashboard/risks/page": "/dashboard/risks",
+  "/dashboard/schedules/page": "/dashboard/schedules",
+  "/dashboard/user-management/page": "/dashboard/user-management",
+  "/dashboard/super-admin/page": "/dashboard/super-admin"
+}

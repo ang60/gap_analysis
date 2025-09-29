@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { OrganizationsModule } from './organizations/organizations.module';
 import { RequirementsModule } from './requirements/requirements.module';
 import { GapAssessmentsModule } from './gap-assessments/gap-assessments.module';
 import { ActionPlansModule } from './action-plans/action-plans.module';
@@ -13,6 +14,8 @@ import { SchedulesModule } from './schedules/schedules.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { EmailModule } from './email/email.module';
 import { CronModule } from './cron/cron.module';
+import { BranchesModule } from './branches/branches.module';
+import { SuperAdminModule } from './super-admin/super-admin.module';
 
 @Module({
   imports: [
@@ -20,6 +23,7 @@ import { CronModule } from './cron/cron.module';
     PrismaModule,
     UsersModule,
     AuthModule,
+    OrganizationsModule,
     RequirementsModule,
     GapAssessmentsModule,
     ActionPlansModule,
@@ -28,6 +32,8 @@ import { CronModule } from './cron/cron.module';
     NotificationsModule,
     EmailModule,
     CronModule,
+    BranchesModule,
+    SuperAdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

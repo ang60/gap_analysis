@@ -3,14 +3,18 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateGapAssessmentDto } from './dto/create-gap-assessment.dto';
 import { UpdateGapAssessmentDto } from './dto/update-gap-assessment.dto';
 import { GapAssessment } from '@prisma/client';
+import { TenantAwareService } from '../common/tenant-aware.service';
 
 @Injectable()
-export class GapAssessmentsService {
-  constructor(private readonly prisma: PrismaService) {}
+export class GapAssessmentsService extends TenantAwareService {
+  constructor(prisma: PrismaService) {
+    super(prisma);
+  }
 
-  async create(data: CreateGapAssessmentDto, createdById: number): Promise<GapAssessment> {
+  async create(organizationId: number, data: CreateGapAssessmentDto, createdById: number): Promise<GapAssessment> {
     return this.prisma.gapAssessment.create({
       data: {
+        organizationId,
         ...data,
         createdById,
       },
@@ -28,8 +32,9 @@ export class GapAssessmentsService {
     });
   }
 
-  async findAll(): Promise<GapAssessment[]> {
+  async findAll(organizationId: number): Promise<GapAssessment[]> {
     return this.prisma.gapAssessment.findMany({
+      where: { organizationId },
       include: {
         requirement: true,
         branch: true,

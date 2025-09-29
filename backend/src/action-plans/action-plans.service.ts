@@ -9,9 +9,10 @@ import { ActionPlan, ActionStatus, ActionPriority } from '@prisma/client';
 export class ActionPlansService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: CreateActionPlanDto, createdById: number): Promise<ActionPlan> {
+  async create(organizationId: number, data: CreateActionPlanDto, createdById: number): Promise<ActionPlan> {
     return this.prisma.actionPlan.create({
       data: {
+        organizationId,
         ...data,
         createdById,
         deadline: data.deadline ? new Date(data.deadline) : null,

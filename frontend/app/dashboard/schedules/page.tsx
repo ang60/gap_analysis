@@ -371,27 +371,27 @@ export default function SchedulesPage() {
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
-                      <span className="text-gray-500">Due Date:</span>
-                      <div className="font-medium">
+                      <span className="text-gray-700 font-medium">Due Date:</span>
+                      <div className="font-medium text-gray-900">
                         {formatDate(schedule.dueDate)}
                         {overdue && <span className="text-red-600 ml-1">(Overdue)</span>}
                       </div>
                     </div>
                     <div>
-                      <span className="text-gray-500">Responsible:</span>
-                      <div className="font-medium">
+                      <span className="text-gray-700 font-medium">Responsible:</span>
+                      <div className="font-medium text-gray-900">
                         {schedule.responsible?.firstName} {schedule.responsible?.lastName}
                       </div>
                     </div>
                     <div>
-                      <span className="text-gray-500">Frequency:</span>
-                      <div className="font-medium">
+                      <span className="text-gray-700 font-medium">Frequency:</span>
+                      <div className="font-medium text-gray-900">
                         {schedule.frequency || 'One-time'}
                       </div>
                     </div>
                     <div>
-                      <span className="text-gray-500">Reminders:</span>
-                      <div className="font-medium flex items-center gap-1">
+                      <span className="text-gray-700 font-medium">Reminders:</span>
+                      <div className="font-medium text-gray-900 flex items-center gap-1">
                         <Bell className="h-3 w-3" />
                         {schedule.reminderDays.join(', ')} days before
                       </div>

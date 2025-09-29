@@ -16,24 +16,27 @@ import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { CompleteScheduleDto } from './dto/complete-schedule.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { TenantRoleGuard } from '../auth/guards/tenant-role.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
-import { User, ScheduleType, ScheduleStatus } from '@prisma/client';
+import { User, ScheduleType, ScheduleStatus, UserRole } from '@prisma/client';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiTags('schedules')
 @Controller('schedules')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, TenantRoleGuard)
 @ApiBearerAuth()
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
   @Post()
+  @Roles(UserRole.MANAGER, UserRole.COMPLIANCE_OFFICER)
   @ApiOperation({ summary: 'Create a new schedule' })
   @ApiResponse({ status: 201, description: 'Schedule created successfully' })
   async create(
     @Body() createScheduleDto: CreateScheduleDto,
     @CurrentUser() user: User
   ) {
-    return this.schedulesService.create(createScheduleDto, user.id);
+    return this.schedulesService.create(user.organizationId, createScheduleDto, user.id);
   }
 
   @Post('recurring')
@@ -43,10 +46,11 @@ export class SchedulesController {
     @Body() createScheduleDto: CreateScheduleDto,
     @CurrentUser() user: User
   ) {
-    return this.schedulesService.createRecurring(createScheduleDto, user.id);
+    return this.schedulesService.createRecurring(user.organizationId, createScheduleDto, user.id);
   }
 
   @Get()
+  @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.COMPLIANCE_OFFICER, UserRole.STAFF)
   @ApiOperation({ summary: 'Get all schedules' })
   @ApiResponse({ status: 200, description: 'List of schedules' })
   async findAll() {
@@ -108,6 +112,7 @@ export class SchedulesController {
   }
 
   @Put(':id')
+  @Roles(UserRole.MANAGER, UserRole.COMPLIANCE_OFFICER)
   @ApiOperation({ summary: 'Update schedule' })
   @ApiResponse({ status: 200, description: 'Schedule updated successfully' })
   async update(
@@ -128,6 +133,7 @@ export class SchedulesController {
   }
 
   @Delete(':id')
+  @Roles(UserRole.MANAGER, UserRole.COMPLIANCE_OFFICER)
   @ApiOperation({ summary: 'Delete schedule' })
   @ApiResponse({ status: 200, description: 'Schedule deleted successfully' })
   async delete(@Param('id', ParseIntPipe) id: number) {

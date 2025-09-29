@@ -18,6 +18,7 @@ import {
   Edit,
   Trash2
 } from 'lucide-react';
+import { RoleBasedComponent, ComplianceOfficerOnly, ManagerAndAbove } from '@/components/RoleBasedComponent';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface Requirement {
@@ -33,7 +34,7 @@ interface Requirement {
   priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   createdAt: string;
   updatedAt: string;
-  gapAssessments?: any[];
+  gapAssessments?: unknown[];
 }
 
 export default function RequirementsPage() {
@@ -244,10 +245,12 @@ export default function RequirementsPage() {
       <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg font-semibold text-gray-900">Requirements</h2>
-          <Button className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            Add Requirement
-          </Button>
+          <ComplianceOfficerOnly>
+            <Button className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              Add Requirement
+            </Button>
+          </ComplianceOfficerOnly>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -293,13 +296,17 @@ export default function RequirementsPage() {
                   <Eye className="h-4 w-4 mr-1" />
                   View
                 </Button>
-                <Button size="sm" variant="outline" className="flex-1">
-                  <Edit className="h-4 w-4 mr-1" />
-                  Edit
-                </Button>
-                <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                <ComplianceOfficerOnly>
+                  <Button size="sm" variant="outline" className="flex-1">
+                    <Edit className="h-4 w-4 mr-1" />
+                    Edit
+                  </Button>
+                </ComplianceOfficerOnly>
+                <ComplianceOfficerOnly>
+                  <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </ComplianceOfficerOnly>
               </div>
             </div>
           ))}
@@ -314,10 +321,12 @@ export default function RequirementsPage() {
                 ? 'Try adjusting your filters to see more results.'
                 : 'Get started by adding your first requirement.'}
             </p>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Requirement
-            </Button>
+            <ComplianceOfficerOnly>
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Add Requirement
+              </Button>
+            </ComplianceOfficerOnly>
           </div>
         )}
       </div>

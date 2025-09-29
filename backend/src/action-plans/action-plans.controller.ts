@@ -16,27 +16,31 @@ import { CreateActionPlanDto } from './dto/create-action-plan.dto';
 import { UpdateActionPlanDto } from './dto/update-action-plan.dto';
 import { CompleteActionPlanDto } from './dto/complete-action-plan.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { TenantRoleGuard } from '../auth/guards/tenant-role.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
-import { User, ActionStatus, ActionPriority } from '@prisma/client';
+import { User, ActionStatus, ActionPriority, UserRole } from '@prisma/client';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiTags('action-plans')
 @Controller('action-plans')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, TenantRoleGuard)
 @ApiBearerAuth()
 export class ActionPlansController {
   constructor(private readonly actionPlansService: ActionPlansService) {}
 
   @Post()
+  @Roles(UserRole.MANAGER, UserRole.COMPLIANCE_OFFICER)
   @ApiOperation({ summary: 'Create a new action plan' })
   @ApiResponse({ status: 201, description: 'Action plan created successfully' })
   async create(
     @Body() createActionPlanDto: CreateActionPlanDto,
     @CurrentUser() user: User
   ) {
-    return this.actionPlansService.create(createActionPlanDto, user.id);
+    return this.actionPlansService.create(user.organizationId, createActionPlanDto, user.id);
   }
 
   @Get()
+  @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.COMPLIANCE_OFFICER, UserRole.STAFF)
   @ApiOperation({ summary: 'Get all action plans' })
   @ApiResponse({ status: 200, description: 'List of action plans' })
   async findAll() {

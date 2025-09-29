@@ -15,27 +15,31 @@ import { RequirementsService } from './requirements.service';
 import { CreateRequirementDto } from './dto/create-requirement.dto';
 import { UpdateRequirementDto } from './dto/update-requirement.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { TenantRoleGuard } from '../auth/guards/tenant-role.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
-import { User, Priority } from '@prisma/client';
+import { User, Priority, UserRole } from '@prisma/client';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiTags('requirements')
 @Controller('requirements')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, TenantRoleGuard)
 @ApiBearerAuth()
 export class RequirementsController {
   constructor(private readonly requirementsService: RequirementsService) {}
 
   @Post()
+  @Roles(UserRole.COMPLIANCE_OFFICER, UserRole.MANAGER)
   @ApiOperation({ summary: 'Create a new requirement' })
   @ApiResponse({ status: 201, description: 'Requirement created successfully' })
   async create(
     @Body() createRequirementDto: CreateRequirementDto,
     @CurrentUser() user: User
   ) {
-    return this.requirementsService.create(createRequirementDto, user.id);
+    return this.requirementsService.create(user.organizationId, createRequirementDto, user.id);
   }
 
   @Get()
+  @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.COMPLIANCE_OFFICER, UserRole.STAFF)
   @ApiOperation({ summary: 'Get all requirements' })
   @ApiResponse({ status: 200, description: 'List of requirements' })
   async findAll() {
@@ -116,6 +120,7 @@ export class RequirementsController {
   }
 
   @Put(':id')
+  @Roles(UserRole.COMPLIANCE_OFFICER, UserRole.MANAGER)
   @ApiOperation({ summary: 'Update requirement' })
   @ApiResponse({ status: 200, description: 'Requirement updated successfully' })
   async update(
@@ -126,6 +131,7 @@ export class RequirementsController {
   }
 
   @Delete(':id')
+  @Roles(UserRole.COMPLIANCE_OFFICER, UserRole.MANAGER)
   @ApiOperation({ summary: 'Delete requirement' })
   @ApiResponse({ status: 200, description: 'Requirement deleted successfully' })
   async delete(@Param('id', ParseIntPipe) id: number) {

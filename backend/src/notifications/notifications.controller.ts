@@ -9,27 +9,32 @@ import {
   UseGuards, 
   ParseIntPipe 
 } from '@nestjs/common';
+import { CurrentUser } from '../auth/current-user.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { NotificationsService } from './notifications.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { NotificationType, NotificationStatus } from '@prisma/client';
+import { TenantRoleGuard } from '../auth/guards/tenant-role.guard';
+import { NotificationType, NotificationStatus, UserRole } from '@prisma/client';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiTags('notifications')
 @Controller('notifications')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, TenantRoleGuard)
 @ApiBearerAuth()
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
 
   @Post()
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Create a new notification' })
   @ApiResponse({ status: 201, description: 'Notification created successfully' })
-  async create(@Body() createNotificationDto: CreateNotificationDto) {
-    return this.notificationsService.create(createNotificationDto);
+  async create(@Body() createNotificationDto: CreateNotificationDto, @CurrentUser() user: any) {
+    return this.notificationsService.create(user.organizationId, createNotificationDto);
   }
 
   @Get()
+  @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.COMPLIANCE_OFFICER, UserRole.STAFF)
   @ApiOperation({ summary: 'Get all notifications' })
   @ApiResponse({ status: 200, description: 'List of notifications' })
   async findAll() {

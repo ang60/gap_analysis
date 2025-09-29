@@ -14,8 +14,11 @@ import {
   Plus,
   ArrowRight
 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function DashboardPage() {
+  const { user } = useAuth();
+  
   const metrics = [
     {
       name: 'Requirements',
@@ -188,9 +191,9 @@ export default function DashboardPage() {
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold mb-2">Welcome back, John!</h1>
+            <h1 className="text-2xl font-bold mb-2">Welcome back, {user?.firstName || 'User'}!</h1>
             <p className="text-blue-100">
-              Your compliance score is <span className="font-semibold">87%</span> - Great progress!
+              {user?.organization?.name || 'Your organization'}&apos;s compliance score is <span className="font-semibold">87%</span> - Great progress!
             </p>
           </div>
           <div className="hidden sm:block">

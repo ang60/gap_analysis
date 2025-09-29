@@ -1,24 +1,49 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Shield, Eye, EyeOff, Check, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import api from '@/lib/api';
+
+interface Branch {
+  id: number;
+  name: string;
+  region: string;
+  organizationId: number;
+}
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [branches, setBranches] = useState<Branch[]>([]);
+  const [loadingBranches, setLoadingBranches] = useState(true);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'STAFF',
     branchId: '',
     agreeToTerms: false,
   });
   const { register, isLoading, error, clearError } = useAuth();
+
+  // Fetch branches for the default organization
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        const response = await api.get('/branches?organizationId=1');
+        setBranches(response.data);
+      } catch (error) {
+        console.error('Failed to fetch branches:', error);
+      } finally {
+        setLoadingBranches(false);
+      }
+    };
+
+    fetchBranches();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +61,7 @@ export default function RegisterPage() {
         lastName: formData.lastName,
         email: formData.email,
         password: formData.password,
-        role: formData.role,
+        // Role will be set to STAFF by default on the backend
         branchId: formData.branchId ? parseInt(formData.branchId) : undefined,
       });
     } catch (error) {
@@ -69,6 +94,12 @@ export default function RegisterPage() {
           <p className="mt-2 text-sm text-gray-600">
             Join GapAnalysis Pro and start your compliance journey
           </p>
+          <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800">
+              <strong>Note:</strong> Your account will be created with Staff role by default. 
+              An administrator will assign your appropriate role after registration.
+            </p>
+          </div>
         </div>
 
         {/* Error Message */}
@@ -95,7 +126,7 @@ export default function RegisterPage() {
                   required
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="John"
                 />
               </div>
@@ -111,7 +142,7 @@ export default function RegisterPage() {
                   required
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Mwangi"
                 />
               </div>
@@ -134,23 +165,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                Role
-              </label>
-              <select
-                id="role"
-                name="role"
-                value={formData.role}
-                onChange={handleInputChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="STAFF">Staff</option>
-                <option value="COMPLIANCE_OFFICER">Compliance Officer</option>
-                <option value="MANAGER">Manager</option>
-                <option value="ADMIN">Administrator</option>
-              </select>
-            </div>
 
             <div>
               <label htmlFor="branchId" className="block text-sm font-medium text-gray-700">
@@ -161,13 +175,17 @@ export default function RegisterPage() {
                 name="branchId"
                 value={formData.branchId}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                disabled={loadingBranches}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
               >
-                <option value="">Select a branch</option>
-                <option value="1">Head Office</option>
-                <option value="2">Nairobi CBD Branch</option>
-                <option value="3">Mombasa Branch</option>
-                <option value="4">Kisumu Branch</option>
+                <option value="">
+                  {loadingBranches ? 'Loading branches...' : 'Select a branch'}
+                </option>
+                {branches.map((branch) => (
+                  <option key={branch.id} value={branch.id}>
+                    {branch.name} - {branch.region}
+                  </option>
+                ))}
               </select>
             </div>
             
@@ -184,7 +202,7 @@ export default function RegisterPage() {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="block w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Create a strong password"
                 />
                 <button
@@ -214,7 +232,7 @@ export default function RegisterPage() {
                   required
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className="block w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Confirm your password"
                 />
                 <button

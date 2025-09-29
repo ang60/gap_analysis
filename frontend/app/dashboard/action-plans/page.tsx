@@ -21,6 +21,7 @@ import {
   Calendar
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { RoleBasedComponent, ManagerAndAbove, ComplianceOfficerOnly } from '@/components/RoleBasedComponent';
 
 interface ActionPlan {
   id: number;
@@ -322,10 +323,12 @@ export default function ActionPlansPage() {
       <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg font-semibold text-gray-900">Action Plans</h2>
-          <Button className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            New Action Plan
-          </Button>
+          <ManagerAndAbove>
+            <Button className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              New Action Plan
+            </Button>
+          </ManagerAndAbove>
         </div>
         
         <div className="space-y-4">
@@ -359,8 +362,8 @@ export default function ActionPlansPage() {
                     <div className="flex items-center gap-2">
                       <User className="h-4 w-4 text-gray-400" />
                       <div>
-                        <span className="text-gray-500">Responsible:</span>
-                        <div className="font-medium">
+                        <span className="text-gray-700 font-medium">Responsible:</span>
+                        <div className="font-medium text-gray-900">
                           {plan.responsible?.firstName} {plan.responsible?.lastName}
                         </div>
                       </div>
@@ -368,8 +371,8 @@ export default function ActionPlansPage() {
                     <div className="flex items-center gap-2">
                       <Calendar className="h-4 w-4 text-gray-400" />
                       <div>
-                        <span className="text-gray-500">Deadline:</span>
-                        <div className="font-medium">
+                        <span className="text-gray-700 font-medium">Deadline:</span>
+                        <div className="font-medium text-gray-900">
                           {plan.deadline ? formatDate(plan.deadline) : 'No deadline'}
                           {overdue && <span className="text-red-600 ml-1">(Overdue)</span>}
                         </div>
@@ -378,8 +381,8 @@ export default function ActionPlansPage() {
                     <div className="flex items-center gap-2">
                       <CheckSquare className="h-4 w-4 text-gray-400" />
                       <div>
-                        <span className="text-gray-500">Gap:</span>
-                        <div className="font-medium text-sm">
+                        <span className="text-gray-700 font-medium">Gap:</span>
+                        <div className="font-medium text-gray-900 text-sm">
                           {plan.gap?.description}
                         </div>
                       </div>
@@ -426,10 +429,12 @@ export default function ActionPlansPage() {
                 ? 'Try adjusting your filters to see more results.'
                 : 'Get started by creating your first action plan.'}
             </p>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              New Action Plan
-            </Button>
+            <ManagerAndAbove>
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                New Action Plan
+              </Button>
+            </ManagerAndAbove>
           </div>
         )}
       </div>
