@@ -5,7 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { 
   CheckSquare, 
   Plus, 
@@ -65,9 +68,216 @@ export default function ActionPlansPage() {
   const [filterPriority, setFilterPriority] = useState('all');
   const { user } = useAuth();
 
+  // Modal states
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [selectedActionPlan, setSelectedActionPlan] = useState<ActionPlan | null>(null);
+
+  // Form states
+  const [editFormData, setEditFormData] = useState({
+    actionText: '',
+    priority: 'MEDIUM' as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL',
+    status: 'PENDING' as 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED',
+    deadline: '',
+    completionNotes: ''
+  });
+
+  const [createFormData, setCreateFormData] = useState({
+    actionText: '',
+    priority: 'MEDIUM' as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL',
+    deadline: '',
+    responsibleId: 1,
+    requirementId: 1
+  });
+
+  const [completeFormData, setCompleteFormData] = useState({
+    completionNotes: ''
+  });
+
   useEffect(() => {
     fetchActionPlans();
   }, []);
+
+  // Modal handlers
+  const handleViewActionPlan = (actionPlan: ActionPlan) => {
+    setSelectedActionPlan(actionPlan);
+    setShowViewModal(true);
+  };
+
+  const handleEditActionPlan = (actionPlan: ActionPlan) => {
+    setSelectedActionPlan(actionPlan);
+    setEditFormData({
+      actionText: actionPlan.actionText,
+      priority: actionPlan.priority,
+      status: actionPlan.status,
+      deadline: actionPlan.deadline ? new Date(actionPlan.deadline).toISOString().split('T')[0] : '',
+      completionNotes: actionPlan.completionNotes || ''
+    });
+    setShowEditModal(true);
+  };
+
+  const handleCompleteActionPlan = (actionPlan: ActionPlan) => {
+    setSelectedActionPlan(actionPlan);
+    setCompleteFormData({ completionNotes: '' });
+    setShowCompleteModal(true);
+  };
+
+  const handleDeleteActionPlan = (actionPlan: ActionPlan) => {
+    setSelectedActionPlan(actionPlan);
+    setShowDeleteModal(true);
+  };
+
+  const handleCreateActionPlan = () => {
+    setCreateFormData({
+      actionText: '',
+      priority: 'MEDIUM',
+      deadline: '',
+      responsibleId: 1,
+      requirementId: 1
+    });
+    setShowCreateModal(true);
+  };
+
+  const handleCloseViewModal = () => {
+    setShowViewModal(false);
+    setSelectedActionPlan(null);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setSelectedActionPlan(null);
+    setEditFormData({
+      actionText: '',
+      priority: 'MEDIUM',
+      status: 'PENDING',
+      deadline: '',
+      completionNotes: ''
+    });
+  };
+
+  const handleCloseCompleteModal = () => {
+    setShowCompleteModal(false);
+    setSelectedActionPlan(null);
+    setCompleteFormData({ completionNotes: '' });
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedActionPlan(null);
+  };
+
+  const handleCloseCreateModal = () => {
+    setShowCreateModal(false);
+    setCreateFormData({
+      actionText: '',
+      priority: 'MEDIUM',
+      deadline: '',
+      responsibleId: 1,
+      requirementId: 1
+    });
+  };
+
+  const handleUpdateActionPlan = async () => {
+    if (!selectedActionPlan) return;
+    
+    try {
+      // TODO: Replace with actual API call
+      // await api.put(`/action-plans/${selectedActionPlan.id}`, editFormData);
+      
+      // Mock update
+      setActionPlans(prev => prev.map(plan => 
+        plan.id === selectedActionPlan.id 
+          ? { ...plan, ...editFormData, updatedAt: new Date().toISOString() }
+          : plan
+      ));
+      
+      alert('Action plan updated successfully!');
+      handleCloseEditModal();
+    } catch (error) {
+      console.error('Failed to update action plan:', error);
+      alert('Failed to update action plan. Please try again.');
+    }
+  };
+
+  const handleCompleteActionPlanSubmit = async () => {
+    if (!selectedActionPlan) return;
+    
+    try {
+      // TODO: Replace with actual API call
+      // await api.put(`/action-plans/${selectedActionPlan.id}/complete`, completeFormData);
+      
+      // Mock completion
+      setActionPlans(prev => prev.map(plan => 
+        plan.id === selectedActionPlan.id 
+          ? { 
+              ...plan, 
+              status: 'COMPLETED' as const,
+              completionNotes: completeFormData.completionNotes,
+              completedAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+            }
+          : plan
+      ));
+      
+      alert('Action plan marked as complete!');
+      handleCloseCompleteModal();
+    } catch (error) {
+      console.error('Failed to complete action plan:', error);
+      alert('Failed to complete action plan. Please try again.');
+    }
+  };
+
+  const handleDeleteActionPlanSubmit = async () => {
+    if (!selectedActionPlan) return;
+    
+    try {
+      // TODO: Replace with actual API call
+      // await api.delete(`/action-plans/${selectedActionPlan.id}`);
+      
+      // Mock deletion
+      setActionPlans(prev => prev.filter(plan => plan.id !== selectedActionPlan.id));
+      
+      alert('Action plan deleted successfully!');
+      handleCloseDeleteModal();
+    } catch (error) {
+      console.error('Failed to delete action plan:', error);
+      alert('Failed to delete action plan. Please try again.');
+    }
+  };
+
+  const handleCreateActionPlanSubmit = async () => {
+    try {
+      // TODO: Replace with actual API call
+      // await api.post('/action-plans', createFormData);
+      
+      // Mock creation
+      const newActionPlan: ActionPlan = {
+        id: Math.max(...actionPlans.map(p => p.id)) + 1,
+        actionText: createFormData.actionText,
+        priority: createFormData.priority,
+        status: 'PENDING',
+        deadline: createFormData.deadline ? new Date(createFormData.deadline).toISOString() : undefined,
+        gapId: 1,
+        responsibleId: createFormData.responsibleId,
+        requirementId: createFormData.requirementId,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        responsible: { id: 1, firstName: 'John', lastName: 'Doe' },
+        requirement: { id: 1, clause: 'A.9.2.1', title: 'User access provisioning' }
+      };
+      
+      setActionPlans(prev => [...prev, newActionPlan]);
+      
+      alert('Action plan created successfully!');
+      handleCloseCreateModal();
+    } catch (error) {
+      console.error('Failed to create action plan:', error);
+      alert('Failed to create action plan. Please try again.');
+    }
+  };
 
   const fetchActionPlans = async () => {
     try {
@@ -407,10 +617,7 @@ export default function ActionPlansPage() {
                       size="sm" 
                       variant="outline" 
                       className="flex-1"
-                      onClick={() => {
-                        // Open action plan details modal
-                        alert(`Viewing action plan: ${plan.actionText}`);
-                      }}
+                      onClick={() => handleViewActionPlan(plan)}
                     >
                       <Eye className="h-4 w-4 mr-1" />
                       View Details
@@ -419,10 +626,7 @@ export default function ActionPlansPage() {
                       size="sm" 
                       variant="outline" 
                       className="flex-1"
-                      onClick={() => {
-                        // Open action plan edit form
-                        alert(`Editing action plan: ${plan.actionText}`);
-                      }}
+                      onClick={() => handleEditActionPlan(plan)}
                     >
                       <Edit className="h-4 w-4 mr-1" />
                       Edit
@@ -431,12 +635,7 @@ export default function ActionPlansPage() {
                       <Button 
                         size="sm" 
                         className="flex-1"
-                        onClick={() => {
-                          // Mark action plan as complete
-                          if (confirm(`Mark action plan "${plan.actionText}" as complete?`)) {
-                            alert(`Action plan "${plan.actionText}" marked as complete!`);
-                          }
-                        }}
+                        onClick={() => handleCompleteActionPlan(plan)}
                       >
                         Mark Complete
                       </Button>
@@ -445,12 +644,7 @@ export default function ActionPlansPage() {
                       size="sm" 
                       variant="outline" 
                       className="text-red-600 hover:text-red-700"
-                      onClick={() => {
-                        // Confirm deletion
-                        if (confirm(`Are you sure you want to delete action plan: ${plan.actionText}?`)) {
-                          alert(`Deleting action plan: ${plan.actionText}`);
-                        }
-                      }}
+                      onClick={() => handleDeleteActionPlan(plan)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -472,10 +666,7 @@ export default function ActionPlansPage() {
             </p>
             <ManagerAndAbove>
               <Button
-                onClick={() => {
-                  // Open action plan creation form
-                  alert('Opening action plan creation form... (This would open a modal to create new action plans)');
-                }}
+                onClick={handleCreateActionPlan}
               >
                 <Plus className="h-4 w-4 mr-2" />
                 New Action Plan
@@ -484,6 +675,302 @@ export default function ActionPlansPage() {
           </div>
         )}
       </div>
+
+      {/* View Details Modal */}
+      <Dialog open={showViewModal} onOpenChange={setShowViewModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Action Plan Details</DialogTitle>
+            <DialogDescription>
+              View detailed information about this action plan
+            </DialogDescription>
+          </DialogHeader>
+          {selectedActionPlan && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-white">Action Text</Label>
+                  <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded border">
+                    {selectedActionPlan.actionText}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-white">Priority</Label>
+                  <div className="mt-1">
+                    <Badge variant={
+                      selectedActionPlan.priority === 'CRITICAL' ? 'destructive' :
+                      selectedActionPlan.priority === 'HIGH' ? 'destructive' :
+                      selectedActionPlan.priority === 'MEDIUM' ? 'secondary' : 'outline'
+                    }>
+                      {selectedActionPlan.priority}
+                    </Badge>
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-white">Status</Label>
+                  <div className="mt-1">
+                    <Badge variant={
+                      selectedActionPlan.status === 'COMPLETED' ? 'default' :
+                      selectedActionPlan.status === 'IN_PROGRESS' ? 'secondary' :
+                      selectedActionPlan.status === 'CANCELLED' ? 'destructive' : 'outline'
+                    }>
+                      {selectedActionPlan.status}
+                    </Badge>
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-white">Deadline</Label>
+                  <p className="text-sm text-white">
+                    {selectedActionPlan.deadline 
+                      ? new Date(selectedActionPlan.deadline).toLocaleDateString()
+                      : 'No deadline set'
+                    }
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-white">Responsible</Label>
+                  <p className="text-sm text-white">
+                    {selectedActionPlan.responsible 
+                      ? `${selectedActionPlan.responsible.firstName} ${selectedActionPlan.responsible.lastName}`
+                      : 'Not assigned'
+                    }
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-white">Requirement</Label>
+                  <p className="text-sm text-white">
+                    {selectedActionPlan.requirement 
+                      ? `${selectedActionPlan.requirement.clause} - ${selectedActionPlan.requirement.title}`
+                      : 'No requirement linked'
+                    }
+                  </p>
+                </div>
+              </div>
+              {selectedActionPlan.completionNotes && (
+                <div>
+                  <Label className="text-white">Completion Notes</Label>
+                  <p className="text-sm text-gray-900 bg-green-50 p-3 rounded border">
+                    {selectedActionPlan.completionNotes}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseViewModal}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Modal */}
+      <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Edit Action Plan</DialogTitle>
+            <DialogDescription>
+              Update the action plan details
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label className="text-white">Action Text</Label>
+              <Textarea
+                value={editFormData.actionText}
+                onChange={(e) => setEditFormData(prev => ({ ...prev, actionText: e.target.value }))}
+                placeholder="Enter action description..."
+                className="mt-1"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-white">Priority</Label>
+                <Select
+                  value={editFormData.priority}
+                  onValueChange={(value: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL') => 
+                    setEditFormData(prev => ({ ...prev, priority: value }))
+                  }
+                >
+                  <SelectTrigger className="mt-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="LOW">Low</SelectItem>
+                    <SelectItem value="MEDIUM">Medium</SelectItem>
+                    <SelectItem value="HIGH">High</SelectItem>
+                    <SelectItem value="CRITICAL">Critical</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-white">Status</Label>
+                <Select
+                  value={editFormData.status}
+                  onValueChange={(value: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED') => 
+                    setEditFormData(prev => ({ ...prev, status: value }))
+                  }
+                >
+                  <SelectTrigger className="mt-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="PENDING">Pending</SelectItem>
+                    <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+                    <SelectItem value="COMPLETED">Completed</SelectItem>
+                    <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div>
+              <Label className="text-white">Deadline</Label>
+              <Input
+                type="date"
+                value={editFormData.deadline}
+                onChange={(e) => setEditFormData(prev => ({ ...prev, deadline: e.target.value }))}
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label className="text-white">Completion Notes</Label>
+              <Textarea
+                value={editFormData.completionNotes}
+                onChange={(e) => setEditFormData(prev => ({ ...prev, completionNotes: e.target.value }))}
+                placeholder="Enter completion notes..."
+                className="mt-1"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseEditModal}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateActionPlan}>
+              Update Action Plan
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Mark Complete Modal */}
+      <Dialog open={showCompleteModal} onOpenChange={setShowCompleteModal}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Mark Action Plan as Complete</DialogTitle>
+            <DialogDescription>
+              Add completion notes and mark this action plan as complete
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label className="text-white">Completion Notes</Label>
+              <Textarea
+                value={completeFormData.completionNotes}
+                onChange={(e) => setCompleteFormData(prev => ({ ...prev, completionNotes: e.target.value }))}
+                placeholder="Enter completion notes..."
+                className="mt-1"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseCompleteModal}>
+              Cancel
+            </Button>
+            <Button onClick={handleCompleteActionPlanSubmit}>
+              Mark Complete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Modal */}
+      <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle>Delete Action Plan</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this action plan? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          {selectedActionPlan && (
+            <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-sm text-red-800">
+                <strong>Action:</strong> {selectedActionPlan.actionText}
+              </p>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseDeleteModal}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteActionPlanSubmit}>
+              Delete Action Plan
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Create Action Plan Modal */}
+      <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Create New Action Plan</DialogTitle>
+            <DialogDescription>
+              Create a new action plan to address compliance gaps
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label className="text-white">Action Text</Label>
+              <Textarea
+                value={createFormData.actionText}
+                onChange={(e) => setCreateFormData(prev => ({ ...prev, actionText: e.target.value }))}
+                placeholder="Enter action description..."
+                className="mt-1"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-white">Priority</Label>
+                <Select
+                  value={createFormData.priority}
+                  onValueChange={(value: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL') => 
+                    setCreateFormData(prev => ({ ...prev, priority: value }))
+                  }
+                >
+                  <SelectTrigger className="mt-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="LOW">Low</SelectItem>
+                    <SelectItem value="MEDIUM">Medium</SelectItem>
+                    <SelectItem value="HIGH">High</SelectItem>
+                    <SelectItem value="CRITICAL">Critical</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-white">Deadline</Label>
+                <Input
+                  type="date"
+                  value={createFormData.deadline}
+                  onChange={(e) => setCreateFormData(prev => ({ ...prev, deadline: e.target.value }))}
+                  className="mt-1"
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseCreateModal}>
+              Cancel
+            </Button>
+            <Button onClick={handleCreateActionPlanSubmit}>
+              Create Action Plan
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

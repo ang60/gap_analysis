@@ -5,7 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { 
   FileText, 
   Plus, 
@@ -62,9 +65,253 @@ export default function EvidencePage() {
   const [filterStatus, setFilterStatus] = useState('all');
   const { user } = useAuth();
 
+  // Modal states
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedEvidence, setSelectedEvidence] = useState<Evidence | null>(null);
+
+  // Form states
+  const [editFormData, setEditFormData] = useState({
+    title: '',
+    description: '',
+    type: 'DOCUMENT' as 'DOCUMENT' | 'SCREENSHOT' | 'POLICY' | 'PROCEDURE' | 'TRAINING_RECORD' | 'AUDIT_REPORT' | 'OTHER',
+    externalUrl: '',
+    requirementId: 1
+  });
+
+  const [addFormData, setAddFormData] = useState({
+    title: '',
+    description: '',
+    type: 'DOCUMENT' as 'DOCUMENT' | 'SCREENSHOT' | 'POLICY' | 'PROCEDURE' | 'TRAINING_RECORD' | 'AUDIT_REPORT' | 'OTHER',
+    externalUrl: '',
+    requirementId: 1
+  });
+
+  const [uploadFormData, setUploadFormData] = useState({
+    title: '',
+    description: '',
+    type: 'DOCUMENT' as 'DOCUMENT' | 'SCREENSHOT' | 'POLICY' | 'PROCEDURE' | 'TRAINING_RECORD' | 'AUDIT_REPORT' | 'OTHER',
+    requirementId: 1,
+    file: null as File | null
+  });
+
   useEffect(() => {
     fetchEvidence();
   }, []);
+
+  // Modal handlers
+  const handleViewEvidence = (evidenceItem: Evidence) => {
+    setSelectedEvidence(evidenceItem);
+    setShowViewModal(true);
+  };
+
+  const handleEditEvidence = (evidenceItem: Evidence) => {
+    setSelectedEvidence(evidenceItem);
+    setEditFormData({
+      title: evidenceItem.title,
+      description: evidenceItem.description,
+      type: evidenceItem.type,
+      externalUrl: evidenceItem.externalUrl || '',
+      requirementId: evidenceItem.requirementId
+    });
+    setShowEditModal(true);
+  };
+
+  const handleDeleteEvidence = (evidenceItem: Evidence) => {
+    setSelectedEvidence(evidenceItem);
+    setShowDeleteModal(true);
+  };
+
+  const handleUploadFile = () => {
+    setUploadFormData({
+      title: '',
+      description: '',
+      type: 'DOCUMENT',
+      requirementId: 1,
+      file: null
+    });
+    setShowUploadModal(true);
+  };
+
+  const handleAddEvidence = () => {
+    setAddFormData({
+      title: '',
+      description: '',
+      type: 'DOCUMENT',
+      externalUrl: '',
+      requirementId: 1
+    });
+    setShowAddModal(true);
+  };
+
+  const handleCloseViewModal = () => {
+    setShowViewModal(false);
+    setSelectedEvidence(null);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setSelectedEvidence(null);
+    setEditFormData({
+      title: '',
+      description: '',
+      type: 'DOCUMENT',
+      externalUrl: '',
+      requirementId: 1
+    });
+  };
+
+  const handleCloseUploadModal = () => {
+    setShowUploadModal(false);
+    setUploadFormData({
+      title: '',
+      description: '',
+      type: 'DOCUMENT',
+      requirementId: 1,
+      file: null
+    });
+  };
+
+  const handleCloseAddModal = () => {
+    setShowAddModal(false);
+    setAddFormData({
+      title: '',
+      description: '',
+      type: 'DOCUMENT',
+      externalUrl: '',
+      requirementId: 1
+    });
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedEvidence(null);
+  };
+
+  const handleUpdateEvidence = async () => {
+    if (!selectedEvidence) return;
+    
+    try {
+      // TODO: Replace with actual API call
+      // await api.put(`/evidence/${selectedEvidence.id}`, editFormData);
+      
+      // Mock update
+      setEvidence(prev => prev.map(item => 
+        item.id === selectedEvidence.id 
+          ? { ...item, ...editFormData }
+          : item
+      ));
+      
+      alert('Evidence updated successfully!');
+      handleCloseEditModal();
+    } catch (error) {
+      console.error('Failed to update evidence:', error);
+      alert('Failed to update evidence. Please try again.');
+    }
+  };
+
+  const handleUploadFileSubmit = async () => {
+    try {
+      // TODO: Replace with actual API call
+      // const formData = new FormData();
+      // formData.append('file', uploadFormData.file);
+      // formData.append('title', uploadFormData.title);
+      // formData.append('description', uploadFormData.description);
+      // formData.append('type', uploadFormData.type);
+      // formData.append('requirementId', uploadFormData.requirementId.toString());
+      // await api.post('/evidence/upload', formData);
+      
+      // Mock upload
+      const newEvidence: Evidence = {
+        id: Math.max(...evidence.map(e => e.id)) + 1,
+        title: uploadFormData.title,
+        description: uploadFormData.description,
+        type: uploadFormData.type,
+        filePath: `/documents/${uploadFormData.file?.name}`,
+        requirementId: uploadFormData.requirementId,
+        branchId: 1,
+        uploadedById: 1,
+        uploadedAt: new Date().toISOString(),
+        status: 'PENDING',
+        requirement: { id: 1, clause: 'A.9.2.1', title: 'User access provisioning', section: 'Access Control' },
+        branch: { id: 1, name: 'Head Office' },
+        uploadedBy: { id: 1, firstName: 'John', lastName: 'Doe' }
+      };
+      
+      setEvidence(prev => [...prev, newEvidence]);
+      
+      alert('File uploaded successfully!');
+      handleCloseUploadModal();
+    } catch (error) {
+      console.error('Failed to upload file:', error);
+      alert('Failed to upload file. Please try again.');
+    }
+  };
+
+  const handleAddEvidenceSubmit = async () => {
+    try {
+      // TODO: Replace with actual API call
+      // await api.post('/evidence', addFormData);
+      
+      // Mock creation
+      const newEvidence: Evidence = {
+        id: Math.max(...evidence.map(e => e.id)) + 1,
+        title: addFormData.title,
+        description: addFormData.description,
+        type: addFormData.type,
+        externalUrl: addFormData.externalUrl,
+        requirementId: addFormData.requirementId,
+        branchId: 1,
+        uploadedById: 1,
+        uploadedAt: new Date().toISOString(),
+        status: 'PENDING',
+        requirement: { id: 1, clause: 'A.9.2.1', title: 'User access provisioning', section: 'Access Control' },
+        branch: { id: 1, name: 'Head Office' },
+        uploadedBy: { id: 1, firstName: 'John', lastName: 'Doe' }
+      };
+      
+      setEvidence(prev => [...prev, newEvidence]);
+      
+      alert('Evidence added successfully!');
+      handleCloseAddModal();
+    } catch (error) {
+      console.error('Failed to add evidence:', error);
+      alert('Failed to add evidence. Please try again.');
+    }
+  };
+
+  const handleDeleteEvidenceSubmit = async () => {
+    if (!selectedEvidence) return;
+    
+    try {
+      // TODO: Replace with actual API call
+      // await api.delete(`/evidence/${selectedEvidence.id}`);
+      
+      // Mock deletion
+      setEvidence(prev => prev.filter(item => item.id !== selectedEvidence.id));
+      
+      alert('Evidence deleted successfully!');
+      handleCloseDeleteModal();
+    } catch (error) {
+      console.error('Failed to delete evidence:', error);
+      alert('Failed to delete evidence. Please try again.');
+    }
+  };
+
+  const handleDownloadEvidence = (evidenceItem: Evidence) => {
+    if (evidenceItem.filePath) {
+      // TODO: Replace with actual download logic
+      // window.open(evidenceItem.filePath, '_blank');
+      alert(`Downloading file: ${evidenceItem.title}`);
+    } else if (evidenceItem.externalUrl) {
+      window.open(evidenceItem.externalUrl, '_blank');
+    } else {
+      alert('No file available for download');
+    }
+  };
 
   const fetchEvidence = async () => {
     try {
@@ -346,20 +593,14 @@ export default function EvidencePage() {
             <Button 
               variant="outline" 
               className="flex items-center gap-2"
-              onClick={() => {
-                // Open file upload modal
-                alert('Opening file upload modal... (This would open a file upload interface)');
-              }}
+              onClick={handleUploadFile}
             >
               <Upload className="h-4 w-4" />
               Upload File
             </Button>
             <Button 
               className="flex items-center gap-2"
-              onClick={() => {
-                // Open evidence creation form
-                alert('Opening evidence creation form... (This would open a modal to add new evidence)');
-              }}
+              onClick={handleAddEvidence}
             >
               <Plus className="h-4 w-4" />
               Add Evidence
@@ -435,10 +676,7 @@ export default function EvidencePage() {
                       size="sm" 
                       variant="outline" 
                       className="flex-1"
-                      onClick={() => {
-                        // Open evidence details modal
-                        alert(`Viewing evidence: ${item.title}`);
-                      }}
+                      onClick={() => handleViewEvidence(item)}
                     >
                       <Eye className="h-4 w-4 mr-1" />
                       View
@@ -448,10 +686,7 @@ export default function EvidencePage() {
                         size="sm" 
                         variant="outline" 
                         className="flex-1"
-                        onClick={() => {
-                          // Download file
-                          alert(`Downloading file: ${item.title}`);
-                        }}
+                        onClick={() => handleDownloadEvidence(item)}
                       >
                         <Download className="h-4 w-4 mr-1" />
                         Download
@@ -477,10 +712,7 @@ export default function EvidencePage() {
                       size="sm" 
                       variant="outline" 
                       className="flex-1"
-                      onClick={() => {
-                        // Open evidence edit form
-                        alert(`Editing evidence: ${item.title}`);
-                      }}
+                      onClick={() => handleEditEvidence(item)}
                     >
                       <Edit className="h-4 w-4 mr-1" />
                       Edit
@@ -489,12 +721,7 @@ export default function EvidencePage() {
                       size="sm" 
                       variant="outline" 
                       className="text-red-600 hover:text-red-700"
-                      onClick={() => {
-                        // Confirm deletion
-                        if (confirm(`Are you sure you want to delete evidence: ${item.title}?`)) {
-                          alert(`Deleting evidence: ${item.title}`);
-                        }
-                      }}
+                      onClick={() => handleDeleteEvidence(item)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -517,19 +744,13 @@ export default function EvidencePage() {
             <div className="flex gap-2 justify-center">
               <Button 
                 variant="outline"
-                onClick={() => {
-                  // Open file upload modal
-                  alert('Opening file upload modal... (This would open a file upload interface)');
-                }}
+                onClick={handleUploadFile}
               >
                 <Upload className="h-4 w-4 mr-2" />
                 Upload File
               </Button>
               <Button
-                onClick={() => {
-                  // Open evidence creation form
-                  alert('Opening evidence creation form... (This would open a modal to add new evidence)');
-                }}
+                onClick={handleAddEvidence}
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Evidence
@@ -538,6 +759,345 @@ export default function EvidencePage() {
           </div>
         )}
       </div>
+
+      {/* View Evidence Modal */}
+      <Dialog open={showViewModal} onOpenChange={setShowViewModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Evidence Details</DialogTitle>
+            <DialogDescription>
+              View detailed information about this evidence
+            </DialogDescription>
+          </DialogHeader>
+          {selectedEvidence && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-white">Title</Label>
+                  <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded border">
+                    {selectedEvidence.title}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-white">Type</Label>
+                  <div className="mt-1">
+                    <Badge variant="secondary">
+                      {selectedEvidence.type}
+                    </Badge>
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-white">Status</Label>
+                  <div className="mt-1">
+                    <Badge variant={
+                      selectedEvidence.status === 'APPROVED' ? 'default' :
+                      selectedEvidence.status === 'PENDING' ? 'secondary' : 'destructive'
+                    }>
+                      {selectedEvidence.status}
+                    </Badge>
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-white">Uploaded By</Label>
+                  <p className="text-sm text-white">
+                    {selectedEvidence.uploadedBy 
+                      ? `${selectedEvidence.uploadedBy.firstName} ${selectedEvidence.uploadedBy.lastName}`
+                      : 'Unknown'
+                    }
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-white">Upload Date</Label>
+                  <p className="text-sm text-white">
+                    {new Date(selectedEvidence.uploadedAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-white">Requirement</Label>
+                  <p className="text-sm text-white">
+                    {selectedEvidence.requirement 
+                      ? `${selectedEvidence.requirement.clause} - ${selectedEvidence.requirement.title}`
+                      : 'No requirement linked'
+                    }
+                  </p>
+                </div>
+              </div>
+              <div>
+                <Label className="text-white">Description</Label>
+                <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded border">
+                  {selectedEvidence.description}
+                </p>
+              </div>
+              {selectedEvidence.filePath && (
+                <div>
+                  <Label className="text-white">File Path</Label>
+                  <p className="text-sm text-white">
+                    {selectedEvidence.filePath}
+                  </p>
+                </div>
+              )}
+              {selectedEvidence.externalUrl && (
+                <div>
+                  <Label className="text-white">External URL</Label>
+                  <p className="text-sm text-white">
+                    {selectedEvidence.externalUrl}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseViewModal}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Evidence Modal */}
+      <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Edit Evidence</DialogTitle>
+            <DialogDescription>
+              Update the evidence details
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label className="text-white">Title</Label>
+              <Input
+                value={editFormData.title}
+                onChange={(e) => setEditFormData(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="Enter evidence title..."
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label className="text-white">Description</Label>
+              <Textarea
+                value={editFormData.description}
+                onChange={(e) => setEditFormData(prev => ({ ...prev, description: e.target.value }))}
+                placeholder="Enter evidence description..."
+                className="mt-1"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-white">Type</Label>
+                <Select
+                  value={editFormData.type}
+                  onValueChange={(value: 'DOCUMENT' | 'SCREENSHOT' | 'POLICY' | 'PROCEDURE' | 'TRAINING_RECORD' | 'AUDIT_REPORT' | 'OTHER') => 
+                    setEditFormData(prev => ({ ...prev, type: value }))
+                  }
+                >
+                  <SelectTrigger className="mt-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="DOCUMENT">Document</SelectItem>
+                    <SelectItem value="SCREENSHOT">Screenshot</SelectItem>
+                    <SelectItem value="POLICY">Policy</SelectItem>
+                    <SelectItem value="PROCEDURE">Procedure</SelectItem>
+                    <SelectItem value="TRAINING_RECORD">Training Record</SelectItem>
+                    <SelectItem value="AUDIT_REPORT">Audit Report</SelectItem>
+                    <SelectItem value="OTHER">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-white">External URL</Label>
+                <Input
+                  value={editFormData.externalUrl}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, externalUrl: e.target.value }))}
+                  placeholder="Enter external URL (optional)..."
+                  className="mt-1"
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseEditModal}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateEvidence}>
+              Update Evidence
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Upload File Modal */}
+      <Dialog open={showUploadModal} onOpenChange={setShowUploadModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Upload File</DialogTitle>
+            <DialogDescription>
+              Upload a new file as evidence
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label className="text-white">Title</Label>
+              <Input
+                value={uploadFormData.title}
+                onChange={(e) => setUploadFormData(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="Enter file title..."
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label className="text-white">Description</Label>
+              <Textarea
+                value={uploadFormData.description}
+                onChange={(e) => setUploadFormData(prev => ({ ...prev, description: e.target.value }))}
+                placeholder="Enter file description..."
+                className="mt-1"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-white">Type</Label>
+                <Select
+                  value={uploadFormData.type}
+                  onValueChange={(value: 'DOCUMENT' | 'SCREENSHOT' | 'POLICY' | 'PROCEDURE' | 'TRAINING_RECORD' | 'AUDIT_REPORT' | 'OTHER') => 
+                    setUploadFormData(prev => ({ ...prev, type: value }))
+                  }
+                >
+                  <SelectTrigger className="mt-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="DOCUMENT">Document</SelectItem>
+                    <SelectItem value="SCREENSHOT">Screenshot</SelectItem>
+                    <SelectItem value="POLICY">Policy</SelectItem>
+                    <SelectItem value="PROCEDURE">Procedure</SelectItem>
+                    <SelectItem value="TRAINING_RECORD">Training Record</SelectItem>
+                    <SelectItem value="AUDIT_REPORT">Audit Report</SelectItem>
+                    <SelectItem value="OTHER">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-white">File</Label>
+                <Input
+                  type="file"
+                  onChange={(e) => setUploadFormData(prev => ({ ...prev, file: e.target.files?.[0] || null }))}
+                  className="mt-1"
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseUploadModal}>
+              Cancel
+            </Button>
+            <Button onClick={handleUploadFileSubmit}>
+              Upload File
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Evidence Modal */}
+      <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Add Evidence</DialogTitle>
+            <DialogDescription>
+              Add new evidence without uploading a file
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label className="text-white">Title</Label>
+              <Input
+                value={addFormData.title}
+                onChange={(e) => setAddFormData(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="Enter evidence title..."
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label className="text-white">Description</Label>
+              <Textarea
+                value={addFormData.description}
+                onChange={(e) => setAddFormData(prev => ({ ...prev, description: e.target.value }))}
+                placeholder="Enter evidence description..."
+                className="mt-1"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-white">Type</Label>
+                <Select
+                  value={addFormData.type}
+                  onValueChange={(value: 'DOCUMENT' | 'SCREENSHOT' | 'POLICY' | 'PROCEDURE' | 'TRAINING_RECORD' | 'AUDIT_REPORT' | 'OTHER') => 
+                    setAddFormData(prev => ({ ...prev, type: value }))
+                  }
+                >
+                  <SelectTrigger className="mt-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="DOCUMENT">Document</SelectItem>
+                    <SelectItem value="SCREENSHOT">Screenshot</SelectItem>
+                    <SelectItem value="POLICY">Policy</SelectItem>
+                    <SelectItem value="PROCEDURE">Procedure</SelectItem>
+                    <SelectItem value="TRAINING_RECORD">Training Record</SelectItem>
+                    <SelectItem value="AUDIT_REPORT">Audit Report</SelectItem>
+                    <SelectItem value="OTHER">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-white">External URL</Label>
+                <Input
+                  value={addFormData.externalUrl}
+                  onChange={(e) => setAddFormData(prev => ({ ...prev, externalUrl: e.target.value }))}
+                  placeholder="Enter external URL (optional)..."
+                  className="mt-1"
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseAddModal}>
+              Cancel
+            </Button>
+            <Button onClick={handleAddEvidenceSubmit}>
+              Add Evidence
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Evidence Modal */}
+      <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle>Delete Evidence</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this evidence? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          {selectedEvidence && (
+            <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-sm text-red-800">
+                <strong>Evidence:</strong> {selectedEvidence.title}
+              </p>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseDeleteModal}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteEvidenceSubmit}>
+              Delete Evidence
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

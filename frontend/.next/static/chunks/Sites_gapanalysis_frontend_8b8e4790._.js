@@ -761,11 +761,199 @@ function ActionPlansPage() {
     const [filterStatus, setFilterStatus] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('all');
     const [filterPriority, setFilterPriority] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('all');
     const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
+    // Modal states
+    const [showViewModal, setShowViewModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [showEditModal, setShowEditModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [showCompleteModal, setShowCompleteModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [showDeleteModal, setShowDeleteModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [showCreateModal, setShowCreateModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [selectedActionPlan, setSelectedActionPlan] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    // Form states
+    const [editFormData, setEditFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
+        actionText: '',
+        priority: 'MEDIUM',
+        status: 'PENDING',
+        deadline: '',
+        completionNotes: ''
+    });
+    const [createFormData, setCreateFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
+        actionText: '',
+        priority: 'MEDIUM',
+        deadline: '',
+        responsibleId: 1,
+        requirementId: 1
+    });
+    const [completeFormData, setCompleteFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
+        completionNotes: ''
+    });
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "ActionPlansPage.useEffect": ()=>{
             fetchActionPlans();
         }
     }["ActionPlansPage.useEffect"], []);
+    // Modal handlers
+    const handleViewActionPlan = (actionPlan)=>{
+        setSelectedActionPlan(actionPlan);
+        setShowViewModal(true);
+    };
+    const handleEditActionPlan = (actionPlan)=>{
+        setSelectedActionPlan(actionPlan);
+        setEditFormData({
+            actionText: actionPlan.actionText,
+            priority: actionPlan.priority,
+            status: actionPlan.status,
+            deadline: actionPlan.deadline ? new Date(actionPlan.deadline).toISOString().split('T')[0] : '',
+            completionNotes: actionPlan.completionNotes || ''
+        });
+        setShowEditModal(true);
+    };
+    const handleCompleteActionPlan = (actionPlan)=>{
+        setSelectedActionPlan(actionPlan);
+        setCompleteFormData({
+            completionNotes: ''
+        });
+        setShowCompleteModal(true);
+    };
+    const handleDeleteActionPlan = (actionPlan)=>{
+        setSelectedActionPlan(actionPlan);
+        setShowDeleteModal(true);
+    };
+    const handleCreateActionPlan = ()=>{
+        setCreateFormData({
+            actionText: '',
+            priority: 'MEDIUM',
+            deadline: '',
+            responsibleId: 1,
+            requirementId: 1
+        });
+        setShowCreateModal(true);
+    };
+    const handleCloseViewModal = ()=>{
+        setShowViewModal(false);
+        setSelectedActionPlan(null);
+    };
+    const handleCloseEditModal = ()=>{
+        setShowEditModal(false);
+        setSelectedActionPlan(null);
+        setEditFormData({
+            actionText: '',
+            priority: 'MEDIUM',
+            status: 'PENDING',
+            deadline: '',
+            completionNotes: ''
+        });
+    };
+    const handleCloseCompleteModal = ()=>{
+        setShowCompleteModal(false);
+        setSelectedActionPlan(null);
+        setCompleteFormData({
+            completionNotes: ''
+        });
+    };
+    const handleCloseDeleteModal = ()=>{
+        setShowDeleteModal(false);
+        setSelectedActionPlan(null);
+    };
+    const handleCloseCreateModal = ()=>{
+        setShowCreateModal(false);
+        setCreateFormData({
+            actionText: '',
+            priority: 'MEDIUM',
+            deadline: '',
+            responsibleId: 1,
+            requirementId: 1
+        });
+    };
+    const handleUpdateActionPlan = async ()=>{
+        if (!selectedActionPlan) return;
+        try {
+            // TODO: Replace with actual API call
+            // await api.put(`/action-plans/${selectedActionPlan.id}`, editFormData);
+            // Mock update
+            setActionPlans((prev)=>prev.map((plan)=>plan.id === selectedActionPlan.id ? {
+                        ...plan,
+                        ...editFormData,
+                        updatedAt: new Date().toISOString()
+                    } : plan));
+            alert('Action plan updated successfully!');
+            handleCloseEditModal();
+        } catch (error) {
+            console.error('Failed to update action plan:', error);
+            alert('Failed to update action plan. Please try again.');
+        }
+    };
+    const handleCompleteActionPlanSubmit = async ()=>{
+        if (!selectedActionPlan) return;
+        try {
+            // TODO: Replace with actual API call
+            // await api.put(`/action-plans/${selectedActionPlan.id}/complete`, completeFormData);
+            // Mock completion
+            setActionPlans((prev)=>prev.map((plan)=>plan.id === selectedActionPlan.id ? {
+                        ...plan,
+                        status: 'COMPLETED',
+                        completionNotes: completeFormData.completionNotes,
+                        completedAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    } : plan));
+            alert('Action plan marked as complete!');
+            handleCloseCompleteModal();
+        } catch (error) {
+            console.error('Failed to complete action plan:', error);
+            alert('Failed to complete action plan. Please try again.');
+        }
+    };
+    const handleDeleteActionPlanSubmit = async ()=>{
+        if (!selectedActionPlan) return;
+        try {
+            // TODO: Replace with actual API call
+            // await api.delete(`/action-plans/${selectedActionPlan.id}`);
+            // Mock deletion
+            setActionPlans((prev)=>prev.filter((plan)=>plan.id !== selectedActionPlan.id));
+            alert('Action plan deleted successfully!');
+            handleCloseDeleteModal();
+        } catch (error) {
+            console.error('Failed to delete action plan:', error);
+            alert('Failed to delete action plan. Please try again.');
+        }
+    };
+    const handleCreateActionPlanSubmit = async ()=>{
+        try {
+            // TODO: Replace with actual API call
+            // await api.post('/action-plans', createFormData);
+            // Mock creation
+            const newActionPlan = {
+                id: Math.max(...actionPlans.map((p)=>p.id)) + 1,
+                actionText: createFormData.actionText,
+                priority: createFormData.priority,
+                status: 'PENDING',
+                deadline: createFormData.deadline ? new Date(createFormData.deadline).toISOString() : undefined,
+                gapId: 1,
+                responsibleId: createFormData.responsibleId,
+                requirementId: createFormData.requirementId,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                responsible: {
+                    id: 1,
+                    firstName: 'John',
+                    lastName: 'Doe'
+                },
+                requirement: {
+                    id: 1,
+                    clause: 'A.9.2.1',
+                    title: 'User access provisioning'
+                }
+            };
+            setActionPlans((prev)=>[
+                    ...prev,
+                    newActionPlan
+                ]);
+            alert('Action plan created successfully!');
+            handleCloseCreateModal();
+        } catch (error) {
+            console.error('Failed to create action plan:', error);
+            alert('Failed to create action plan. Please try again.');
+        }
+    };
     const fetchActionPlans = async ()=>{
         try {
             setLoading(true);
@@ -915,12 +1103,12 @@ function ActionPlansPage() {
                 className: "animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"
             }, void 0, false, {
                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                lineNumber: 195,
+                lineNumber: 405,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-            lineNumber: 194,
+            lineNumber: 404,
             columnNumber: 7
         }, this);
     }
@@ -939,7 +1127,7 @@ function ActionPlansPage() {
                                     children: "Action Plans"
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 206,
+                                    lineNumber: 416,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -954,20 +1142,20 @@ function ActionPlansPage() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 208,
+                                            lineNumber: 418,
                                             columnNumber: 65
                                         }, this),
                                         " found"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 207,
+                                    lineNumber: 417,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                            lineNumber: 205,
+                            lineNumber: 415,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -976,23 +1164,23 @@ function ActionPlansPage() {
                                 className: "h-16 w-16 text-blue-200"
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                lineNumber: 212,
+                                lineNumber: 422,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                            lineNumber: 211,
+                            lineNumber: 421,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                    lineNumber: 204,
+                    lineNumber: 414,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                lineNumber: 203,
+                lineNumber: 413,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1010,7 +1198,7 @@ function ActionPlansPage() {
                                             children: "Total Actions"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 222,
+                                            lineNumber: 432,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1018,7 +1206,7 @@ function ActionPlansPage() {
                                             children: actionPlans.length
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 223,
+                                            lineNumber: 433,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1026,13 +1214,13 @@ function ActionPlansPage() {
                                             children: "+5 this month"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 224,
+                                            lineNumber: 434,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 221,
+                                    lineNumber: 431,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1041,23 +1229,23 @@ function ActionPlansPage() {
                                         className: "h-6 w-6 text-blue-600"
                                     }, void 0, false, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                        lineNumber: 227,
+                                        lineNumber: 437,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 226,
+                                    lineNumber: 436,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                            lineNumber: 220,
+                            lineNumber: 430,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                        lineNumber: 219,
+                        lineNumber: 429,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1072,7 +1260,7 @@ function ActionPlansPage() {
                                             children: "In Progress"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 235,
+                                            lineNumber: 445,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1080,7 +1268,7 @@ function ActionPlansPage() {
                                             children: actionPlans.filter((a)=>a.status === 'IN_PROGRESS').length
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 236,
+                                            lineNumber: 446,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1088,13 +1276,13 @@ function ActionPlansPage() {
                                             children: "Active tasks"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 237,
+                                            lineNumber: 447,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 234,
+                                    lineNumber: 444,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1103,23 +1291,23 @@ function ActionPlansPage() {
                                         className: "h-6 w-6 text-blue-600"
                                     }, void 0, false, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                        lineNumber: 240,
+                                        lineNumber: 450,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 239,
+                                    lineNumber: 449,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                            lineNumber: 233,
+                            lineNumber: 443,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                        lineNumber: 232,
+                        lineNumber: 442,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1134,7 +1322,7 @@ function ActionPlansPage() {
                                             children: "Overdue"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 248,
+                                            lineNumber: 458,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1142,7 +1330,7 @@ function ActionPlansPage() {
                                             children: actionPlans.filter((a)=>isOverdue(a.deadline || '', a.status)).length
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 249,
+                                            lineNumber: 459,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1150,13 +1338,13 @@ function ActionPlansPage() {
                                             children: "Need attention"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 250,
+                                            lineNumber: 460,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 247,
+                                    lineNumber: 457,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1165,23 +1353,23 @@ function ActionPlansPage() {
                                         className: "h-6 w-6 text-red-600"
                                     }, void 0, false, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                        lineNumber: 253,
+                                        lineNumber: 463,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 252,
+                                    lineNumber: 462,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                            lineNumber: 246,
+                            lineNumber: 456,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                        lineNumber: 245,
+                        lineNumber: 455,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1196,7 +1384,7 @@ function ActionPlansPage() {
                                             children: "Completed"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 261,
+                                            lineNumber: 471,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1204,7 +1392,7 @@ function ActionPlansPage() {
                                             children: actionPlans.filter((a)=>a.status === 'COMPLETED').length
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 262,
+                                            lineNumber: 472,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1212,13 +1400,13 @@ function ActionPlansPage() {
                                             children: "This month"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 263,
+                                            lineNumber: 473,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 260,
+                                    lineNumber: 470,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1227,29 +1415,29 @@ function ActionPlansPage() {
                                         className: "h-6 w-6 text-green-600"
                                     }, void 0, false, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                        lineNumber: 266,
+                                        lineNumber: 476,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 265,
+                                    lineNumber: 475,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                            lineNumber: 259,
+                            lineNumber: 469,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                        lineNumber: 258,
+                        lineNumber: 468,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                lineNumber: 218,
+                lineNumber: 428,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -1262,19 +1450,19 @@ function ActionPlansPage() {
                                     className: "h-5 w-5"
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 276,
+                                    lineNumber: 486,
                                     columnNumber: 13
                                 }, this),
                                 "Filters"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                            lineNumber: 275,
+                            lineNumber: 485,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                        lineNumber: 274,
+                        lineNumber: 484,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -1288,7 +1476,7 @@ function ActionPlansPage() {
                                             className: "absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 283,
+                                            lineNumber: 493,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1298,13 +1486,13 @@ function ActionPlansPage() {
                                             className: "pl-10"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 284,
+                                            lineNumber: 494,
                                             columnNumber: 16
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 282,
+                                    lineNumber: 492,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -1317,12 +1505,12 @@ function ActionPlansPage() {
                                                 placeholder: "Status"
                                             }, void 0, false, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                lineNumber: 293,
+                                                lineNumber: 503,
                                                 columnNumber: 18
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 292,
+                                            lineNumber: 502,
                                             columnNumber: 16
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -1334,7 +1522,7 @@ function ActionPlansPage() {
                                                     children: "All Status"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                    lineNumber: 296,
+                                                    lineNumber: 506,
                                                     columnNumber: 18
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1343,7 +1531,7 @@ function ActionPlansPage() {
                                                     children: "Pending"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                    lineNumber: 297,
+                                                    lineNumber: 507,
                                                     columnNumber: 18
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1352,7 +1540,7 @@ function ActionPlansPage() {
                                                     children: "In Progress"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                    lineNumber: 298,
+                                                    lineNumber: 508,
                                                     columnNumber: 18
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1361,7 +1549,7 @@ function ActionPlansPage() {
                                                     children: "Completed"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                    lineNumber: 299,
+                                                    lineNumber: 509,
                                                     columnNumber: 18
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1370,19 +1558,19 @@ function ActionPlansPage() {
                                                     children: "Cancelled"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                    lineNumber: 300,
+                                                    lineNumber: 510,
                                                     columnNumber: 18
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 295,
+                                            lineNumber: 505,
                                             columnNumber: 16
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 291,
+                                    lineNumber: 501,
                                     columnNumber: 14
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -1395,12 +1583,12 @@ function ActionPlansPage() {
                                                 placeholder: "Priority"
                                             }, void 0, false, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                lineNumber: 305,
+                                                lineNumber: 515,
                                                 columnNumber: 18
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 304,
+                                            lineNumber: 514,
                                             columnNumber: 16
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -1412,7 +1600,7 @@ function ActionPlansPage() {
                                                     children: "All Priorities"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                    lineNumber: 308,
+                                                    lineNumber: 518,
                                                     columnNumber: 18
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1421,7 +1609,7 @@ function ActionPlansPage() {
                                                     children: "Critical"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                    lineNumber: 309,
+                                                    lineNumber: 519,
                                                     columnNumber: 18
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1430,7 +1618,7 @@ function ActionPlansPage() {
                                                     children: "High"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                    lineNumber: 310,
+                                                    lineNumber: 520,
                                                     columnNumber: 18
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1439,7 +1627,7 @@ function ActionPlansPage() {
                                                     children: "Medium"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                    lineNumber: 311,
+                                                    lineNumber: 521,
                                                     columnNumber: 18
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1448,19 +1636,19 @@ function ActionPlansPage() {
                                                     children: "Low"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                    lineNumber: 312,
+                                                    lineNumber: 522,
                                                     columnNumber: 18
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 307,
+                                            lineNumber: 517,
                                             columnNumber: 16
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 303,
+                                    lineNumber: 513,
                                     columnNumber: 14
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1469,24 +1657,24 @@ function ActionPlansPage() {
                                     children: "Refresh"
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 315,
+                                    lineNumber: 525,
                                     columnNumber: 14
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                            lineNumber: 281,
+                            lineNumber: 491,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                        lineNumber: 280,
+                        lineNumber: 490,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                lineNumber: 273,
+                lineNumber: 483,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1500,7 +1688,7 @@ function ActionPlansPage() {
                                 children: "Action Plans"
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                lineNumber: 325,
+                                lineNumber: 535,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$RoleBasedComponent$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ManagerAndAbove"], {
@@ -1515,25 +1703,25 @@ function ActionPlansPage() {
                                             className: "h-4 w-4"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 334,
+                                            lineNumber: 544,
                                             columnNumber: 15
                                         }, this),
                                         "New Action Plan"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 327,
+                                    lineNumber: 537,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                lineNumber: 326,
+                                lineNumber: 536,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                        lineNumber: 324,
+                        lineNumber: 534,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1556,7 +1744,7 @@ function ActionPlansPage() {
                                                         children: plan.actionText
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 350,
+                                                        lineNumber: 560,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1568,13 +1756,13 @@ function ActionPlansPage() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 351,
+                                                        lineNumber: 561,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                lineNumber: 349,
+                                                lineNumber: 559,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1587,14 +1775,14 @@ function ActionPlansPage() {
                                                                 className: "h-3 w-3 mr-1"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                lineNumber: 357,
+                                                                lineNumber: 567,
                                                                 columnNumber: 23
                                                             }, this),
                                                             statusInfo.label
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 356,
+                                                        lineNumber: 566,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -1602,19 +1790,19 @@ function ActionPlansPage() {
                                                         children: plan.priority
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 360,
+                                                        lineNumber: 570,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                lineNumber: 355,
+                                                lineNumber: 565,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                        lineNumber: 348,
+                                        lineNumber: 558,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1630,7 +1818,7 @@ function ActionPlansPage() {
                                                                 className: "h-4 w-4 text-gray-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                lineNumber: 369,
+                                                                lineNumber: 579,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1640,7 +1828,7 @@ function ActionPlansPage() {
                                                                         children: "Responsible:"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                        lineNumber: 371,
+                                                                        lineNumber: 581,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1652,19 +1840,19 @@ function ActionPlansPage() {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                        lineNumber: 372,
+                                                                        lineNumber: 582,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                lineNumber: 370,
+                                                                lineNumber: 580,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 368,
+                                                        lineNumber: 578,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1674,7 +1862,7 @@ function ActionPlansPage() {
                                                                 className: "h-4 w-4 text-gray-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                lineNumber: 378,
+                                                                lineNumber: 588,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1684,7 +1872,7 @@ function ActionPlansPage() {
                                                                         children: "Deadline:"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                        lineNumber: 380,
+                                                                        lineNumber: 590,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1696,25 +1884,25 @@ function ActionPlansPage() {
                                                                                 children: "(Overdue)"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                                lineNumber: 383,
+                                                                                lineNumber: 593,
                                                                                 columnNumber: 39
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                        lineNumber: 381,
+                                                                        lineNumber: 591,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                lineNumber: 379,
+                                                                lineNumber: 589,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 377,
+                                                        lineNumber: 587,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1724,7 +1912,7 @@ function ActionPlansPage() {
                                                                 className: "h-4 w-4 text-gray-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                lineNumber: 388,
+                                                                lineNumber: 598,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1734,7 +1922,7 @@ function ActionPlansPage() {
                                                                         children: "Gap:"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                        lineNumber: 390,
+                                                                        lineNumber: 600,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1742,25 +1930,25 @@ function ActionPlansPage() {
                                                                         children: (_plan_gap = plan.gap) === null || _plan_gap === void 0 ? void 0 : _plan_gap.description
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                        lineNumber: 391,
+                                                                        lineNumber: 601,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                lineNumber: 389,
+                                                                lineNumber: 599,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 387,
+                                                        lineNumber: 597,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                lineNumber: 367,
+                                                lineNumber: 577,
                                                 columnNumber: 19
                                             }, this),
                                             plan.completionNotes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1771,7 +1959,7 @@ function ActionPlansPage() {
                                                         children: "Completion Notes:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 400,
+                                                        lineNumber: 610,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1779,13 +1967,13 @@ function ActionPlansPage() {
                                                         children: plan.completionNotes
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 401,
+                                                        lineNumber: 611,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                lineNumber: 399,
+                                                lineNumber: 609,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1795,107 +1983,91 @@ function ActionPlansPage() {
                                                         size: "sm",
                                                         variant: "outline",
                                                         className: "flex-1",
-                                                        onClick: ()=>{
-                                                            // Open action plan details modal
-                                                            alert("Viewing action plan: ".concat(plan.actionText));
-                                                        },
+                                                        onClick: ()=>handleViewActionPlan(plan),
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
                                                                 className: "h-4 w-4 mr-1"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                lineNumber: 415,
+                                                                lineNumber: 622,
                                                                 columnNumber: 23
                                                             }, this),
                                                             "View Details"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 406,
+                                                        lineNumber: 616,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                                         size: "sm",
                                                         variant: "outline",
                                                         className: "flex-1",
-                                                        onClick: ()=>{
-                                                            // Open action plan edit form
-                                                            alert("Editing action plan: ".concat(plan.actionText));
-                                                        },
+                                                        onClick: ()=>handleEditActionPlan(plan),
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$square$2d$pen$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Edit$3e$__["Edit"], {
                                                                 className: "h-4 w-4 mr-1"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                                lineNumber: 427,
+                                                                lineNumber: 631,
                                                                 columnNumber: 23
                                                             }, this),
                                                             "Edit"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 418,
+                                                        lineNumber: 625,
                                                         columnNumber: 21
                                                     }, this),
                                                     plan.status !== 'COMPLETED' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                                         size: "sm",
                                                         className: "flex-1",
-                                                        onClick: ()=>{
-                                                            // Mark action plan as complete
-                                                            if (confirm('Mark action plan "'.concat(plan.actionText, '" as complete?'))) {
-                                                                alert('Action plan "'.concat(plan.actionText, '" marked as complete!'));
-                                                            }
-                                                        },
+                                                        onClick: ()=>handleCompleteActionPlan(plan),
                                                         children: "Mark Complete"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 431,
+                                                        lineNumber: 635,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                                         size: "sm",
                                                         variant: "outline",
                                                         className: "text-red-600 hover:text-red-700",
-                                                        onClick: ()=>{
-                                                            // Confirm deletion
-                                                            if (confirm("Are you sure you want to delete action plan: ".concat(plan.actionText, "?"))) {
-                                                                alert("Deleting action plan: ".concat(plan.actionText));
-                                                            }
-                                                        },
+                                                        onClick: ()=>handleDeleteActionPlan(plan),
                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {
                                                             className: "h-4 w-4"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                            lineNumber: 455,
+                                                            lineNumber: 649,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                        lineNumber: 444,
+                                                        lineNumber: 643,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                                lineNumber: 405,
+                                                lineNumber: 615,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                        lineNumber: 366,
+                                        lineNumber: 576,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, plan.id, true, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                lineNumber: 347,
+                                lineNumber: 557,
                                 columnNumber: 15
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                        lineNumber: 340,
+                        lineNumber: 550,
                         columnNumber: 9
                     }, this),
                     filteredActionPlans.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1905,7 +2077,7 @@ function ActionPlansPage() {
                                 className: "h-12 w-12 text-gray-400 mx-auto mb-4"
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                lineNumber: 466,
+                                lineNumber: 660,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1913,7 +2085,7 @@ function ActionPlansPage() {
                                 children: "No action plans found"
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                lineNumber: 467,
+                                lineNumber: 661,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1921,55 +2093,52 @@ function ActionPlansPage() {
                                 children: searchTerm || filterStatus !== 'all' || filterPriority !== 'all' ? 'Try adjusting your filters to see more results.' : 'Get started by creating your first action plan.'
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                lineNumber: 468,
+                                lineNumber: 662,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$RoleBasedComponent$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ManagerAndAbove"], {
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                    onClick: ()=>{
-                                        // Open action plan creation form
-                                        alert('Opening action plan creation form... (This would open a modal to create new action plans)');
-                                    },
+                                    onClick: handleCreateActionPlan,
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
                                             className: "h-4 w-4 mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                            lineNumber: 480,
+                                            lineNumber: 671,
                                             columnNumber: 17
                                         }, this),
                                         "New Action Plan"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                    lineNumber: 474,
+                                    lineNumber: 668,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                                lineNumber: 473,
+                                lineNumber: 667,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                        lineNumber: 465,
+                        lineNumber: 659,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-                lineNumber: 323,
+                lineNumber: 533,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/action-plans/page.tsx",
-        lineNumber: 201,
+        lineNumber: 411,
         columnNumber: 5
     }, this);
 }
-_s(ActionPlansPage, "eajfEpbr3CxfINJOPwRsOsyilW0=", false, function() {
+_s(ActionPlansPage, "tOBCm50WZSKpxYMeKlO50APVBQc=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
     ];
