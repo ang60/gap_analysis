@@ -306,29 +306,29 @@ export default function EvidencePage() {
                />
             </div>
              <Select value={filterType} onValueChange={setFilterType}>
-               <SelectTrigger>
+               <SelectTrigger className="bg-white text-gray-900 border-gray-300">
                  <SelectValue placeholder="Type" />
                </SelectTrigger>
-               <SelectContent>
-                 <SelectItem value="all">All Types</SelectItem>
-                 <SelectItem value="DOCUMENT">Document</SelectItem>
-                 <SelectItem value="SCREENSHOT">Screenshot</SelectItem>
-                 <SelectItem value="POLICY">Policy</SelectItem>
-                 <SelectItem value="PROCEDURE">Procedure</SelectItem>
-                 <SelectItem value="TRAINING_RECORD">Training Record</SelectItem>
-                 <SelectItem value="AUDIT_REPORT">Audit Report</SelectItem>
-                 <SelectItem value="OTHER">Other</SelectItem>
+               <SelectContent className="bg-white border border-gray-300">
+                 <SelectItem value="all" className="text-gray-900 hover:bg-gray-100">All Types</SelectItem>
+                 <SelectItem value="DOCUMENT" className="text-gray-900 hover:bg-gray-100">Document</SelectItem>
+                 <SelectItem value="SCREENSHOT" className="text-gray-900 hover:bg-gray-100">Screenshot</SelectItem>
+                 <SelectItem value="POLICY" className="text-gray-900 hover:bg-gray-100">Policy</SelectItem>
+                 <SelectItem value="PROCEDURE" className="text-gray-900 hover:bg-gray-100">Procedure</SelectItem>
+                 <SelectItem value="TRAINING_RECORD" className="text-gray-900 hover:bg-gray-100">Training Record</SelectItem>
+                 <SelectItem value="AUDIT_REPORT" className="text-gray-900 hover:bg-gray-100">Audit Report</SelectItem>
+                 <SelectItem value="OTHER" className="text-gray-900 hover:bg-gray-100">Other</SelectItem>
                </SelectContent>
              </Select>
              <Select value={filterStatus} onValueChange={setFilterStatus}>
-               <SelectTrigger>
+               <SelectTrigger className="bg-white text-gray-900 border-gray-300">
                  <SelectValue placeholder="Status" />
                </SelectTrigger>
-               <SelectContent>
-                 <SelectItem value="all">All Status</SelectItem>
-                 <SelectItem value="PENDING">Pending Review</SelectItem>
-                 <SelectItem value="APPROVED">Approved</SelectItem>
-                 <SelectItem value="REJECTED">Rejected</SelectItem>
+               <SelectContent className="bg-white border border-gray-300">
+                 <SelectItem value="all" className="text-gray-900 hover:bg-gray-100">All Status</SelectItem>
+                 <SelectItem value="PENDING" className="text-gray-900 hover:bg-gray-100">Pending Review</SelectItem>
+                 <SelectItem value="APPROVED" className="text-gray-900 hover:bg-gray-100">Approved</SelectItem>
+                 <SelectItem value="REJECTED" className="text-gray-900 hover:bg-gray-100">Rejected</SelectItem>
                </SelectContent>
              </Select>
              <Button variant="outline" onClick={fetchEvidence}>
@@ -343,11 +343,24 @@ export default function EvidencePage() {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg font-semibold text-gray-900">Evidence</h2>
           <div className="flex gap-2">
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => {
+                // Open file upload modal
+                alert('Opening file upload modal... (This would open a file upload interface)');
+              }}
+            >
               <Upload className="h-4 w-4" />
               Upload File
             </Button>
-            <Button className="flex items-center gap-2">
+            <Button 
+              className="flex items-center gap-2"
+              onClick={() => {
+                // Open evidence creation form
+                alert('Opening evidence creation form... (This would open a modal to add new evidence)');
+              }}
+            >
               <Plus className="h-4 w-4" />
               Add Evidence
             </Button>
@@ -418,27 +431,71 @@ export default function EvidencePage() {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="flex-1">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => {
+                        // Open evidence details modal
+                        alert(`Viewing evidence: ${item.title}`);
+                      }}
+                    >
                       <Eye className="h-4 w-4 mr-1" />
                       View
                     </Button>
                     {item.filePath && (
-                      <Button size="sm" variant="outline" className="flex-1">
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => {
+                          // Download file
+                          alert(`Downloading file: ${item.title}`);
+                        }}
+                      >
                         <Download className="h-4 w-4 mr-1" />
                         Download
                       </Button>
                     )}
                     {item.externalUrl && (
-                      <Button size="sm" variant="outline" className="flex-1">
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => {
+                          // Open external link
+                          if (item.externalUrl) {
+                            window.open(item.externalUrl, '_blank');
+                          }
+                        }}
+                      >
                         <Link className="h-4 w-4 mr-1" />
                         Open Link
                       </Button>
                     )}
-                    <Button size="sm" variant="outline" className="flex-1">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => {
+                        // Open evidence edit form
+                        alert(`Editing evidence: ${item.title}`);
+                      }}
+                    >
                       <Edit className="h-4 w-4 mr-1" />
                       Edit
                     </Button>
-                    <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="text-red-600 hover:text-red-700"
+                      onClick={() => {
+                        // Confirm deletion
+                        if (confirm(`Are you sure you want to delete evidence: ${item.title}?`)) {
+                          alert(`Deleting evidence: ${item.title}`);
+                        }
+                      }}
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -458,11 +515,22 @@ export default function EvidencePage() {
                 : 'Get started by uploading your first piece of evidence.'}
             </p>
             <div className="flex gap-2 justify-center">
-              <Button variant="outline">
+              <Button 
+                variant="outline"
+                onClick={() => {
+                  // Open file upload modal
+                  alert('Opening file upload modal... (This would open a file upload interface)');
+                }}
+              >
                 <Upload className="h-4 w-4 mr-2" />
                 Upload File
               </Button>
-              <Button>
+              <Button
+                onClick={() => {
+                  // Open evidence creation form
+                  alert('Opening evidence creation form... (This would open a modal to add new evidence)');
+                }}
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Evidence
               </Button>

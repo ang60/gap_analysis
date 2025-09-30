@@ -289,27 +289,27 @@ export default function ActionPlansPage() {
                />
             </div>
              <Select value={filterStatus} onValueChange={setFilterStatus}>
-               <SelectTrigger>
+               <SelectTrigger className="bg-white text-gray-900 border-gray-300">
                  <SelectValue placeholder="Status" />
                </SelectTrigger>
-               <SelectContent>
-                 <SelectItem value="all">All Status</SelectItem>
-                 <SelectItem value="PENDING">Pending</SelectItem>
-                 <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                 <SelectItem value="COMPLETED">Completed</SelectItem>
-                 <SelectItem value="CANCELLED">Cancelled</SelectItem>
+               <SelectContent className="bg-white border border-gray-300">
+                 <SelectItem value="all" className="text-gray-900 hover:bg-gray-100">All Status</SelectItem>
+                 <SelectItem value="PENDING" className="text-gray-900 hover:bg-gray-100">Pending</SelectItem>
+                 <SelectItem value="IN_PROGRESS" className="text-gray-900 hover:bg-gray-100">In Progress</SelectItem>
+                 <SelectItem value="COMPLETED" className="text-gray-900 hover:bg-gray-100">Completed</SelectItem>
+                 <SelectItem value="CANCELLED" className="text-gray-900 hover:bg-gray-100">Cancelled</SelectItem>
                </SelectContent>
              </Select>
              <Select value={filterPriority} onValueChange={setFilterPriority}>
-               <SelectTrigger>
+               <SelectTrigger className="bg-white text-gray-900 border-gray-300">
                  <SelectValue placeholder="Priority" />
                </SelectTrigger>
-               <SelectContent>
-                 <SelectItem value="all">All Priorities</SelectItem>
-                 <SelectItem value="CRITICAL">Critical</SelectItem>
-                 <SelectItem value="HIGH">High</SelectItem>
-                 <SelectItem value="MEDIUM">Medium</SelectItem>
-                 <SelectItem value="LOW">Low</SelectItem>
+               <SelectContent className="bg-white border border-gray-300">
+                 <SelectItem value="all" className="text-gray-900 hover:bg-gray-100">All Priorities</SelectItem>
+                 <SelectItem value="CRITICAL" className="text-gray-900 hover:bg-gray-100">Critical</SelectItem>
+                 <SelectItem value="HIGH" className="text-gray-900 hover:bg-gray-100">High</SelectItem>
+                 <SelectItem value="MEDIUM" className="text-gray-900 hover:bg-gray-100">Medium</SelectItem>
+                 <SelectItem value="LOW" className="text-gray-900 hover:bg-gray-100">Low</SelectItem>
                </SelectContent>
              </Select>
              <Button variant="outline" onClick={fetchActionPlans}>
@@ -324,7 +324,13 @@ export default function ActionPlansPage() {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg font-semibold text-gray-900">Action Plans</h2>
           <ManagerAndAbove>
-            <Button className="flex items-center gap-2">
+            <Button 
+              className="flex items-center gap-2"
+              onClick={() => {
+                // Open action plan creation form
+                alert('Opening action plan creation form... (This would open a modal to create new action plans)');
+              }}
+            >
               <Plus className="h-4 w-4" />
               New Action Plan
             </Button>
@@ -397,20 +403,55 @@ export default function ActionPlansPage() {
                   )}
                   
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="flex-1">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => {
+                        // Open action plan details modal
+                        alert(`Viewing action plan: ${plan.actionText}`);
+                      }}
+                    >
                       <Eye className="h-4 w-4 mr-1" />
                       View Details
                     </Button>
-                    <Button size="sm" variant="outline" className="flex-1">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => {
+                        // Open action plan edit form
+                        alert(`Editing action plan: ${plan.actionText}`);
+                      }}
+                    >
                       <Edit className="h-4 w-4 mr-1" />
                       Edit
                     </Button>
                     {plan.status !== 'COMPLETED' && (
-                      <Button size="sm" className="flex-1">
+                      <Button 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => {
+                          // Mark action plan as complete
+                          if (confirm(`Mark action plan "${plan.actionText}" as complete?`)) {
+                            alert(`Action plan "${plan.actionText}" marked as complete!`);
+                          }
+                        }}
+                      >
                         Mark Complete
                       </Button>
                     )}
-                    <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="text-red-600 hover:text-red-700"
+                      onClick={() => {
+                        // Confirm deletion
+                        if (confirm(`Are you sure you want to delete action plan: ${plan.actionText}?`)) {
+                          alert(`Deleting action plan: ${plan.actionText}`);
+                        }
+                      }}
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -430,7 +471,12 @@ export default function ActionPlansPage() {
                 : 'Get started by creating your first action plan.'}
             </p>
             <ManagerAndAbove>
-              <Button>
+              <Button
+                onClick={() => {
+                  // Open action plan creation form
+                  alert('Opening action plan creation form... (This would open a modal to create new action plans)');
+                }}
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 New Action Plan
               </Button>

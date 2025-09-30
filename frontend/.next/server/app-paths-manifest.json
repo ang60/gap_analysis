@@ -1,9 +1,16 @@
 {
   "/auth/login/page": "app/auth/login/page.js",
+  "/dashboard/action-plans/page": "app/dashboard/action-plans/page.js",
+  "/dashboard/admin/page": "app/dashboard/admin/page.js",
+  "/dashboard/compliance-officer/page": "app/dashboard/compliance-officer/page.js",
   "/dashboard/gap-analysis/page": "app/dashboard/gap-analysis/page.js",
+  "/dashboard/manager/page": "app/dashboard/manager/page.js",
   "/dashboard/page": "app/dashboard/page.js",
   "/dashboard/profile/page": "app/dashboard/profile/page.js",
-  "/dashboard/super-admin/page": "app/dashboard/super-admin/page.js",
+  "/dashboard/requirements/page": "app/dashboard/requirements/page.js",
+  "/dashboard/risks/page": "app/dashboard/risks/page.js",
+  "/dashboard/schedules/page": "app/dashboard/schedules/page.js",
+  "/dashboard/user-management/page": "app/dashboard/user-management/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js"
 }

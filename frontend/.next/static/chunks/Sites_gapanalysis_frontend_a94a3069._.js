@@ -135,29 +135,21 @@ const navigationItems = [
         name: 'Requirements',
         href: '/dashboard/requirements',
         roles: [
-            'ADMIN',
-            'MANAGER',
-            'COMPLIANCE_OFFICER',
-            'STAFF'
+            'COMPLIANCE_OFFICER'
         ]
     },
     {
         name: 'Gap Analysis',
         href: '/dashboard/gap-analysis',
         roles: [
-            'ADMIN',
-            'MANAGER',
-            'COMPLIANCE_OFFICER',
-            'STAFF'
+            'COMPLIANCE_OFFICER'
         ]
     },
     {
         name: 'Action Plans',
         href: '/dashboard/action-plans',
         roles: [
-            'ADMIN',
             'MANAGER',
-            'COMPLIANCE_OFFICER',
             'STAFF'
         ]
     },
@@ -165,29 +157,21 @@ const navigationItems = [
         name: 'Risk Register',
         href: '/dashboard/risks',
         roles: [
-            'ADMIN',
-            'MANAGER',
-            'COMPLIANCE_OFFICER',
-            'STAFF'
+            'COMPLIANCE_OFFICER'
         ]
     },
     {
         name: 'Schedules',
         href: '/dashboard/schedules',
         roles: [
-            'ADMIN',
             'MANAGER',
-            'COMPLIANCE_OFFICER',
-            'STAFF'
+            'COMPLIANCE_OFFICER'
         ]
     },
     {
         name: 'Evidence',
         href: '/dashboard/evidence',
         roles: [
-            'ADMIN',
-            'MANAGER',
-            'COMPLIANCE_OFFICER',
             'STAFF'
         ]
     },

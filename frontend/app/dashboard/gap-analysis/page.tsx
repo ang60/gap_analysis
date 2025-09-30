@@ -7,6 +7,9 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { 
   CheckSquare, 
   Plus, 
@@ -52,6 +55,32 @@ export default function GapAnalysisPage() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterRisk, setFilterRisk] = useState('all');
   const { user } = useAuth();
+
+  // Modal state
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedAssessment, setSelectedAssessment] = useState<GapAssessment | null>(null);
+
+  // Form data for editing
+  const [formData, setFormData] = useState({
+    status: 0,
+    description: '',
+    evidenceLink: '',
+    riskScore: 0
+  });
+
+  // Form data for creating new assessment
+  const [createFormData, setCreateFormData] = useState({
+    requirementId: 1,
+    branchId: 1,
+    status: 0,
+    description: '',
+    evidenceLink: '',
+    riskScore: 0
+  });
 
   useEffect(() => {
     fetchAssessments();
@@ -113,6 +142,184 @@ export default function GapAnalysisPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // View, Edit, and Delete handlers
+  const handleViewAssessment = (assessment: GapAssessment) => {
+    setSelectedAssessment(assessment);
+    setShowViewModal(true);
+  };
+
+  const handleEditAssessment = (assessment: GapAssessment) => {
+    setSelectedAssessment(assessment);
+    setFormData({
+      status: assessment.status,
+      description: assessment.description,
+      evidenceLink: assessment.evidenceLink || '',
+      riskScore: assessment.riskScore
+    });
+    setShowEditModal(true);
+  };
+
+  const handleDeleteAssessment = (assessment: GapAssessment) => {
+    setSelectedAssessment(assessment);
+    setShowDeleteModal(true);
+  };
+
+  const handleInputChange = (field: string, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleUpdateAssessment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedAssessment) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Update assessment in the list
+      setAssessments(prev => prev.map(assessment => 
+        assessment.id === selectedAssessment.id 
+          ? { ...assessment, ...formData, updatedAt: new Date().toISOString() }
+          : assessment
+      ));
+      
+      setShowEditModal(false);
+      setSelectedAssessment(null);
+      setFormData({
+        status: 0,
+        description: '',
+        evidenceLink: '',
+        riskScore: 0
+      });
+      
+      alert('Assessment updated successfully!');
+    } catch (error) {
+      console.error('Failed to update assessment:', error);
+      alert('Failed to update assessment. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedAssessment) return;
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Remove assessment from list
+      setAssessments(prev => prev.filter(assessment => assessment.id !== selectedAssessment.id));
+      
+      setShowDeleteModal(false);
+      setSelectedAssessment(null);
+      alert(`Assessment deleted successfully!`);
+    } catch (error) {
+      console.error('Failed to delete assessment:', error);
+      alert('Failed to delete assessment. Please try again.');
+    }
+  };
+
+  const handleCloseViewModal = () => {
+    setShowViewModal(false);
+    setSelectedAssessment(null);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setSelectedAssessment(null);
+    setFormData({
+      status: 0,
+      description: '',
+      evidenceLink: '',
+      riskScore: 0
+    });
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedAssessment(null);
+  };
+
+  // Create new assessment handlers
+  const handleCreateAssessment = () => {
+    console.log('Create assessment button clicked');
+    setShowCreateModal(true);
+  };
+
+  const handleCreateInputChange = (field: string, value: any) => {
+    setCreateFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSubmitCreateAssessment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Create new assessment object
+      const newAssessment: GapAssessment = {
+        id: Date.now(), // Temporary ID
+        ...createFormData,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        requirement: {
+          id: createFormData.requirementId,
+          clause: 'A.9.2.1', // Mock requirement data
+          title: 'User Access Control',
+          section: 'Access Control'
+        },
+        branch: {
+          id: createFormData.branchId,
+          name: 'Head Office'
+        }
+      };
+      
+      // Add to assessments list
+      setAssessments(prev => [newAssessment, ...prev]);
+      
+      // Reset form and close modal
+      setCreateFormData({
+        requirementId: 1,
+        branchId: 1,
+        status: 0,
+        description: '',
+        evidenceLink: '',
+        riskScore: 0
+      });
+      setShowCreateModal(false);
+      
+      alert('Assessment created successfully!');
+    } catch (error) {
+      console.error('Failed to create assessment:', error);
+      alert('Failed to create assessment. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCloseCreateModal = () => {
+    setShowCreateModal(false);
+    setCreateFormData({
+      requirementId: 1,
+      branchId: 1,
+      status: 0,
+      description: '',
+      evidenceLink: '',
+      riskScore: 0
+    });
   };
 
   const getStatusInfo = (status: number) => {
@@ -286,7 +493,10 @@ export default function GapAnalysisPage() {
       <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg font-semibold text-gray-900">Gap Assessments</h2>
-          <Button className="flex items-center gap-2">
+          <Button 
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white" 
+            onClick={handleCreateAssessment}
+          >
             <Plus className="h-4 w-4" />
             New Assessment
           </Button>
@@ -350,15 +560,30 @@ export default function GapAnalysisPage() {
                   )}
                   
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="flex-1">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => handleViewAssessment(assessment)}
+                    >
                       <Eye className="h-4 w-4 mr-1" />
                       View Details
                     </Button>
-                    <Button size="sm" variant="outline" className="flex-1">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => handleEditAssessment(assessment)}
+                    >
                       <Edit className="h-4 w-4 mr-1" />
                       Update Assessment
                     </Button>
-                    <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="text-red-600 hover:text-red-700"
+                      onClick={() => handleDeleteAssessment(assessment)}
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -377,13 +602,357 @@ export default function GapAnalysisPage() {
                 ? 'Try adjusting your filters to see more results.'
                 : 'Get started by creating your first gap assessment.'}
             </p>
-            <Button>
+            <Button onClick={handleCreateAssessment}>
               <Plus className="h-4 w-4 mr-2" />
               New Assessment
             </Button>
           </div>
         )}
       </div>
+
+      {/* Create Assessment Modal */}
+      <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Create New Assessment</DialogTitle>
+            <DialogDescription>
+              Create a new gap assessment for a specific requirement.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={handleSubmitCreateAssessment} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="create-requirementId">Requirement</Label>
+                <Select 
+                  value={createFormData.requirementId.toString()} 
+                  onValueChange={(value) => handleCreateInputChange('requirementId', parseInt(value))}
+                >
+                  <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                    <SelectValue placeholder="Select requirement" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-gray-300">
+                    <SelectItem value="1" className="text-gray-900 hover:bg-gray-100">A.9.2.1 - User Access Control</SelectItem>
+                    <SelectItem value="2" className="text-gray-900 hover:bg-gray-100">A.9.2.2 - User Access Review</SelectItem>
+                    <SelectItem value="3" className="text-gray-900 hover:bg-gray-100">A.9.2.3 - Privileged Access Management</SelectItem>
+                    <SelectItem value="4" className="text-gray-900 hover:bg-gray-100">A.9.2.4 - Access Rights Review</SelectItem>
+                    <SelectItem value="5" className="text-gray-900 hover:bg-gray-100">A.9.2.5 - Access Rights Removal</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="create-branchId">Branch</Label>
+                <Select 
+                  value={createFormData.branchId.toString()} 
+                  onValueChange={(value) => handleCreateInputChange('branchId', parseInt(value))}
+                >
+                  <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                    <SelectValue placeholder="Select branch" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-gray-300">
+                    <SelectItem value="1" className="text-gray-900 hover:bg-gray-100">Head Office</SelectItem>
+                    <SelectItem value="2" className="text-gray-900 hover:bg-gray-100">Branch A</SelectItem>
+                    <SelectItem value="3" className="text-gray-900 hover:bg-gray-100">Branch B</SelectItem>
+                    <SelectItem value="4" className="text-gray-900 hover:bg-gray-100">Branch C</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="create-status">Implementation Status</Label>
+              <Select 
+                value={createFormData.status.toString()} 
+                onValueChange={(value) => handleCreateInputChange('status', parseInt(value))}
+              >
+                <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border border-gray-300">
+                  <SelectItem value="0" className="text-gray-900 hover:bg-gray-100">0 - Not Implemented</SelectItem>
+                  <SelectItem value="1" className="text-gray-900 hover:bg-gray-100">1 - Partially Implemented</SelectItem>
+                  <SelectItem value="2" className="text-gray-900 hover:bg-gray-100">2 - Mostly Implemented</SelectItem>
+                  <SelectItem value="3" className="text-gray-900 hover:bg-gray-100">3 - Fully Implemented</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="create-description">Assessment Description</Label>
+              <Textarea
+                id="create-description"
+                value={createFormData.description}
+                onChange={(e) => handleCreateInputChange('description', e.target.value)}
+                placeholder="Describe the current implementation status of this requirement"
+                rows={4}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="create-evidenceLink">Evidence Link (Optional)</Label>
+              <Input
+                id="create-evidenceLink"
+                type="url"
+                value={createFormData.evidenceLink}
+                onChange={(e) => handleCreateInputChange('evidenceLink', e.target.value)}
+                placeholder="https://example.com/evidence"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="create-riskScore">Risk Score</Label>
+              <Select 
+                value={createFormData.riskScore.toString()} 
+                onValueChange={(value) => handleCreateInputChange('riskScore', parseInt(value))}
+              >
+                <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                  <SelectValue placeholder="Select risk score" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border border-gray-300">
+                  <SelectItem value="0" className="text-gray-900 hover:bg-gray-100">0 - No Risk</SelectItem>
+                  <SelectItem value="1" className="text-gray-900 hover:bg-gray-100">1 - Low Risk</SelectItem>
+                  <SelectItem value="2" className="text-gray-900 hover:bg-gray-100">2 - Medium Risk</SelectItem>
+                  <SelectItem value="3" className="text-gray-900 hover:bg-gray-100">3 - High Risk</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={handleCloseCreateModal}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating...' : 'Create Assessment'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Assessment Modal */}
+      <Dialog open={showViewModal} onOpenChange={setShowViewModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Assessment Details</DialogTitle>
+            <DialogDescription>
+              View detailed information about this gap assessment.
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedAssessment && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700">Requirement</Label>
+                <div className="bg-gray-50 p-3 rounded-md">
+                  <p className="text-sm font-medium text-gray-900">
+                    {selectedAssessment.requirement?.clause} - {selectedAssessment.requirement?.title}
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    Section: {selectedAssessment.requirement?.section}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700">Assessment Description</Label>
+                <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-md">
+                  {selectedAssessment.description}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">Implementation Status</Label>
+                  <div className="flex items-center gap-2">
+                    <Badge className={getStatusInfo(selectedAssessment.status).color}>
+                      {getStatusInfo(selectedAssessment.status).label}
+                    </Badge>
+                    <span className="text-sm text-gray-600">
+                      ({selectedAssessment.status}/3)
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">Risk Score</Label>
+                  <div className="flex items-center gap-2">
+                    <Badge className={getRiskInfo(selectedAssessment.riskScore).color}>
+                      {getRiskInfo(selectedAssessment.riskScore).label}
+                    </Badge>
+                    <span className="text-sm text-gray-600">
+                      ({selectedAssessment.riskScore}/3)
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {selectedAssessment.evidenceLink && (
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">Evidence Link</Label>
+                  <div className="bg-gray-50 p-3 rounded-md">
+                    <a 
+                      href={selectedAssessment.evidenceLink} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 text-sm break-all"
+                    >
+                      {selectedAssessment.evidenceLink}
+                    </a>
+                  </div>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">Branch</Label>
+                  <p className="text-sm text-gray-900">
+                    {selectedAssessment.branch?.name}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">Last Updated</Label>
+                  <p className="text-sm text-gray-900">
+                    {new Date(selectedAssessment.updatedAt).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseViewModal}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Assessment Modal */}
+      <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Update Assessment</DialogTitle>
+            <DialogDescription>
+              Update the gap assessment information and status.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={handleUpdateAssessment} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-status">Implementation Status</Label>
+              <Select 
+                value={formData.status.toString()} 
+                onValueChange={(value) => handleInputChange('status', parseInt(value))}
+              >
+                <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border border-gray-300">
+                  <SelectItem value="0" className="text-gray-900 hover:bg-gray-100">0 - Not Implemented</SelectItem>
+                  <SelectItem value="1" className="text-gray-900 hover:bg-gray-100">1 - Partially Implemented</SelectItem>
+                  <SelectItem value="2" className="text-gray-900 hover:bg-gray-100">2 - Mostly Implemented</SelectItem>
+                  <SelectItem value="3" className="text-gray-900 hover:bg-gray-100">3 - Fully Implemented</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-description">Assessment Description</Label>
+              <Textarea
+                id="edit-description"
+                value={formData.description}
+                onChange={(e) => handleInputChange('description', e.target.value)}
+                placeholder="Describe the current implementation status"
+                rows={4}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-evidenceLink">Evidence Link (Optional)</Label>
+              <Input
+                id="edit-evidenceLink"
+                type="url"
+                value={formData.evidenceLink}
+                onChange={(e) => handleInputChange('evidenceLink', e.target.value)}
+                placeholder="https://example.com/evidence"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-riskScore">Risk Score</Label>
+              <Select 
+                value={formData.riskScore.toString()} 
+                onValueChange={(value) => handleInputChange('riskScore', parseInt(value))}
+              >
+                <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                  <SelectValue placeholder="Select risk score" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border border-gray-300">
+                  <SelectItem value="0" className="text-gray-900 hover:bg-gray-100">0 - No Risk</SelectItem>
+                  <SelectItem value="1" className="text-gray-900 hover:bg-gray-100">1 - Low Risk</SelectItem>
+                  <SelectItem value="2" className="text-gray-900 hover:bg-gray-100">2 - Medium Risk</SelectItem>
+                  <SelectItem value="3" className="text-gray-900 hover:bg-gray-100">3 - High Risk</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={handleCloseEditModal}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Updating...' : 'Update Assessment'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Modal */}
+      <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Delete Assessment</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this gap assessment? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedAssessment && (
+            <div className="py-4">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                  <span className="font-medium text-red-800">Assessment to be deleted:</span>
+                </div>
+                <p className="text-sm text-red-700 font-medium">
+                  {selectedAssessment.requirement?.clause} - {selectedAssessment.requirement?.title}
+                </p>
+                <p className="text-xs text-red-600 mt-1">
+                  Status: {getStatusInfo(selectedAssessment.status).label} | 
+                  Risk: {getRiskInfo(selectedAssessment.riskScore).label}
+                </p>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseDeleteModal}>
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleConfirmDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete Assessment
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

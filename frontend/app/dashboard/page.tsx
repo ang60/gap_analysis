@@ -1,8 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { 
   Shield, 
   TrendingUp, 
@@ -14,371 +15,595 @@ import {
   Users,
   BarChart3,
   Plus,
-  ArrowRight
+  ArrowRight,
+  Target,
+  Search,
+  Settings,
+  UserPlus
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { RoleBasedComponent } from '@/components/RoleBasedComponent';
+import Link from 'next/link';
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
-  // Redirect Super Admin to Super Admin dashboard
   useEffect(() => {
-    if (user?.role === 'SUPER_ADMIN') {
-      router.push('/dashboard/super-admin');
-    }
-  }, [user, router]);
+    setLoading(false);
+  }, []);
 
-  // Don't render the regular dashboard for Super Admin
-  if (user?.role === 'SUPER_ADMIN') {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-2 text-gray-600">Redirecting to System Administration...</p>
+          <p className="mt-2 text-gray-600">Loading Dashboard...</p>
         </div>
       </div>
     );
   }
-  
-  const metrics = [
-    {
-      name: 'Requirements',
-      value: '28/41',
-      change: '+12%',
-      changeType: 'positive',
-      icon: FileText,
-      color: 'blue',
-    },
-    {
-      name: 'Schedules',
-      value: '8 upcoming',
-      change: '3 overdue',
-      changeType: 'negative',
-      icon: Calendar,
-      color: 'orange',
-    },
-    {
-      name: 'Action Plans',
-      value: '45 completed',
-      change: '7 pending',
-      changeType: 'neutral',
-      icon: CheckCircle,
-      color: 'green',
-    },
-    {
-      name: 'Active Risks',
-      value: '12',
-      change: '2 high',
-      changeType: 'negative',
-      icon: AlertTriangle,
-      color: 'red',
-    },
-  ];
 
-  const quickActions = [
-    {
-      name: 'New Gap Assessment',
-      description: 'Create a new compliance gap assessment',
-      href: '/dashboard/gap-analysis/new',
-      icon: Plus,
-      color: 'blue',
-    },
-    {
-      name: 'Create Schedule',
-      description: 'Set up a new recurring schedule',
-      href: '/dashboard/schedules/new',
-      icon: Calendar,
-      color: 'green',
-    },
-    {
-      name: 'Add Risk',
-      description: 'Register a new risk in the system',
-      href: '/dashboard/risks/new',
-      icon: AlertTriangle,
-      color: 'red',
-    },
-    {
-      name: 'Upload Evidence',
-      description: 'Upload supporting documentation',
-      href: '/dashboard/evidence/upload',
-      icon: FileText,
-      color: 'purple',
-    },
-  ];
-
-  const recentActivity = [
-    {
-      id: 1,
-      type: 'gap_assessment',
-      title: 'New gap assessment created',
-      description: 'ISO 27001:2022 Clause 7.3 - Awareness',
-      time: '2 hours ago',
-      status: 'pending',
-    },
-    {
-      id: 2,
-      type: 'action_plan',
-      title: 'Action plan completed',
-      description: 'Implement security awareness training',
-      time: '4 hours ago',
-      status: 'completed',
-    },
-    {
-      id: 3,
-      type: 'schedule',
-      title: 'Schedule reminder',
-      description: 'Quarterly Risk Assessment due in 3 days',
-      time: '1 day ago',
-      status: 'warning',
-    },
-    {
-      id: 4,
-      type: 'risk',
-      title: 'New risk identified',
-      description: 'Data breach risk - High priority',
-      time: '2 days ago',
-      status: 'critical',
-    },
-  ];
-
-  const upcomingSchedules = [
-    {
-      id: 1,
-      title: 'Quarterly Risk Assessment',
-      dueDate: '2024-02-15',
-      priority: 'critical',
-      branch: 'Head Office',
-    },
-    {
-      id: 2,
-      title: 'Information Security Training',
-      dueDate: '2024-02-20',
-      priority: 'high',
-      branch: 'Nairobi CBD',
-    },
-    {
-      id: 3,
-      title: 'Internal Audit Review',
-      dueDate: '2024-02-25',
-      priority: 'medium',
-      branch: 'Mombasa Branch',
-    },
-  ];
-
-  const complianceOverview = [
-    { clause: 'Clause 4', progress: 85, status: 'good' },
-    { clause: 'Clause 5', progress: 92, status: 'excellent' },
-    { clause: 'Clause 6', progress: 78, status: 'good' },
-    { clause: 'Clause 7', progress: 65, status: 'warning' },
-    { clause: 'Clause 8', progress: 88, status: 'good' },
-    { clause: 'Clause 9', progress: 95, status: 'excellent' },
-    { clause: 'Clause 10', progress: 82, status: 'good' },
-    { clause: 'Annex A', progress: 71, status: 'warning' },
-  ];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed': return 'text-green-600 bg-green-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'warning': return 'text-orange-600 bg-orange-100';
-      case 'critical': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'critical': return 'text-red-600 bg-red-100';
-      case 'high': return 'text-orange-600 bg-orange-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      case 'low': return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
-
-  const getProgressColor = (status: string) => {
-    switch (status) {
-      case 'excellent': return 'bg-green-500';
-      case 'good': return 'bg-blue-500';
-      case 'warning': return 'bg-yellow-500';
-      case 'critical': return 'bg-red-500';
-      default: return 'bg-gray-500';
-    }
-  };
-
-  return (
-    <div className="space-y-8">
-      {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white">
+  // Super Admin Dashboard
+  if (user?.role === 'SUPER_ADMIN') {
+    return (
+      <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold mb-2">Welcome back, {user?.firstName || 'User'}!</h1>
-            <p className="text-blue-100">
-              {user?.organization?.name || 'Your organization'}&apos;s compliance score is <span className="font-semibold">87%</span> - Great progress!
-            </p>
+            <h1 className="text-3xl font-bold text-gray-900">Super Admin Dashboard</h1>
+            <p className="text-gray-600">System-wide oversight and management</p>
           </div>
-          <div className="hidden sm:block">
-            <Shield className="h-16 w-16 text-blue-200" />
-          </div>
+          <Badge className="bg-purple-100 text-purple-800 px-3 py-1">
+            Super Admin
+          </Badge>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Organizations</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">4</div>
+              <p className="text-xs text-muted-foreground">Active organizations</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">20</div>
+              <p className="text-xs text-muted-foreground">Across all organizations</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">System Health</CardTitle>
+              <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600">98%</div>
+              <p className="text-xs text-muted-foreground">Uptime this month</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Sessions</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">12</div>
+              <p className="text-xs text-muted-foreground">Current users online</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>System Management</CardTitle>
+              <CardDescription>Manage organizations and system settings</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Link href="/dashboard/super-admin">
+                <Button className="w-full justify-start">
+                  <Settings className="mr-2 h-4 w-4" />
+                  System Administration
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         </div>
       </div>
+    );
+  }
 
-      {/* Key Metrics */}
+  // Admin Dashboard
+  if (user?.role === 'ADMIN') {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+            <p className="text-gray-600">Support & Coordination - Manage your organization</p>
+          </div>
+          <Badge className="bg-red-100 text-red-800 px-3 py-1">
+            Admin
+          </Badge>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">15</div>
+              <p className="text-xs text-muted-foreground">In your organization</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Sessions</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">8</div>
+              <p className="text-xs text-muted-foreground">Users online now</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Support Tickets</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">3</div>
+              <p className="text-xs text-muted-foreground">Pending resolution</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">System Status</CardTitle>
+              <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600">Operational</div>
+              <p className="text-xs text-muted-foreground">All systems running</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>User Management</CardTitle>
+              <CardDescription>Manage users and assign roles</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Link href="/dashboard/user-management">
+                <Button className="w-full justify-start">
+                  <UserPlus className="mr-2 h-4 w-4" />
+                  Manage Users
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Support & Training</CardTitle>
+              <CardDescription>Help users and provide training</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Button className="w-full justify-start" onClick={() => alert('Starting training session...')}>
+                <Shield className="mr-2 h-4 w-4" />
+                Start Training Session
+              </Button>
+              <Button variant="outline" className="w-full justify-start" onClick={() => window.open('/docs', '_blank')}>
+                <FileText className="mr-2 h-4 w-4" />
+                View Documentation
+              </Button>
+              <Button variant="outline" className="w-full justify-start" onClick={() => window.location.href = '/dashboard/support-tickets'}>
+                <AlertTriangle className="mr-2 h-4 w-4" />
+                View Tickets
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Compliance Officer Dashboard
+  if (user?.role === 'COMPLIANCE_OFFICER') {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Compliance Officer Dashboard</h1>
+            <p className="text-gray-600">Oversight & Regulatory Assurance - Ensure compliance excellence</p>
+          </div>
+          <Badge className="bg-green-100 text-green-800 px-3 py-1">
+            Compliance Officer
+          </Badge>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Requirements</CardTitle>
+              <FileText className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">28</div>
+              <p className="text-xs text-muted-foreground">Total requirements</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Gap Assessments</CardTitle>
+              <Target className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">12</div>
+              <p className="text-xs text-muted-foreground">Pending review</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Risk Register</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">5</div>
+              <p className="text-xs text-muted-foreground">High priority risks</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Compliance Score</CardTitle>
+              <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600">85%</div>
+              <p className="text-xs text-muted-foreground">Current compliance level</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Compliance Management</CardTitle>
+              <CardDescription>Manage requirements and assessments</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Link href="/dashboard/requirements">
+                <Button className="w-full justify-start">
+                  <FileText className="mr-2 h-4 w-4" />
+                  Manage Requirements
+                </Button>
+              </Link>
+              <Link href="/dashboard/gap-analysis">
+                <Button variant="outline" className="w-full justify-start">
+                  <Target className="mr-2 h-4 w-4" />
+                  Gap Analysis
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Risk & Reporting</CardTitle>
+              <CardDescription>Assess risks and generate reports</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Link href="/dashboard/risks">
+                <Button className="w-full justify-start">
+                  <AlertTriangle className="mr-2 h-4 w-4" />
+                  Risk Register
+                </Button>
+              </Link>
+              <Button variant="outline" className="w-full justify-start" onClick={() => alert('Generating compliance report...')}>
+                <BarChart3 className="mr-2 h-4 w-4" />
+                Generate Report
+              </Button>
+              <Button variant="outline" className="w-full justify-start" onClick={() => alert('Checking for regulatory updates...')}>
+                <Search className="mr-2 h-4 w-4" />
+                Check Updates
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Manager Dashboard
+  if (user?.role === 'MANAGER') {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Manager Dashboard</h1>
+            <p className="text-gray-600">Direction & Decision-making - Lead your team</p>
+          </div>
+          <Badge className="bg-blue-100 text-blue-800 px-3 py-1">
+            Manager
+          </Badge>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Team Members</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">8</div>
+              <p className="text-xs text-muted-foreground">Under your management</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Action Plans</CardTitle>
+              <Target className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">12</div>
+              <p className="text-xs text-muted-foreground">Active plans</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Schedules</CardTitle>
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">15</div>
+              <p className="text-xs text-muted-foreground">Upcoming tasks</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Performance</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600">92%</div>
+              <p className="text-xs text-muted-foreground">Team efficiency</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Team Management</CardTitle>
+              <CardDescription>Manage your team and assignments</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Button className="w-full justify-start" onClick={() => alert('Opening task assignment interface...')}>
+                <Users className="mr-2 h-4 w-4" />
+                Assign Tasks
+              </Button>
+              <Link href="/dashboard/action-plans">
+                <Button variant="outline" className="w-full justify-start">
+                  <Target className="mr-2 h-4 w-4" />
+                  Create Action Plan
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Planning & Scheduling</CardTitle>
+              <CardDescription>Plan and schedule team activities</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Link href="/dashboard/schedules">
+                <Button className="w-full justify-start">
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Manage Schedules
+                </Button>
+              </Link>
+              <Button variant="outline" className="w-full justify-start" onClick={() => alert('Opening planning interface...')}>
+                <BarChart3 className="mr-2 h-4 w-4" />
+                Strategic Planning
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Staff Dashboard
+  if (user?.role === 'STAFF') {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Staff Dashboard</h1>
+            <p className="text-gray-600">Input & Implementation - Execute tasks and provide input</p>
+          </div>
+          <Badge className="bg-gray-100 text-gray-800 px-3 py-1">
+            Staff
+          </Badge>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">My Tasks</CardTitle>
+              <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">8</div>
+              <p className="text-xs text-muted-foreground">Assigned to you</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Completed</CardTitle>
+              <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600">15</div>
+              <p className="text-xs text-muted-foreground">This month</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Overdue</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-red-600">2</div>
+              <p className="text-xs text-muted-foreground">Need attention</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Evidence</CardTitle>
+              <FileText className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">12</div>
+              <p className="text-xs text-muted-foreground">Uploaded this week</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>My Tasks</CardTitle>
+              <CardDescription>Manage your assigned tasks</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                  <div>
+                    <p className="font-medium">Complete Risk Assessment</p>
+                    <p className="text-sm text-gray-600">Due: Tomorrow</p>
+                  </div>
+                  <Button size="sm" variant="outline" onClick={() => alert('Opening task details...')}>
+                    View Details
+                  </Button>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                  <div>
+                    <p className="font-medium">Upload Evidence</p>
+                    <p className="text-sm text-red-600">Overdue: 2 days</p>
+                  </div>
+                  <Button size="sm" variant="outline" className="border-red-300 text-red-700 hover:bg-red-50" onClick={() => alert('Opening overdue task...')}>
+                    Complete Now
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Evidence Management</CardTitle>
+              <CardDescription>Upload and manage evidence</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Link href="/dashboard/evidence">
+                <Button className="w-full justify-start">
+                  <FileText className="mr-2 h-4 w-4" />
+                  Upload Evidence
+                </Button>
+              </Link>
+              <Button variant="outline" className="w-full justify-start" onClick={() => alert('Opening issue reporting form...')}>
+                <AlertTriangle className="mr-2 h-4 w-4" />
+                Report Issue
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Fallback for users without specific roles
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-gray-600">Welcome to your gap analysis system</p>
+        </div>
+      </div>
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {metrics.map((metric) => (
-          <div key={metric.name} className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">{metric.name}</p>
-                <p className="text-2xl font-bold text-gray-900">{metric.value}</p>
-                <p className={`text-sm ${
-                  metric.changeType === 'positive' ? 'text-green-600' :
-                  metric.changeType === 'negative' ? 'text-red-600' : 'text-gray-600'
-                }`}>
-                  {metric.change}
-                </p>
-              </div>
-              <div className={`p-3 rounded-lg ${
-                metric.color === 'blue' ? 'bg-blue-100' :
-                metric.color === 'orange' ? 'bg-orange-100' :
-                metric.color === 'green' ? 'bg-green-100' :
-                metric.color === 'red' ? 'bg-red-100' : 'bg-gray-100'
-              }`}>
-                <metric.icon className={`h-6 w-6 ${
-                  metric.color === 'blue' ? 'text-blue-600' :
-                  metric.color === 'orange' ? 'text-orange-600' :
-                  metric.color === 'green' ? 'text-green-600' :
-                  metric.color === 'red' ? 'text-red-600' : 'text-gray-600'
-                }`} />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Quick Actions */}
-      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {quickActions.map((action) => (
-            <Link
-              key={action.name}
-              href={action.href}
-              className="p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors group"
-            >
-              <div className="flex items-center space-x-3">
-                <div className={`p-2 rounded-lg ${
-                  action.color === 'blue' ? 'bg-blue-100' :
-                  action.color === 'green' ? 'bg-green-100' :
-                  action.color === 'red' ? 'bg-red-100' :
-                  action.color === 'purple' ? 'bg-purple-100' : 'bg-gray-100'
-                }`}>
-                  <action.icon className={`h-5 w-5 ${
-                    action.color === 'blue' ? 'text-blue-600' :
-                    action.color === 'green' ? 'text-green-600' :
-                    action.color === 'red' ? 'text-red-600' :
-                    action.color === 'purple' ? 'text-purple-600' : 'text-gray-600'
-                  }`} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 group-hover:text-gray-700">
-                    {action.name}
-                  </p>
-                  <p className="text-xs text-gray-500">{action.description}</p>
-                </div>
-                <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-gray-600" />
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
-          <div className="space-y-4">
-            {recentActivity.map((activity) => (
-              <div key={activity.id} className="flex items-start space-x-3">
-                <div className={`p-2 rounded-full ${getStatusColor(activity.status)}`}>
-                  <Clock className="h-4 w-4" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">{activity.title}</p>
-                  <p className="text-sm text-gray-500">{activity.description}</p>
-                  <p className="text-xs text-gray-400">{activity.time}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <Link
-              href="/dashboard/activity"
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-            >
-              View all activity →
-            </Link>
-          </div>
-        </div>
-
-        {/* Upcoming Schedules */}
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Schedules</h2>
-          <div className="space-y-4">
-            {upcomingSchedules.map((schedule) => (
-              <div key={schedule.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">{schedule.title}</p>
-                  <p className="text-xs text-gray-500">{schedule.branch}</p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${getPriorityColor(schedule.priority)}`}>
-                    {schedule.priority}
-                  </span>
-                  <span className="text-xs text-gray-500">{schedule.dueDate}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <Link
-              href="/dashboard/schedules"
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-            >
-              View all schedules →
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Compliance Overview */}
-      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">ISO 27001:2022 Compliance Overview</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {complianceOverview.map((item) => (
-            <div key={item.clause} className="p-4 border border-gray-200 rounded-lg">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-900">{item.clause}</span>
-                <span className="text-sm text-gray-500">{item.progress}%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className={`h-2 rounded-full ${getProgressColor(item.status)}`}
-                  style={{ width: `${item.progress}%` }}
-                ></div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <Link
-            href="/dashboard/requirements"
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-          >
-            View detailed compliance report →
-          </Link>
-        </div>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Requirements</CardTitle>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">28</div>
+            <p className="text-xs text-muted-foreground">Total requirements</p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Schedules</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">8</div>
+            <p className="text-xs text-muted-foreground">Upcoming tasks</p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Action Plans</CardTitle>
+            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">45</div>
+            <p className="text-xs text-muted-foreground">Completed plans</p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Risks</CardTitle>
+            <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">12</div>
+            <p className="text-xs text-muted-foreground">Active risks</p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

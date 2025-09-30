@@ -21,32 +21,32 @@ const navigationItems: NavigationItem[] = [
   {
     name: 'Requirements',
     href: '/dashboard/requirements',
-    roles: ['ADMIN', 'MANAGER', 'COMPLIANCE_OFFICER', 'STAFF'],
+    roles: ['COMPLIANCE_OFFICER'], // Only Compliance Officers create requirements
   },
   {
     name: 'Gap Analysis',
     href: '/dashboard/gap-analysis',
-    roles: ['ADMIN', 'MANAGER', 'COMPLIANCE_OFFICER', 'STAFF'],
+    roles: ['COMPLIANCE_OFFICER'], // Only Compliance Officers perform gap analysis
   },
   {
     name: 'Action Plans',
     href: '/dashboard/action-plans',
-    roles: ['ADMIN', 'MANAGER', 'COMPLIANCE_OFFICER', 'STAFF'],
+    roles: ['MANAGER', 'STAFF'], // Managers create, Staff complete
   },
   {
     name: 'Risk Register',
     href: '/dashboard/risks',
-    roles: ['ADMIN', 'MANAGER', 'COMPLIANCE_OFFICER', 'STAFF'],
+    roles: ['COMPLIANCE_OFFICER'], // Only Compliance Officers assess risks
   },
   {
     name: 'Schedules',
     href: '/dashboard/schedules',
-    roles: ['ADMIN', 'MANAGER', 'COMPLIANCE_OFFICER', 'STAFF'],
+    roles: ['MANAGER', 'COMPLIANCE_OFFICER'], // Managers and Compliance Officers create schedules
   },
   {
     name: 'Evidence',
     href: '/dashboard/evidence',
-    roles: ['ADMIN', 'MANAGER', 'COMPLIANCE_OFFICER', 'STAFF'],
+    roles: ['STAFF'], // Only Staff upload evidence
   },
   {
     name: 'User Management',

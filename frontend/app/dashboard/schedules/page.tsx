@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { 
   Calendar, 
   Plus, 
@@ -57,6 +60,29 @@ export default function SchedulesPage() {
   const [filterType, setFilterType] = useState('all');
   const [filterPriority, setFilterPriority] = useState('all');
   const { user } = useAuth();
+
+  // Modal state
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(null);
+
+  // Form data
+  const [formData, setFormData] = useState({
+    type: 'COMPLIANCE_REVIEW' as Schedule['type'],
+    title: '',
+    description: '',
+    dueDate: '',
+    frequency: 'MONTHLY' as Schedule['frequency'],
+    customInterval: 1,
+    priority: 'MEDIUM' as Schedule['priority'],
+    isRecurring: false,
+    reminderDays: [1, 3, 7] as number[],
+    branchId: 1,
+    responsibleId: 1
+  });
 
   useEffect(() => {
     fetchSchedules();
@@ -127,6 +153,215 @@ export default function SchedulesPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Form handlers
+  const handleInputChange = (field: string, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Create new schedule object
+      const newSchedule: Schedule = {
+        id: Date.now(), // Temporary ID
+        ...formData,
+        status: 'PENDING',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        branch: { id: formData.branchId, name: 'Head Office' },
+        responsible: { id: formData.responsibleId, firstName: 'New', lastName: 'User' }
+      };
+      
+      // Add to schedules list
+      setSchedules(prev => [newSchedule, ...prev]);
+      
+      // Reset form and close modal
+      setFormData({
+        type: 'COMPLIANCE_REVIEW',
+        title: '',
+        description: '',
+        dueDate: '',
+        frequency: 'MONTHLY',
+        customInterval: 1,
+        priority: 'MEDIUM',
+        isRecurring: false,
+        reminderDays: [1, 3, 7],
+        branchId: 1,
+        responsibleId: 1
+      });
+      setShowCreateModal(false);
+      
+      alert('Schedule created successfully!');
+    } catch (error) {
+      console.error('Failed to create schedule:', error);
+      alert('Failed to create schedule. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowCreateModal(false);
+    setFormData({
+      type: 'COMPLIANCE_REVIEW',
+      title: '',
+      description: '',
+      dueDate: '',
+      frequency: 'MONTHLY',
+      customInterval: 1,
+      priority: 'MEDIUM',
+      isRecurring: false,
+      reminderDays: [1, 3, 7],
+      branchId: 1,
+      responsibleId: 1
+    });
+  };
+
+  // View, Edit, Delete, and Complete handlers
+  const handleViewSchedule = (schedule: Schedule) => {
+    setSelectedSchedule(schedule);
+    setShowViewModal(true);
+  };
+
+  const handleEditSchedule = (schedule: Schedule) => {
+    setSelectedSchedule(schedule);
+    setFormData({
+      type: schedule.type,
+      title: schedule.title,
+      description: schedule.description,
+      dueDate: schedule.dueDate,
+      frequency: schedule.frequency,
+      customInterval: schedule.customInterval,
+      priority: schedule.priority,
+      isRecurring: schedule.isRecurring,
+      reminderDays: schedule.reminderDays,
+      branchId: schedule.branchId,
+      responsibleId: schedule.responsibleId
+    });
+    setShowEditModal(true);
+  };
+
+  const handleDeleteSchedule = (schedule: Schedule) => {
+    setSelectedSchedule(schedule);
+    setShowDeleteModal(true);
+  };
+
+  const handleCompleteSchedule = async (schedule: Schedule) => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Update schedule status to completed
+      setSchedules(prev => prev.map(s => 
+        s.id === schedule.id 
+          ? { ...s, status: 'COMPLETED', updatedAt: new Date().toISOString() }
+          : s
+      ));
+      
+      alert(`Schedule "${schedule.title}" marked as complete!`);
+    } catch (error) {
+      console.error('Failed to complete schedule:', error);
+      alert('Failed to complete schedule. Please try again.');
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedSchedule) return;
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Remove schedule from list
+      setSchedules(prev => prev.filter(s => s.id !== selectedSchedule.id));
+      
+      setShowDeleteModal(false);
+      setSelectedSchedule(null);
+      alert(`Schedule "${selectedSchedule.title}" deleted successfully!`);
+    } catch (error) {
+      console.error('Failed to delete schedule:', error);
+      alert('Failed to delete schedule. Please try again.');
+    }
+  };
+
+  const handleUpdateSchedule = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedSchedule) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Update schedule in the list
+      setSchedules(prev => prev.map(s => 
+        s.id === selectedSchedule.id 
+          ? { ...s, ...formData, updatedAt: new Date().toISOString() }
+          : s
+      ));
+      
+      setShowEditModal(false);
+      setSelectedSchedule(null);
+      setFormData({
+        type: 'COMPLIANCE_REVIEW',
+        title: '',
+        description: '',
+        dueDate: '',
+        frequency: 'MONTHLY',
+        customInterval: 1,
+        priority: 'MEDIUM',
+        isRecurring: false,
+        reminderDays: [1, 3, 7],
+        branchId: 1,
+        responsibleId: 1
+      });
+      
+      alert('Schedule updated successfully!');
+    } catch (error) {
+      console.error('Failed to update schedule:', error);
+      alert('Failed to update schedule. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCloseViewModal = () => {
+    setShowViewModal(false);
+    setSelectedSchedule(null);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setSelectedSchedule(null);
+    setFormData({
+      type: 'COMPLIANCE_REVIEW',
+      title: '',
+      description: '',
+      dueDate: '',
+      frequency: 'MONTHLY',
+      customInterval: 1,
+      priority: 'MEDIUM',
+      isRecurring: false,
+      reminderDays: [1, 3, 7],
+      branchId: 1,
+      responsibleId: 1
+    });
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedSchedule(null);
   };
 
   const getStatusInfo = (status: string) => {
@@ -282,40 +517,40 @@ export default function SchedulesPage() {
                />
             </div>
              <Select value={filterStatus} onValueChange={setFilterStatus}>
-               <SelectTrigger>
+               <SelectTrigger className="bg-white text-gray-900 border-gray-300">
                  <SelectValue placeholder="Status" />
                </SelectTrigger>
-               <SelectContent>
-                 <SelectItem value="all">All Status</SelectItem>
-                 <SelectItem value="PENDING">Pending</SelectItem>
-                 <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                 <SelectItem value="COMPLETED">Completed</SelectItem>
-                 <SelectItem value="OVERDUE">Overdue</SelectItem>
+               <SelectContent className="bg-white border border-gray-300">
+                 <SelectItem value="all" className="text-gray-900 hover:bg-gray-100">All Status</SelectItem>
+                 <SelectItem value="PENDING" className="text-gray-900 hover:bg-gray-100">Pending</SelectItem>
+                 <SelectItem value="IN_PROGRESS" className="text-gray-900 hover:bg-gray-100">In Progress</SelectItem>
+                 <SelectItem value="COMPLETED" className="text-gray-900 hover:bg-gray-100">Completed</SelectItem>
+                 <SelectItem value="OVERDUE" className="text-gray-900 hover:bg-gray-100">Overdue</SelectItem>
                </SelectContent>
              </Select>
              <Select value={filterType} onValueChange={setFilterType}>
-               <SelectTrigger>
+               <SelectTrigger className="bg-white text-gray-900 border-gray-300">
                  <SelectValue placeholder="Type" />
                </SelectTrigger>
-               <SelectContent>
-                 <SelectItem value="all">All Types</SelectItem>
-                 <SelectItem value="RISK_ASSESSMENT">Risk Assessment</SelectItem>
-                 <SelectItem value="COMPLIANCE_REVIEW">Compliance Review</SelectItem>
-                 <SelectItem value="AUDIT">Audit</SelectItem>
-                 <SelectItem value="TRAINING">Training</SelectItem>
-                 <SelectItem value="MAINTENANCE">Maintenance</SelectItem>
+               <SelectContent className="bg-white border border-gray-300">
+                 <SelectItem value="all" className="text-gray-900 hover:bg-gray-100">All Types</SelectItem>
+                 <SelectItem value="RISK_ASSESSMENT" className="text-gray-900 hover:bg-gray-100">Risk Assessment</SelectItem>
+                 <SelectItem value="COMPLIANCE_REVIEW" className="text-gray-900 hover:bg-gray-100">Compliance Review</SelectItem>
+                 <SelectItem value="AUDIT" className="text-gray-900 hover:bg-gray-100">Audit</SelectItem>
+                 <SelectItem value="TRAINING" className="text-gray-900 hover:bg-gray-100">Training</SelectItem>
+                 <SelectItem value="MAINTENANCE" className="text-gray-900 hover:bg-gray-100">Maintenance</SelectItem>
                </SelectContent>
              </Select>
              <Select value={filterPriority} onValueChange={setFilterPriority}>
-               <SelectTrigger>
+               <SelectTrigger className="bg-white text-gray-900 border-gray-300">
                  <SelectValue placeholder="Priority" />
                </SelectTrigger>
-               <SelectContent>
-                 <SelectItem value="all">All Priorities</SelectItem>
-                 <SelectItem value="CRITICAL">Critical</SelectItem>
-                 <SelectItem value="HIGH">High</SelectItem>
-                 <SelectItem value="MEDIUM">Medium</SelectItem>
-                 <SelectItem value="LOW">Low</SelectItem>
+               <SelectContent className="bg-white border border-gray-300">
+                 <SelectItem value="all" className="text-gray-900 hover:bg-gray-100">All Priorities</SelectItem>
+                 <SelectItem value="CRITICAL" className="text-gray-900 hover:bg-gray-100">Critical</SelectItem>
+                 <SelectItem value="HIGH" className="text-gray-900 hover:bg-gray-100">High</SelectItem>
+                 <SelectItem value="MEDIUM" className="text-gray-900 hover:bg-gray-100">Medium</SelectItem>
+                 <SelectItem value="LOW" className="text-gray-900 hover:bg-gray-100">Low</SelectItem>
                </SelectContent>
              </Select>
              <Button variant="outline" onClick={fetchSchedules}>
@@ -329,7 +564,10 @@ export default function SchedulesPage() {
       <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg font-semibold text-gray-900">Schedules</h2>
-          <Button className="flex items-center gap-2">
+          <Button 
+            className="flex items-center gap-2"
+            onClick={() => setShowCreateModal(true)}
+          >
             <Plus className="h-4 w-4" />
             New Schedule
           </Button>
@@ -399,20 +637,39 @@ export default function SchedulesPage() {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="flex-1">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => handleViewSchedule(schedule)}
+                    >
                       <Eye className="h-4 w-4 mr-1" />
                       View Details
                     </Button>
-                    <Button size="sm" variant="outline" className="flex-1">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => handleEditSchedule(schedule)}
+                    >
                       <Edit className="h-4 w-4 mr-1" />
                       Edit
                     </Button>
                     {schedule.status !== 'COMPLETED' && (
-                      <Button size="sm" className="flex-1">
+                      <Button 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => handleCompleteSchedule(schedule)}
+                      >
                         Mark Complete
                       </Button>
                     )}
-                    <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="text-red-600 hover:text-red-700"
+                      onClick={() => handleDeleteSchedule(schedule)}
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -431,13 +688,494 @@ export default function SchedulesPage() {
                 ? 'Try adjusting your filters to see more results.'
                 : 'Get started by creating your first schedule.'}
             </p>
-            <Button>
+            <Button
+              onClick={() => setShowCreateModal(true)}
+            >
               <Plus className="h-4 w-4 mr-2" />
               New Schedule
             </Button>
           </div>
         )}
       </div>
+
+      {/* Create Schedule Modal */}
+      <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Create New Schedule</DialogTitle>
+            <DialogDescription>
+              Create a new schedule for compliance activities, risk assessments, or other tasks.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="type">Schedule Type</Label>
+                <Select 
+                  value={formData.type} 
+                  onValueChange={(value) => handleInputChange('type', value)}
+                >
+                  <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-gray-300">
+                    <SelectItem value="RISK_ASSESSMENT" className="text-gray-900 hover:bg-gray-100">Risk Assessment</SelectItem>
+                    <SelectItem value="COMPLIANCE_REVIEW" className="text-gray-900 hover:bg-gray-100">Compliance Review</SelectItem>
+                    <SelectItem value="AUDIT" className="text-gray-900 hover:bg-gray-100">Audit</SelectItem>
+                    <SelectItem value="TRAINING" className="text-gray-900 hover:bg-gray-100">Training</SelectItem>
+                    <SelectItem value="MAINTENANCE" className="text-gray-900 hover:bg-gray-100">Maintenance</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="priority">Priority</Label>
+                <Select 
+                  value={formData.priority} 
+                  onValueChange={(value) => handleInputChange('priority', value)}
+                >
+                  <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                    <SelectValue placeholder="Select priority" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-gray-300">
+                    <SelectItem value="LOW" className="text-gray-900 hover:bg-gray-100">Low</SelectItem>
+                    <SelectItem value="MEDIUM" className="text-gray-900 hover:bg-gray-100">Medium</SelectItem>
+                    <SelectItem value="HIGH" className="text-gray-900 hover:bg-gray-100">High</SelectItem>
+                    <SelectItem value="CRITICAL" className="text-gray-900 hover:bg-gray-100">Critical</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                value={formData.title}
+                onChange={(e) => handleInputChange('title', e.target.value)}
+                placeholder="Enter schedule title"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => handleInputChange('description', e.target.value)}
+                placeholder="Enter schedule description"
+                rows={3}
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="dueDate">Due Date</Label>
+                <Input
+                  id="dueDate"
+                  type="datetime-local"
+                  value={formData.dueDate}
+                  onChange={(e) => handleInputChange('dueDate', e.target.value)}
+                  required
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="frequency">Frequency</Label>
+                <Select 
+                  value={formData.frequency} 
+                  onValueChange={(value) => handleInputChange('frequency', value)}
+                >
+                  <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                    <SelectValue placeholder="Select frequency" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-gray-300">
+                    <SelectItem value="DAILY" className="text-gray-900 hover:bg-gray-100">Daily</SelectItem>
+                    <SelectItem value="WEEKLY" className="text-gray-900 hover:bg-gray-100">Weekly</SelectItem>
+                    <SelectItem value="MONTHLY" className="text-gray-900 hover:bg-gray-100">Monthly</SelectItem>
+                    <SelectItem value="QUARTERLY" className="text-gray-900 hover:bg-gray-100">Quarterly</SelectItem>
+                    <SelectItem value="ANNUAL" className="text-gray-900 hover:bg-gray-100">Annual</SelectItem>
+                    <SelectItem value="CUSTOM" className="text-gray-900 hover:bg-gray-100">Custom</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {formData.frequency === 'CUSTOM' && (
+              <div className="space-y-2">
+                <Label htmlFor="customInterval">Custom Interval (days)</Label>
+                <Input
+                  id="customInterval"
+                  type="number"
+                  min="1"
+                  value={formData.customInterval}
+                  onChange={(e) => handleInputChange('customInterval', parseInt(e.target.value))}
+                />
+              </div>
+            )}
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="isRecurring"
+                checked={formData.isRecurring}
+                onChange={(e) => handleInputChange('isRecurring', e.target.checked)}
+                className="rounded border-gray-300"
+              />
+              <Label htmlFor="isRecurring">This is a recurring schedule</Label>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Reminder Days</Label>
+              <div className="flex flex-wrap gap-2">
+                {[1, 3, 7, 14, 30].map((day) => (
+                  <label key={day} className="flex items-center space-x-1">
+                    <input
+                      type="checkbox"
+                      checked={formData.reminderDays.includes(day)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          handleInputChange('reminderDays', [...formData.reminderDays, day]);
+                        } else {
+                          handleInputChange('reminderDays', formData.reminderDays.filter(d => d !== day));
+                        }
+                      }}
+                      className="rounded border-gray-300"
+                    />
+                    <span className="text-sm">{day} day{day !== 1 ? 's' : ''}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={handleCloseModal}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating...' : 'Create Schedule'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Schedule Modal */}
+      <Dialog open={showViewModal} onOpenChange={setShowViewModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Schedule Details</DialogTitle>
+            <DialogDescription>
+              View detailed information about this schedule.
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedSchedule && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700">Schedule Title</Label>
+                <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-md">
+                  {selectedSchedule.title}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700">Description</Label>
+                <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-md">
+                  {selectedSchedule.description}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">Type</Label>
+                  <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-md">
+                    {selectedSchedule.type.replace('_', ' ')}
+                  </p>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">Priority</Label>
+                  <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-md">
+                    {selectedSchedule.priority}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">Due Date</Label>
+                  <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-md">
+                    {new Date(selectedSchedule.dueDate).toLocaleDateString()}
+                  </p>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">Frequency</Label>
+                  <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-md">
+                    {selectedSchedule.frequency}
+                    {selectedSchedule.frequency === 'CUSTOM' && ` (${selectedSchedule.customInterval} days)`}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700">Status</Label>
+                <div className="flex items-center gap-2">
+                  <Badge className={getStatusInfo(selectedSchedule.status).color}>
+                    {getStatusInfo(selectedSchedule.status).label}
+                  </Badge>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700">Recurring</Label>
+                <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-md">
+                  {selectedSchedule.isRecurring ? 'Yes' : 'No'}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700">Reminder Days</Label>
+                <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-md">
+                  {selectedSchedule.reminderDays.join(', ')} days before
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">Responsible</Label>
+                  <p className="text-sm text-gray-900">
+                    {selectedSchedule.responsible?.firstName} {selectedSchedule.responsible?.lastName}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">Branch</Label>
+                  <p className="text-sm text-gray-900">
+                    {selectedSchedule.branch?.name}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseViewModal}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Schedule Modal */}
+      <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Edit Schedule</DialogTitle>
+            <DialogDescription>
+              Update the schedule information and settings.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={handleUpdateSchedule} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-type">Schedule Type</Label>
+                <Select 
+                  value={formData.type} 
+                  onValueChange={(value) => handleInputChange('type', value)}
+                >
+                  <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-gray-300">
+                    <SelectItem value="RISK_ASSESSMENT" className="text-gray-900 hover:bg-gray-100">Risk Assessment</SelectItem>
+                    <SelectItem value="COMPLIANCE_REVIEW" className="text-gray-900 hover:bg-gray-100">Compliance Review</SelectItem>
+                    <SelectItem value="AUDIT" className="text-gray-900 hover:bg-gray-100">Audit</SelectItem>
+                    <SelectItem value="TRAINING" className="text-gray-900 hover:bg-gray-100">Training</SelectItem>
+                    <SelectItem value="MAINTENANCE" className="text-gray-900 hover:bg-gray-100">Maintenance</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="edit-priority">Priority</Label>
+                <Select 
+                  value={formData.priority} 
+                  onValueChange={(value) => handleInputChange('priority', value)}
+                >
+                  <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                    <SelectValue placeholder="Select priority" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-gray-300">
+                    <SelectItem value="LOW" className="text-gray-900 hover:bg-gray-100">Low</SelectItem>
+                    <SelectItem value="MEDIUM" className="text-gray-900 hover:bg-gray-100">Medium</SelectItem>
+                    <SelectItem value="HIGH" className="text-gray-900 hover:bg-gray-100">High</SelectItem>
+                    <SelectItem value="CRITICAL" className="text-gray-900 hover:bg-gray-100">Critical</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-title">Title</Label>
+              <Input
+                id="edit-title"
+                value={formData.title}
+                onChange={(e) => handleInputChange('title', e.target.value)}
+                placeholder="Enter schedule title"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-description">Description</Label>
+              <Textarea
+                id="edit-description"
+                value={formData.description}
+                onChange={(e) => handleInputChange('description', e.target.value)}
+                placeholder="Enter schedule description"
+                rows={3}
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-dueDate">Due Date</Label>
+                <Input
+                  id="edit-dueDate"
+                  type="datetime-local"
+                  value={formData.dueDate}
+                  onChange={(e) => handleInputChange('dueDate', e.target.value)}
+                  required
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="edit-frequency">Frequency</Label>
+                <Select 
+                  value={formData.frequency} 
+                  onValueChange={(value) => handleInputChange('frequency', value)}
+                >
+                  <SelectTrigger className="bg-white text-gray-900 border-gray-300">
+                    <SelectValue placeholder="Select frequency" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-gray-300">
+                    <SelectItem value="DAILY" className="text-gray-900 hover:bg-gray-100">Daily</SelectItem>
+                    <SelectItem value="WEEKLY" className="text-gray-900 hover:bg-gray-100">Weekly</SelectItem>
+                    <SelectItem value="MONTHLY" className="text-gray-900 hover:bg-gray-100">Monthly</SelectItem>
+                    <SelectItem value="QUARTERLY" className="text-gray-900 hover:bg-gray-100">Quarterly</SelectItem>
+                    <SelectItem value="ANNUAL" className="text-gray-900 hover:bg-gray-100">Annual</SelectItem>
+                    <SelectItem value="CUSTOM" className="text-gray-900 hover:bg-gray-100">Custom</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {formData.frequency === 'CUSTOM' && (
+              <div className="space-y-2">
+                <Label htmlFor="edit-customInterval">Custom Interval (days)</Label>
+                <Input
+                  id="edit-customInterval"
+                  type="number"
+                  min="1"
+                  value={formData.customInterval}
+                  onChange={(e) => handleInputChange('customInterval', parseInt(e.target.value))}
+                />
+              </div>
+            )}
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="edit-isRecurring"
+                checked={formData.isRecurring}
+                onChange={(e) => handleInputChange('isRecurring', e.target.checked)}
+                className="rounded border-gray-300"
+              />
+              <Label htmlFor="edit-isRecurring">This is a recurring schedule</Label>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Reminder Days</Label>
+              <div className="flex flex-wrap gap-2">
+                {[1, 3, 7, 14, 30].map((day) => (
+                  <label key={day} className="flex items-center space-x-1">
+                    <input
+                      type="checkbox"
+                      checked={formData.reminderDays.includes(day)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          handleInputChange('reminderDays', [...formData.reminderDays, day]);
+                        } else {
+                          handleInputChange('reminderDays', formData.reminderDays.filter(d => d !== day));
+                        }
+                      }}
+                      className="rounded border-gray-300"
+                    />
+                    <span className="text-sm">{day} day{day !== 1 ? 's' : ''}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={handleCloseEditModal}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Updating...' : 'Update Schedule'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Modal */}
+      <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Delete Schedule</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this schedule? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedSchedule && (
+            <div className="py-4">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                  <span className="font-medium text-red-800">Schedule to be deleted:</span>
+                </div>
+                <p className="text-sm text-red-700 font-medium">{selectedSchedule.title}</p>
+                <p className="text-xs text-red-600 mt-1">
+                  Type: {selectedSchedule.type.replace('_', ' ')} | 
+                  Priority: {selectedSchedule.priority} | 
+                  Due: {new Date(selectedSchedule.dueDate).toLocaleDateString()}
+                </p>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseDeleteModal}>
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleConfirmDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete Schedule
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
