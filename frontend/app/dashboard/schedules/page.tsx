@@ -1593,7 +1593,6 @@ export default function SchedulesPage() {
               </div>
             </div>
           )}
-
           <DialogFooter>
             <Button variant="outline" onClick={handleCloseDeleteModal}>
               Cancel
