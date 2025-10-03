@@ -21,9 +21,12 @@ async function bootstrap() {
 
   // CORS
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3001',
+    origin: process.env.FRONTEND_URL || 'https://carbonbloom.cognitron.co.ke',
     credentials: true,
   });
+
+  // Set global prefix for all routes
+  app.setGlobalPrefix('gap/api');
 
   // Swagger documentation
   const config = new DocumentBuilder()
@@ -36,11 +39,13 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('gap/api/docs', app, document);
 
   const port = process.env.PORT ?? 4000;
   await app.listen(port);
-  console.log(`🚀 Application is running on: http://localhost:${port}`);
-  console.log(`📚 Swagger documentation: http://localhost:${port}/api`);
+  console.log(`🚀 Application is running on: http://localhost:${port}/gap/api`);
+  console.log(
+    `📚 Swagger documentation: http://localhost:${port}/gap/api/docs`,
+  );
 }
 bootstrap();
