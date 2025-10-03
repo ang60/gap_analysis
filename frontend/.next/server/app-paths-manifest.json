@@ -1,10 +1,6 @@
 {
-  "/auth/login/page": "app/auth/login/page.js",
-  "/dashboard/action-plans/page": "app/dashboard/action-plans/page.js",
-  "/dashboard/evidence/page": "app/dashboard/evidence/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/dashboard/profile/page": "app/dashboard/profile/page.js",
-  "/dashboard/requirements/page": "app/dashboard/requirements/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/auth/register/page": "app/auth/register/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js"
 }
