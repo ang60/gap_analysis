@@ -24,37 +24,37 @@ async function main() {
   console.log('✅ Super Admin created:', superAdmin.email);
 
   // Create multiple organizations for multi-tenancy testing
-  const equityBank = await prisma.organization.upsert({
-    where: { domain: 'equitybank.co.ke' },
+  const techCorp = await prisma.organization.upsert({
+    where: { domain: 'techcorp.com' },
     update: {},
     create: {
-      name: 'Equity Bank Kenya',
-      domain: 'equitybank.co.ke',
-      subdomain: 'equity',
+      name: 'TechCorp Solutions',
+      domain: 'techcorp.com',
+      subdomain: 'tech',
       isActive: true,
       settings: {},
     },
   });
 
-  const kcbBank = await prisma.organization.upsert({
-    where: { domain: 'kcbgroup.com' },
+  const globalInc = await prisma.organization.upsert({
+    where: { domain: 'globalinc.com' },
     update: {},
     create: {
-      name: 'KCB Bank Kenya',
-      domain: 'kcbgroup.com',
-      subdomain: 'kcb',
+      name: 'Global Industries Inc',
+      domain: 'globalinc.com',
+      subdomain: 'global',
       isActive: true,
       settings: {},
     },
   });
 
-  const coopBank = await prisma.organization.upsert({
-    where: { domain: 'co-opbank.co.ke' },
+  const innovaCorp = await prisma.organization.upsert({
+    where: { domain: 'innovacorp.com' },
     update: {},
     create: {
-      name: 'Co-operative Bank of Kenya',
-      domain: 'co-opbank.co.ke',
-      subdomain: 'coop',
+      name: 'Innova Corporation',
+      domain: 'innovacorp.com',
+      subdomain: 'innova',
       isActive: true,
       settings: {},
     },
@@ -74,48 +74,51 @@ async function main() {
   });
 
   // Create branches for each organization (let database auto-increment IDs)
-  const equityBranch = await prisma.branch.upsert({
+  const techBranch = await prisma.branch.upsert({
     where: { 
       name_organizationId: {
-        name: 'Equity Bank Head Office',
-        organizationId: equityBank.id,
+        name: 'TechCorp Headquarters',
+        organizationId: techCorp.id,
       }
     },
     update: {},
     create: {
-      name: 'Equity Bank Head Office',
-      region: 'Nairobi',
-      organizationId: equityBank.id,
+      branchId: 1,
+      name: 'TechCorp Headquarters',
+      region: 'San Francisco',
+      organizationId: techCorp.id,
     },
   });
 
-  const kcbBranch = await prisma.branch.upsert({
+  const globalBranch = await prisma.branch.upsert({
     where: { 
       name_organizationId: {
-        name: 'KCB Bank Head Office',
-        organizationId: kcbBank.id,
+        name: 'Global Industries HQ',
+        organizationId: globalInc.id,
       }
     },
     update: {},
     create: {
-      name: 'KCB Bank Head Office',
-      region: 'Nairobi',
-      organizationId: kcbBank.id,
+      branchId: 1,
+      name: 'Global Industries HQ',
+      region: 'New York',
+      organizationId: globalInc.id,
     },
   });
 
-  const coopBranch = await prisma.branch.upsert({
+  const innovaBranch = await prisma.branch.upsert({
     where: { 
       name_organizationId: {
-        name: 'Co-op Bank Head Office',
-        organizationId: coopBank.id,
+        name: 'Innova Corporation Main Office',
+        organizationId: innovaCorp.id,
       }
     },
     update: {},
     create: {
-      name: 'Co-op Bank Head Office',
-      region: 'Nairobi',
-      organizationId: coopBank.id,
+      branchId: 1,
+      name: 'Innova Corporation Main Office',
+      region: 'Austin',
+      organizationId: innovaCorp.id,
     },
   });
 
@@ -128,6 +131,7 @@ async function main() {
     },
     update: {},
     create: {
+      branchId: 1,
       name: 'Default Head Office',
       region: 'Nairobi',
       organizationId: defaultOrg.id,
@@ -144,6 +148,7 @@ async function main() {
     },
     update: {},
     create: {
+      branchId: 1,
       name: 'Nairobi CBD Branch',
       region: 'Nairobi',
       organizationId: defaultOrg.id,
@@ -159,6 +164,7 @@ async function main() {
     },
     update: {},
     create: {
+      branchId: 1,
       name: 'Mombasa Branch',
       region: 'Mombasa',
       organizationId: defaultOrg.id,
@@ -174,96 +180,97 @@ async function main() {
     },
     update: {},
     create: {
+      branchId: 1,
       name: 'Kisumu Branch',
       region: 'Kisumu',
       organizationId: defaultOrg.id,
     },
   });
 
-  // Create users for Equity Bank
-  const equityAdmin = await prisma.user.upsert({
-    where: { email: 'admin@equitybank.co.ke' },
+  // Create users for TechCorp
+  const techAdmin = await prisma.user.upsert({
+    where: { email: 'admin@techcorp.com' },
     update: {},
     create: {
-      email: 'admin@equitybank.co.ke',
-      password: await bcrypt.hash('EquityAdmin123', 10),
-      firstName: 'James',
-      lastName: 'Mwangi',
+      email: 'admin@techcorp.com',
+      password: await bcrypt.hash('TechAdmin123', 10),
+      firstName: 'John',
+      lastName: 'Smith',
       role: UserRole.ADMIN,
-      organizationId: equityBank.id,
-      branchId: equityBranch.id,
+      organizationId: techCorp.id,
+      branchId: techBranch.id,
     },
   });
 
-  const equityManager = await prisma.user.upsert({
-    where: { email: 'manager@equitybank.co.ke' },
+  const techManager = await prisma.user.upsert({
+    where: { email: 'manager@techcorp.com' },
     update: {},
     create: {
-      email: 'manager@equitybank.co.ke',
-      password: await bcrypt.hash('EquityManager123', 10),
-      firstName: 'Mary',
-      lastName: 'Wanjiku',
-      role: UserRole.MANAGER,
-      organizationId: equityBank.id,
-      branchId: equityBranch.id,
-    },
-  });
-
-  // Create users for KCB Bank
-  const kcbAdmin = await prisma.user.upsert({
-    where: { email: 'admin@kcbgroup.com' },
-    update: {},
-    create: {
-      email: 'admin@kcbgroup.com',
-      password: await bcrypt.hash('KcbAdmin123', 10),
-      firstName: 'Peter',
-      lastName: 'Kimani',
-      role: UserRole.ADMIN,
-      organizationId: kcbBank.id,
-      branchId: kcbBranch.id,
-    },
-  });
-
-  const kcbManager = await prisma.user.upsert({
-    where: { email: 'manager@kcbgroup.com' },
-    update: {},
-    create: {
-      email: 'manager@kcbgroup.com',
-      password: await bcrypt.hash('KcbManager123', 10),
-      firstName: 'Grace',
-      lastName: 'Akinyi',
-      role: UserRole.MANAGER,
-      organizationId: kcbBank.id,
-      branchId: kcbBranch.id,
-    },
-  });
-
-  // Create users for Co-op Bank
-  const coopAdmin = await prisma.user.upsert({
-    where: { email: 'admin@co-opbank.co.ke' },
-    update: {},
-    create: {
-      email: 'admin@co-opbank.co.ke',
-      password: await bcrypt.hash('CoopAdmin123', 10),
-      firstName: 'David',
-      lastName: 'Ochieng',
-      role: UserRole.ADMIN,
-      organizationId: coopBank.id,
-      branchId: coopBranch.id,
-    },
-  });
-
-  const coopManager = await prisma.user.upsert({
-    where: { email: 'manager@co-opbank.co.ke' },
-    update: {},
-    create: {
-      email: 'manager@co-opbank.co.ke',
-      password: await bcrypt.hash('CoopManager123', 10),
+      email: 'manager@techcorp.com',
+      password: await bcrypt.hash('TechManager123', 10),
       firstName: 'Sarah',
-      lastName: 'Muthoni',
+      lastName: 'Johnson',
       role: UserRole.MANAGER,
-      organizationId: coopBank.id,
-      branchId: coopBranch.id,
+      organizationId: techCorp.id,
+      branchId: techBranch.id,
+    },
+  });
+
+  // Create users for Global Industries
+  const globalAdmin = await prisma.user.upsert({
+    where: { email: 'admin@globalinc.com' },
+    update: {},
+    create: {
+      email: 'admin@globalinc.com',
+      password: await bcrypt.hash('GlobalAdmin123', 10),
+      firstName: 'Michael',
+      lastName: 'Brown',
+      role: UserRole.ADMIN,
+      organizationId: globalInc.id,
+      branchId: globalBranch.id,
+    },
+  });
+
+  const globalManager = await prisma.user.upsert({
+    where: { email: 'manager@globalinc.com' },
+    update: {},
+    create: {
+      email: 'manager@globalinc.com',
+      password: await bcrypt.hash('GlobalManager123', 10),
+      firstName: 'Emily',
+      lastName: 'Davis',
+      role: UserRole.MANAGER,
+      organizationId: globalInc.id,
+      branchId: globalBranch.id,
+    },
+  });
+
+  // Create users for Innova Corporation
+  const innovaAdmin = await prisma.user.upsert({
+    where: { email: 'admin@innovacorp.com' },
+    update: {},
+    create: {
+      email: 'admin@innovacorp.com',
+      password: await bcrypt.hash('InnovaAdmin123', 10),
+      firstName: 'David',
+      lastName: 'Wilson',
+      role: UserRole.ADMIN,
+      organizationId: innovaCorp.id,
+      branchId: innovaBranch.id,
+    },
+  });
+
+  const innovaManager = await prisma.user.upsert({
+    where: { email: 'manager@innovacorp.com' },
+    update: {},
+    create: {
+      email: 'manager@innovacorp.com',
+      password: await bcrypt.hash('InnovaManager123', 10),
+      firstName: 'Lisa',
+      lastName: 'Anderson',
+      role: UserRole.MANAGER,
+      organizationId: innovaCorp.id,
+      branchId: innovaBranch.id,
     },
   });
 
@@ -272,7 +279,7 @@ async function main() {
     where: { email: 'admin@bank.co.ke' },
     update: {},
     create: {
-      email: 'admin@bank.co.ke',
+      email: 'admin@company.com',
       password: await bcrypt.hash('AdminPass123', 10),
       firstName: 'System',
       lastName: 'Administrator',
@@ -286,10 +293,10 @@ async function main() {
     where: { email: 'manager@bank.co.ke' },
     update: {},
     create: {
-      email: 'manager@bank.co.ke',
+      email: 'manager@company.com',
       password: await bcrypt.hash('ManagerPass123', 10),
       firstName: 'John',
-      lastName: 'Mwangi',
+      lastName: 'Manager',
       role: UserRole.MANAGER,
       organizationId: defaultOrg.id,
       branchId: defaultBranch.id,
@@ -300,10 +307,10 @@ async function main() {
     where: { email: 'officer@bank.co.ke' },
     update: {},
     create: {
-      email: 'officer@bank.co.ke',
+      email: 'officer@company.com',
       password: await bcrypt.hash('OfficerPass123', 10),
       firstName: 'Jane',
-      lastName: 'Wanjiku',
+      lastName: 'Officer',
       role: UserRole.COMPLIANCE_OFFICER,
       organizationId: defaultOrg.id,
       branchId: defaultBranch.id,
@@ -311,90 +318,90 @@ async function main() {
   });
 
   // Create additional test users with different roles for each organization
-  // Equity Bank additional users
-  const equityComplianceOfficer = await prisma.user.upsert({
-    where: { email: 'compliance@equitybank.co.ke' },
+  // TechCorp additional users
+  const techComplianceOfficer = await prisma.user.upsert({
+    where: { email: 'compliance@techcorp.com' },
     update: {},
     create: {
-      email: 'compliance@equitybank.co.ke',
-      password: await bcrypt.hash('EquityCompliance123', 10),
+      email: 'compliance@techcorp.com',
+      password: await bcrypt.hash('TechCompliance123', 10),
       firstName: 'Alice',
-      lastName: 'Njoroge',
+      lastName: 'Williams',
       role: UserRole.COMPLIANCE_OFFICER,
-      organizationId: equityBank.id,
-      branchId: equityBranch.id,
+      organizationId: techCorp.id,
+      branchId: techBranch.id,
     },
   });
 
-  const equityStaff = await prisma.user.upsert({
-    where: { email: 'staff@equitybank.co.ke' },
+  const techStaff = await prisma.user.upsert({
+    where: { email: 'staff@techcorp.com' },
     update: {},
     create: {
-      email: 'staff@equitybank.co.ke',
-      password: await bcrypt.hash('EquityStaff123', 10),
+      email: 'staff@techcorp.com',
+      password: await bcrypt.hash('TechStaff123', 10),
       firstName: 'Brian',
-      lastName: 'Kiprop',
+      lastName: 'Taylor',
       role: UserRole.STAFF,
-      organizationId: equityBank.id,
-      branchId: equityBranch.id,
+      organizationId: techCorp.id,
+      branchId: techBranch.id,
     },
   });
 
-  // KCB Bank additional users
-  const kcbComplianceOfficer = await prisma.user.upsert({
-    where: { email: 'compliance@kcbgroup.com' },
+  // Global Industries additional users
+  const globalComplianceOfficer = await prisma.user.upsert({
+    where: { email: 'compliance@globalinc.com' },
     update: {},
     create: {
-      email: 'compliance@kcbgroup.com',
-      password: await bcrypt.hash('KcbCompliance123', 10),
-      firstName: 'Catherine',
-      lastName: 'Wanjala',
+      email: 'compliance@globalinc.com',
+      password: await bcrypt.hash('GlobalCompliance123', 10),
+      firstName: 'Charles',
+      lastName: 'Miller',
       role: UserRole.COMPLIANCE_OFFICER,
-      organizationId: kcbBank.id,
-      branchId: kcbBranch.id,
+      organizationId: globalInc.id,
+      branchId: globalBranch.id,
     },
   });
 
-  const kcbStaff = await prisma.user.upsert({
-    where: { email: 'staff@kcbgroup.com' },
+  const globalStaff = await prisma.user.upsert({
+    where: { email: 'staff@globalinc.com' },
     update: {},
     create: {
-      email: 'staff@kcbgroup.com',
-      password: await bcrypt.hash('KcbStaff123', 10),
-      firstName: 'Daniel',
-      lastName: 'Mutua',
+      email: 'staff@globalinc.com',
+      password: await bcrypt.hash('GlobalStaff123', 10),
+      firstName: 'Diana',
+      lastName: 'Garcia',
       role: UserRole.STAFF,
-      organizationId: kcbBank.id,
-      branchId: kcbBranch.id,
+      organizationId: globalInc.id,
+      branchId: globalBranch.id,
     },
   });
 
-  // Co-op Bank additional users
-  const coopComplianceOfficer = await prisma.user.upsert({
-    where: { email: 'compliance@co-opbank.co.ke' },
+  // Innova Corporation additional users
+  const innovaComplianceOfficer = await prisma.user.upsert({
+    where: { email: 'compliance@innovacorp.com' },
     update: {},
     create: {
-      email: 'compliance@co-opbank.co.ke',
-      password: await bcrypt.hash('CoopCompliance123', 10),
+      email: 'compliance@innovacorp.com',
+      password: await bcrypt.hash('InnovaCompliance123', 10),
       firstName: 'Esther',
-      lastName: 'Nyong\'o',
+      lastName: 'Martinez',
       role: UserRole.COMPLIANCE_OFFICER,
-      organizationId: coopBank.id,
-      branchId: coopBranch.id,
+      organizationId: innovaCorp.id,
+      branchId: innovaBranch.id,
     },
   });
 
-  const coopStaff = await prisma.user.upsert({
-    where: { email: 'staff@co-opbank.co.ke' },
+  const innovaStaff = await prisma.user.upsert({
+    where: { email: 'staff@innovacorp.com' },
     update: {},
     create: {
-      email: 'staff@co-opbank.co.ke',
-      password: await bcrypt.hash('CoopStaff123', 10),
+      email: 'staff@innovacorp.com',
+      password: await bcrypt.hash('InnovaStaff123', 10),
       firstName: 'Francis',
-      lastName: 'Omondi',
+      lastName: 'Thompson',
       role: UserRole.STAFF,
-      organizationId: coopBank.id,
-      branchId: coopBranch.id,
+      organizationId: innovaCorp.id,
+      branchId: innovaBranch.id,
     },
   });
 
@@ -403,10 +410,10 @@ async function main() {
     where: { email: 'staff@bank.co.ke' },
     update: {},
     create: {
-      email: 'staff@bank.co.ke',
+      email: 'staff@company.com',
       password: await bcrypt.hash('StaffPass123', 10),
       firstName: 'Hannah',
-      lastName: 'Kamau',
+      lastName: 'Staff',
       role: UserRole.STAFF,
       organizationId: defaultOrg.id,
       branchId: defaultBranch.id,
@@ -415,18 +422,18 @@ async function main() {
 
   // Update branch managers
   await prisma.branch.update({
-    where: { id: equityBranch.id },
-    data: { managerId: equityAdmin.id },
+    where: { id: techBranch.id },
+    data: { managerId: techAdmin.id },
   });
 
   await prisma.branch.update({
-    where: { id: kcbBranch.id },
-    data: { managerId: kcbAdmin.id },
+    where: { id: globalBranch.id },
+    data: { managerId: globalAdmin.id },
   });
 
   await prisma.branch.update({
-    where: { id: coopBranch.id },
-    data: { managerId: coopAdmin.id },
+    where: { id: innovaBranch.id },
+    data: { managerId: innovaAdmin.id },
   });
 
   await prisma.branch.update({
@@ -853,9 +860,9 @@ async function main() {
   ];
 
   // Create ISO 27001:2022 requirements for each organization
-  const organizations = [equityBank, kcbBank, coopBank, defaultOrg];
-  const adminUsers = [equityAdmin, kcbAdmin, coopAdmin, defaultAdmin];
-  const branches = [equityBranch, kcbBranch, coopBranch, defaultBranch];
+  const organizations = [techCorp, globalInc, innovaCorp, defaultOrg];
+  const adminUsers = [techAdmin, globalAdmin, innovaAdmin, defaultAdmin];
+  const branches = [techBranch, globalBranch, innovaBranch, defaultBranch];
 
   for (let i = 0; i < organizations.length; i++) {
     const org = organizations[i];
@@ -914,7 +921,7 @@ async function main() {
     },
   ];
 
-  const managerUsers = [equityManager, kcbManager, coopManager, defaultManager];
+  const managerUsers = [techManager, globalManager, innovaManager, defaultManager];
 
   for (let i = 0; i < organizations.length; i++) {
     const org = organizations[i];
@@ -1015,7 +1022,7 @@ async function main() {
 
     const riskTemplates = [
       {
-        description: `Data breach risk in ${org.name} core banking system`,
+        description: `Data breach risk in ${org.name} core systems`,
         likelihood: 2,
         impact: 4,
         mitigation: `Implement multi-factor authentication and regular security audits`
@@ -1094,19 +1101,19 @@ async function main() {
   console.log('  Email: superadmin@gapanalysis.com');
   console.log('  Password: SuperAdmin@123');
   console.log('\n📋 Multi-Tenant Test Credentials:');
-  console.log('\n🏦 Equity Bank Kenya:');
-  console.log('  Admin: admin@equitybank.co.ke / EquityAdmin123');
-  console.log('  Manager: manager@equitybank.co.ke / EquityManager123');
-  console.log('\n🏦 KCB Bank Kenya:');
-  console.log('  Admin: admin@kcbgroup.com / KcbAdmin123');
-  console.log('  Manager: manager@kcbgroup.com / KcbManager123');
-  console.log('\n🏦 Co-operative Bank of Kenya:');
-  console.log('  Admin: admin@co-opbank.co.ke / CoopAdmin123');
-  console.log('  Manager: manager@co-opbank.co.ke / CoopManager123');
-  console.log('\n🏦 Default Organization (Backward Compatibility):');
-  console.log('  Admin: admin@bank.co.ke / AdminPass123');
-  console.log('  Manager: manager@bank.co.ke / ManagerPass123');
-  console.log('  Officer: officer@bank.co.ke / OfficerPass123');
+  console.log('\n🏢 TechCorp Solutions:');
+  console.log('  Admin: admin@techcorp.com / TechAdmin123');
+  console.log('  Manager: manager@techcorp.com / TechManager123');
+  console.log('\n🏢 Global Industries Inc:');
+  console.log('  Admin: admin@globalinc.com / GlobalAdmin123');
+  console.log('  Manager: manager@globalinc.com / GlobalManager123');
+  console.log('\n🏢 Innova Corporation:');
+  console.log('  Admin: admin@innovacorp.com / InnovaAdmin123');
+  console.log('  Manager: manager@innovacorp.com / InnovaManager123');
+  console.log('\n🏢 Default Organization (Backward Compatibility):');
+  console.log('  Admin: admin@company.com / AdminPass123');
+  console.log('  Manager: manager@company.com / ManagerPass123');
+  console.log('  Officer: officer@company.com / OfficerPass123');
 }
 
 main()

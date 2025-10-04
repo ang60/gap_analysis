@@ -16,6 +16,8 @@ import { EmailModule } from './email/email.module';
 import { CronModule } from './cron/cron.module';
 import { BranchesModule } from './branches/branches.module';
 import { SuperAdminModule } from './super-admin/super-admin.module';
+import { PaymentsModule } from './payments/payments.module';
+import { ComplianceStandardsModule } from './compliance-standards/compliance-standards.module';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { SuperAdminModule } from './super-admin/super-admin.module';
     CronModule,
     BranchesModule,
     SuperAdminModule,
+    PaymentsModule,
+    ComplianceStandardsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

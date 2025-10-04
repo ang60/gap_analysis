@@ -5,7 +5,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 export class UpdateOrganizationDto extends PartialType(CreateOrganizationDto) {
   @ApiPropertyOptional({
     description: 'Organization name',
-    example: 'Bank of Kenya Updated',
+    example: 'Acme Corporation Updated',
     minLength: 2,
     maxLength: 100
   })
@@ -13,7 +13,7 @@ export class UpdateOrganizationDto extends PartialType(CreateOrganizationDto) {
 
   @ApiPropertyOptional({
     description: 'Organization domain',
-    example: 'bankofkenya.com',
+    example: 'acme.com',
     pattern: '^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
   })
   domain?: string;

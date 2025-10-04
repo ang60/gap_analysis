@@ -218,8 +218,18 @@ export class UsersService extends TenantAwareService {
   }
 
   async createBranch(data: { name: string; region: string; managerId?: number }, organizationId: number) {
+    // Get the next branchId for this organization
+    const lastBranch = await this.prisma.branch.findFirst({
+      where: { organizationId },
+      orderBy: { branchId: 'desc' },
+      select: { branchId: true },
+    });
+
+    const nextBranchId = (lastBranch?.branchId || 0) + 1;
+
     return this.prisma.branch.create({
       data: {
+        branchId: nextBranchId,
         ...data,
         organizationId,
       },
@@ -234,6 +244,18 @@ export class UsersService extends TenantAwareService {
   async findOrganizationByDomain(domain: string) {
     return this.prisma.organization.findUnique({
       where: { domain },
+    });
+  }
+
+  async findOrganizationById(id: number) {
+    return this.prisma.organization.findUnique({
+      where: { id },
+    });
+  }
+
+  async findBranchById(id: number) {
+    return this.prisma.branch.findUnique({
+      where: { id },
     });
   }
 

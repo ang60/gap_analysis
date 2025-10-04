@@ -34,13 +34,13 @@ export default function Home() {
       <section className="relative py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-            Intelligent Gap Analysis for
+            Gap Analysis for
             <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              {" "}Modern Banking
+              {" "}All Organizations
             </span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Comprehensive compliance & risk management platform designed specifically for Kenyan banking sector. 
+            Comprehensive compliance & risk management platform designed for all organizations. 
             Achieve ISO 27001:2022 certification with automated gap identification and real-time compliance tracking.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -50,12 +50,12 @@ export default function Home() {
             >
               Start Free Trial
             </Link>
-            <Link
+            {/* <Link
               href="#demo"
               className="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors"
             >
               Watch Demo
-            </Link>
+            </Link> */}
           </div>
         </div>
       </section>
@@ -68,7 +68,7 @@ export default function Home() {
               Everything You Need for Compliance Excellence
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Streamline your compliance processes with our comprehensive suite of tools designed for Kenyan banking regulations.
+              Streamline your compliance processes with our comprehensive suite of tools designed for all organizational regulations.
             </p>
           </div>
           
@@ -141,10 +141,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Trusted by Leading Kenyan Banks
+              Trusted by Leading Organizations
             </h2>
             <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-              Join the growing number of financial institutions achieving compliance excellence.
+              Join the growing number of organizations achieving compliance excellence.
             </p>
           </div>
           
@@ -155,7 +155,7 @@ export default function Home() {
             </div>
             <div>
               <div className="text-4xl font-bold text-white mb-2">50+</div>
-              <div className="text-blue-100">Banking Clients</div>
+              <div className="text-blue-100">Organizations</div>
             </div>
             <div>
               <div className="text-4xl font-bold text-white mb-2">24/7</div>
@@ -176,7 +176,7 @@ export default function Home() {
             Ready to Transform Your Compliance Management?
           </h2>
           <p className="text-xl text-gray-600 mb-8">
-            Join leading Kenyan banks in achieving compliance excellence with our comprehensive platform.
+            Join leading organizations in achieving compliance excellence with our comprehensive platform.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -202,10 +202,10 @@ export default function Home() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Shield className="h-6 w-6 text-blue-400" />
-                <span className="text-lg font-bold">GapAnalysis Pro</span>
+                <span className="text-lg font-bold">GapAnalysis</span>
               </div>
               <p className="text-gray-400">
-                Comprehensive compliance & risk management platform for Kenyan banking sector.
+                Comprehensive compliance & risk management platform for all organizations.
               </p>
             </div>
             <div>
@@ -234,7 +234,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 GapAnalysis Pro. All rights reserved.</p>
+            <p>&copy; 2024 GapAnalysis  All rights reserved.</p>
           </div>
         </div>
       </footer>

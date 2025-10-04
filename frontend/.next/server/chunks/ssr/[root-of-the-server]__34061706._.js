@@ -114,12 +114,12 @@ function Home() {
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                             className: "text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6",
                             children: [
-                                "Intelligent Gap Analysis for",
+                                "Gap Analysis for",
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     className: "bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent",
                                     children: [
                                         " ",
-                                        "Modern Banking"
+                                        "All Organizations"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
@@ -134,7 +134,7 @@ function Home() {
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             className: "text-xl text-gray-600 mb-8 max-w-3xl mx-auto",
-                            children: "Comprehensive compliance & risk management platform designed specifically for Kenyan banking sector. Achieve ISO 27001:2022 certification with automated gap identification and real-time compliance tracking."
+                            children: "Comprehensive compliance & risk management platform designed for all organizations. Achieve ISO 27001:2022 certification with automated gap identification and real-time compliance tracking."
                         }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
                             lineNumber: 42,
@@ -142,27 +142,16 @@ function Home() {
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "flex flex-col sm:flex-row gap-4 justify-center",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"], {
-                                    href: "/auth/register",
-                                    className: "bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors",
-                                    children: "Start Free Trial"
-                                }, void 0, false, {
-                                    fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
-                                    lineNumber: 47,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"], {
-                                    href: "#demo",
-                                    className: "border border-gray-300 text-gray-700 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors",
-                                    children: "Watch Demo"
-                                }, void 0, false, {
-                                    fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
-                                    lineNumber: 53,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"], {
+                                href: "/auth/register",
+                                className: "bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors",
+                                children: "Start Free Trial"
+                            }, void 0, false, {
+                                fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
+                                lineNumber: 47,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
                             lineNumber: 46,
                             columnNumber: 11
@@ -196,7 +185,7 @@ function Home() {
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     className: "text-xl text-gray-600 max-w-2xl mx-auto",
-                                    children: "Streamline your compliance processes with our comprehensive suite of tools designed for Kenyan banking regulations."
+                                    children: "Streamline your compliance processes with our comprehensive suite of tools designed for all organizational regulations."
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
                                     lineNumber: 70,
@@ -472,7 +461,7 @@ function Home() {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                     className: "text-3xl sm:text-4xl font-bold text-white mb-4",
-                                    children: "Trusted by Leading Kenyan Banks"
+                                    children: "Trusted by Leading Organizations"
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
                                     lineNumber: 143,
@@ -480,7 +469,7 @@ function Home() {
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     className: "text-xl text-blue-100 max-w-2xl mx-auto",
-                                    children: "Join the growing number of financial institutions achieving compliance excellence."
+                                    children: "Join the growing number of organizations achieving compliance excellence."
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
                                     lineNumber: 146,
@@ -531,7 +520,7 @@ function Home() {
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "text-blue-100",
-                                            children: "Banking Clients"
+                                            children: "Organizations"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
                                             lineNumber: 158,
@@ -623,7 +612,7 @@ function Home() {
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             className: "text-xl text-gray-600 mb-8",
-                            children: "Join leading Kenyan banks in achieving compliance excellence with our comprehensive platform."
+                            children: "Join leading organizations in achieving compliance excellence with our comprehensive platform."
                         }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
                             lineNumber: 178,
@@ -689,7 +678,7 @@ function Home() {
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     className: "text-lg font-bold",
-                                                    children: "GapAnalysis Pro"
+                                                    children: "GapAnalysis"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
                                                     lineNumber: 205,
@@ -703,7 +692,7 @@ function Home() {
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             className: "text-gray-400",
-                                            children: "Comprehensive compliance & risk management platform for Kenyan banking sector."
+                                            children: "Comprehensive compliance & risk management platform for all organizations."
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
                                             lineNumber: 207,
@@ -934,7 +923,7 @@ function Home() {
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "border-t border-gray-800 mt-8 pt-8 text-center text-gray-400",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                children: "© 2024 GapAnalysis Pro. All rights reserved."
+                                children: "© 2024 GapAnalysis  All rights reserved."
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/page.tsx",
                                 lineNumber: 237,

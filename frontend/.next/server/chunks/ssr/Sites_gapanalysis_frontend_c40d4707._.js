@@ -90,7 +90,19 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$fron
 var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/next/dist/client/app-dir/link.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/next/navigation.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/lib/utils.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/lucide-react/dist/esm/icons/house.js [app-ssr] (ecmascript) <export default as Home>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/lucide-react/dist/esm/icons/file-text.js [app-ssr] (ecmascript) <export default as FileText>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chart$2d$column$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BarChart3$3e$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/lucide-react/dist/esm/icons/chart-column.js [app-ssr] (ecmascript) <export default as BarChart3>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$square$2d$check$2d$big$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckSquare$3e$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/lucide-react/dist/esm/icons/square-check-big.js [app-ssr] (ecmascript) <export default as CheckSquare>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/lucide-react/dist/esm/icons/triangle-alert.js [app-ssr] (ecmascript) <export default as AlertTriangle>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/lucide-react/dist/esm/icons/calendar.js [app-ssr] (ecmascript) <export default as Calendar>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$upload$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Upload$3e$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/lucide-react/dist/esm/icons/upload.js [app-ssr] (ecmascript) <export default as Upload>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/lucide-react/dist/esm/icons/users.js [app-ssr] (ecmascript) <export default as Users>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$settings$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Settings$3e$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/lucide-react/dist/esm/icons/settings.js [app-ssr] (ecmascript) <export default as Settings>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/lucide-react/dist/esm/icons/user.js [app-ssr] (ecmascript) <export default as User>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$credit$2d$card$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__CreditCard$3e$__ = __turbopack_context__.i("[project]/Sites/gapanalysis/frontend/node_modules/lucide-react/dist/esm/icons/credit-card.js [app-ssr] (ecmascript) <export default as CreditCard>");
 'use client';
+;
 ;
 ;
 ;
@@ -105,21 +117,24 @@ const navigationItems = [
             'MANAGER',
             'COMPLIANCE_OFFICER',
             'STAFF'
-        ]
+        ],
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__["Home"]
     },
     {
         name: 'Requirements',
         href: '/dashboard/requirements',
         roles: [
             'COMPLIANCE_OFFICER'
-        ]
+        ],
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"]
     },
     {
         name: 'Gap Analysis',
         href: '/dashboard/gap-analysis',
         roles: [
             'COMPLIANCE_OFFICER'
-        ]
+        ],
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chart$2d$column$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BarChart3$3e$__["BarChart3"]
     },
     {
         name: 'Action Plans',
@@ -127,14 +142,16 @@ const navigationItems = [
         roles: [
             'MANAGER',
             'STAFF'
-        ]
+        ],
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$square$2d$check$2d$big$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckSquare$3e$__["CheckSquare"]
     },
     {
         name: 'Risk Register',
         href: '/dashboard/risks',
         roles: [
             'COMPLIANCE_OFFICER'
-        ]
+        ],
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__["AlertTriangle"]
     },
     {
         name: 'Schedules',
@@ -142,28 +159,41 @@ const navigationItems = [
         roles: [
             'MANAGER',
             'COMPLIANCE_OFFICER'
-        ]
+        ],
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__["Calendar"]
     },
     {
         name: 'Evidence',
         href: '/dashboard/evidence',
         roles: [
             'STAFF'
-        ]
+        ],
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$upload$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Upload$3e$__["Upload"]
+    },
+    {
+        name: 'Payments',
+        href: '/dashboard/payments',
+        roles: [
+            'ADMIN',
+            'MANAGER'
+        ],
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$credit$2d$card$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__CreditCard$3e$__["CreditCard"]
     },
     {
         name: 'User Management',
         href: '/dashboard/user-management',
         roles: [
             'ADMIN'
-        ]
+        ],
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"]
     },
     {
         name: 'System Administration',
         href: '/dashboard/super-admin',
         roles: [
             'SUPER_ADMIN'
-        ]
+        ],
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$settings$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Settings$3e$__["Settings"]
     },
     {
         name: 'Profile',
@@ -173,7 +203,8 @@ const navigationItems = [
             'MANAGER',
             'COMPLIANCE_OFFICER',
             'STAFF'
-        ]
+        ],
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"]
     }
 ];
 function RoleBasedNavigation({ className }) {
@@ -193,20 +224,20 @@ function RoleBasedNavigation({ className }) {
                         className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])('mr-3 h-5 w-5 flex-shrink-0', isActive ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500')
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/components/RoleBasedNavigation.tsx",
-                        lineNumber: 98,
+                        lineNumber: 127,
                         columnNumber: 15
                     }, this),
                     item.name
                 ]
             }, item.name, true, {
                 fileName: "[project]/Sites/gapanalysis/frontend/components/RoleBasedNavigation.tsx",
-                lineNumber: 87,
+                lineNumber: 116,
                 columnNumber: 11
             }, this);
         })
     }, void 0, false, {
         fileName: "[project]/Sites/gapanalysis/frontend/components/RoleBasedNavigation.tsx",
-        lineNumber: 83,
+        lineNumber: 112,
         columnNumber: 5
     }, this);
 }

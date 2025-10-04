@@ -3,8 +3,8 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
-  title: "Gap Analysis System - Kenyan Banking Compliance Platform",
-  description: "Comprehensive compliance & risk management platform for Kenyan banking sector. ISO 27001:2022 compliance, CBK guidelines, and automated gap analysis.",
+  title: "Gap Analysis System - Universal Compliance Platform",
+  description: "Comprehensive compliance & risk management platform for all organizations. ISO 27001:2022 compliance, regulatory guidelines, and automated gap analysis.",
 };
 
 export default function RootLayout({

@@ -46,7 +46,7 @@ export default function LoginPage() {
             Welcome back
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Sign in to your GapAnalysis Pro account
+            Sign in to your GapAnalysis account
           </p>
         </div>
 
@@ -152,40 +152,6 @@ export default function LoginPage() {
           </div>
         </form>
 
-        {/* Multi-Tenant Demo Credentials */}
-        <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <h3 className="text-sm font-medium text-blue-900 mb-3">Multi-Tenant Demo Credentials</h3>
-          <div className="text-xs text-blue-700 space-y-3">
-            <div>
-              <p className="font-semibold text-blue-800">🏦 Equity Bank Kenya:</p>
-              <p>Admin: admin@equitybank.co.ke / EquityAdmin123</p>
-              <p>Manager: manager@equitybank.co.ke / EquityManager123</p>
-              <p>Compliance: compliance@equitybank.co.ke / EquityCompliance123</p>
-              <p>Staff: staff@equitybank.co.ke / EquityStaff123</p>
-            </div>
-            <div>
-              <p className="font-semibold text-blue-800">🏦 KCB Bank Kenya:</p>
-              <p>Admin: admin@kcbgroup.com / KcbAdmin123</p>
-              <p>Manager: manager@kcbgroup.com / KcbManager123</p>
-              <p>Compliance: compliance@kcbgroup.com / KcbCompliance123</p>
-              <p>Staff: staff@kcbgroup.com / KcbStaff123</p>
-            </div>
-            <div>
-              <p className="font-semibold text-blue-800">🏦 Co-operative Bank:</p>
-              <p>Admin: admin@co-opbank.co.ke / CoopAdmin123</p>
-              <p>Manager: manager@co-opbank.co.ke / CoopManager123</p>
-              <p>Compliance: compliance@co-opbank.co.ke / CoopCompliance123</p>
-              <p>Staff: staff@co-opbank.co.ke / CoopStaff123</p>
-            </div>
-            <div className="border-t pt-2">
-              <p className="font-semibold text-blue-800">🏦 Default Organization:</p>
-              <p>Admin: admin@bank.co.ke / AdminPass123</p>
-              <p>Manager: manager@bank.co.ke / ManagerPass123</p>
-              <p>Officer: officer@bank.co.ke / OfficerPass123</p>
-              <p>Staff: staff@bank.co.ke / StaffPass123</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

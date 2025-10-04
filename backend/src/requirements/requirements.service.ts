@@ -16,7 +16,7 @@ export class RequirementsService {
         createdById,
       },
       include: {
-        createdBy: true,
+        users: true,
         branch: true,
         gapAssessments: {
           include: {
@@ -31,7 +31,7 @@ export class RequirementsService {
   async findAll(): Promise<Requirement[]> {
     return this.prisma.requirement.findMany({
       include: {
-        createdBy: true,
+        users: true,
         branch: true,
         gapAssessments: {
           include: {
@@ -47,7 +47,7 @@ export class RequirementsService {
     const requirement = await this.prisma.requirement.findUnique({
       where: { id },
       include: {
-        createdBy: true,
+        users: true,
         branch: true,
         gapAssessments: {
           include: {
@@ -73,7 +73,7 @@ export class RequirementsService {
         },
       },
       include: {
-        createdBy: true,
+        users: true,
         branch: true,
         gapAssessments: {
           include: {
@@ -89,7 +89,7 @@ export class RequirementsService {
     return this.prisma.requirement.findMany({
       where: { category },
       include: {
-        createdBy: true,
+        users: true,
         branch: true,
         gapAssessments: {
           include: {
@@ -105,7 +105,7 @@ export class RequirementsService {
     return this.prisma.requirement.findMany({
       where: { section },
       include: {
-        createdBy: true,
+        users: true,
         branch: true,
         gapAssessments: {
           include: {
@@ -121,7 +121,7 @@ export class RequirementsService {
     return this.prisma.requirement.findMany({
       where: { priority },
       include: {
-        createdBy: true,
+        users: true,
         branch: true,
         gapAssessments: {
           include: {
@@ -141,7 +141,7 @@ export class RequirementsService {
         },
       },
       include: {
-        createdBy: true,
+        users: true,
         branch: true,
         gapAssessments: {
           where: {
@@ -248,7 +248,7 @@ export class RequirementsService {
         },
       },
       include: {
-        createdBy: true,
+        users: true,
         branch: true,
         gapAssessments: {
           where: {
@@ -271,7 +271,7 @@ export class RequirementsService {
       where: { id },
       data,
       include: {
-        createdBy: true,
+        users: true,
         branch: true,
         gapAssessments: {
           include: {

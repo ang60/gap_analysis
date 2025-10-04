@@ -4,6 +4,19 @@ import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { 
+  Home, 
+  FileText, 
+  BarChart3, 
+  CheckSquare, 
+  AlertTriangle, 
+  Calendar, 
+  Upload, 
+  Users, 
+  Settings, 
+  User,
+  CreditCard
+} from 'lucide-react';
 
 interface NavigationItem {
   name: string;
@@ -17,51 +30,67 @@ const navigationItems: NavigationItem[] = [
     name: 'Dashboard',
     href: '/dashboard',
     roles: ['ADMIN', 'MANAGER', 'COMPLIANCE_OFFICER', 'STAFF'],
+    icon: Home,
   },
   {
     name: 'Requirements',
     href: '/dashboard/requirements',
     roles: ['COMPLIANCE_OFFICER'], // Only Compliance Officers create requirements
+    icon: FileText,
   },
   {
     name: 'Gap Analysis',
     href: '/dashboard/gap-analysis',
     roles: ['COMPLIANCE_OFFICER'], // Only Compliance Officers perform gap analysis
+    icon: BarChart3,
   },
   {
     name: 'Action Plans',
     href: '/dashboard/action-plans',
     roles: ['MANAGER', 'STAFF'], // Managers create, Staff complete
+    icon: CheckSquare,
   },
   {
     name: 'Risk Register',
     href: '/dashboard/risks',
     roles: ['COMPLIANCE_OFFICER'], // Only Compliance Officers assess risks
+    icon: AlertTriangle,
   },
   {
     name: 'Schedules',
     href: '/dashboard/schedules',
     roles: ['MANAGER', 'COMPLIANCE_OFFICER'], // Managers and Compliance Officers create schedules
+    icon: Calendar,
   },
   {
     name: 'Evidence',
     href: '/dashboard/evidence',
     roles: ['STAFF'], // Only Staff upload evidence
+    icon: Upload,
+  },
+  {
+    name: 'Payments',
+    href: '/dashboard/payments',
+    roles: ['ADMIN', 'MANAGER'], // Only Admins and Managers can manage payments
+    icon: CreditCard,
   },
   {
     name: 'User Management',
     href: '/dashboard/user-management',
     roles: ['ADMIN'],
+    icon: Users,
   },
   {
     name: 'System Administration',
     href: '/dashboard/super-admin',
     roles: ['SUPER_ADMIN'],
+    icon: Settings,
   },
   {
     name: 'Profile',
     href: '/dashboard/profile',
     roles: ['ADMIN', 'MANAGER', 'COMPLIANCE_OFFICER', 'STAFF'],
+    icon: User,
   },
 ];
 

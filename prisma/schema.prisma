@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
   output   = "../backend/node_modules/.prisma/client"
@@ -11,249 +8,265 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Organization/Tenant Management
 model Organization {
-  id          Int      @id @default(autoincrement())
-  name        String
-  domain      String   @unique
-  subdomain   String?  @unique // For subdomain-based tenant access
-  isActive    Boolean  @default(true)
-  settings    Json?    // Tenant-specific settings
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Relations
-  users         User[]
-  branches      Branch[]
-  requirements  Requirement[]
+  id             Int             @id @default(autoincrement())
+  name           String
+  domain         String          @unique
+  subdomain      String?         @unique
+  isActive       Boolean         @default(true)
+  settings       Json?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  actionPlans    ActionPlan[]
+  branches       Branch[]
   gapAssessments GapAssessment[]
-  actionPlans   ActionPlan[]
-  risks         Risk[]
-  schedules     Schedule[]
-  notifications Notification[]
+  notifications  Notification[]
+  payments       Payment[]
+  requirements   Requirement[]
+  risks          Risk[]
+  schedules      Schedule[]
+  subscriptions  Subscription[]
+  users          User[]
+  complianceStandards ComplianceStandard[]
 
   @@map("organizations")
 }
 
-// User Management
 model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
-  password     String
-  firstName    String
-  lastName     String
-  role         UserRole @default(STAFF)
-  refreshToken String?
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  // Relations
-  organizationId Int
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  branchId       Int?
-  branch         Branch?      @relation(fields: [branchId], references: [id])
-  
-  // User relationships
-  managedBranches Branch[] @relation("BranchManager")
-  createdGaps     GapAssessment[]
-  createdActions  ActionPlan[]
-  assignedActions ActionPlan[] @relation("ActionAssignee")
-  ownedRisks      Risk[]
-  createdSchedules Schedule[]
-  responsibleSchedules Schedule[] @relation("ScheduleResponsible")
-  notifications   Notification[]
-  createdRequirements Requirement[]
+  id                   Int             @id @default(autoincrement())
+  email                String          @unique
+  password             String
+  firstName            String
+  lastName             String
+  role                 UserRole        @default(STAFF)
+  refreshToken         String?
+  isActive             Boolean         @default(true)
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+  branchId             Int?
+  organizationId       Int
+  createdActions       ActionPlan[]
+  assignedActions      ActionPlan[]    @relation("ActionAssignee")
+  managedBranches      Branch[]        @relation("BranchManager")
+  createdGaps          GapAssessment[]
+  notifications        Notification[]
+  payments             Payment[]
+  requirements         Requirement[]
+  ownedRisks           Risk[]
+  createdSchedules     Schedule[]
+  responsibleSchedules Schedule[]      @relation("ScheduleResponsible")
+  branch               Branch?         @relation(fields: [branchId], references: [id])
+  organization         Organization    @relation(fields: [organizationId], references: [id])
 
   @@map("users")
 }
 
 model Branch {
-  id          Int      @id @default(autoincrement())
-  name        String
-  region      String
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Relations
-  organizationId Int
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  id             Int             @id @default(autoincrement())
+  name           String
+  region         String
+  isActive       Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   managerId      Int?
-  manager        User?        @relation("BranchManager", fields: [managerId], references: [id])
-  
-  users       User[]
+  organizationId Int
+  branchId       Int
+  manager        User?           @relation("BranchManager", fields: [managerId], references: [id])
+  organization   Organization    @relation(fields: [organizationId], references: [id])
   gapAssessments GapAssessment[]
-  risks       Risk[]
-  schedules   Schedule[]
-  requirements Requirement[]
+  requirements   Requirement[]
+  risks          Risk[]
+  schedules      Schedule[]
+  users          User[]
 
   @@unique([name, organizationId])
+  @@unique([branchId, organizationId])
   @@map("branches")
 }
 
-// Requirements Management
 model Requirement {
-  id           Int      @id @default(autoincrement())
-  clause       String
-  subClause    String?
-  title        String
-  description  String
-  category     String   @default("ISO 27001")
-  standard     String   @default("ISO 27001:2022")
-  section      String
-  isMandatory  Boolean  @default(true)
-  priority     Priority @default(MEDIUM)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  // Relations
-  organizationId Int
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  id             Int             @id @default(autoincrement())
+  clause         String
+  subClause      String?
+  title          String
+  description    String
+  category       String          @default("ISO 27001")
+  standard       String          @default("ISO 27001:2022")
+  section        String
+  isMandatory    Boolean         @default(true)
+  priority       Priority        @default(MEDIUM)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   createdById    Int
-  createdBy      User         @relation(fields: [createdById], references: [id])
   branchId       Int?
-  branch         Branch?       @relation(fields: [branchId], references: [id])
-
-  @@unique([clause, organizationId]) // Unique clause per organization
-  
-  gapAssessments GapAssessment[]
+  organizationId Int
   actionPlans    ActionPlan[]
+  gapAssessments GapAssessment[]
+  branch         Branch?         @relation(fields: [branchId], references: [id])
+  users          User            @relation(fields: [createdById], references: [id])
+  organization   Organization    @relation(fields: [organizationId], references: [id])
+  complianceStandardId Int?
+  complianceStandard   ComplianceStandard? @relation(fields: [complianceStandardId], references: [id])
 
+  @@unique([clause, organizationId])
   @@map("requirements")
 }
 
-// Gap Assessment
 model GapAssessment {
-  id            Int      @id @default(autoincrement())
-  status        Int      @default(0) // 0-3 scale: 0=Not Implemented, 1=Partially, 2=Mostly, 3=Fully
-  description   String
-  evidenceLink  String?
-  riskScore     Int      @default(0) // 0-3 scale
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  // Relations
-  organizationId Int
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  id             Int          @id @default(autoincrement())
+  status         Int          @default(0)
+  description    String
+  evidenceLink   String?
+  riskScore      Int          @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
   requirementId  Int
-  requirement    Requirement  @relation(fields: [requirementId], references: [id])
   branchId       Int
-  branch         Branch        @relation(fields: [branchId], references: [id])
   createdById    Int
-  createdBy      User          @relation(fields: [createdById], references: [id])
-  
-  actionPlans   ActionPlan[]
+  organizationId Int
+  actionPlans    ActionPlan[]
+  branch         Branch       @relation(fields: [branchId], references: [id])
+  createdBy      User         @relation(fields: [createdById], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  requirement    Requirement  @relation(fields: [requirementId], references: [id])
+  complianceStandardId Int?
+  complianceStandard   ComplianceStandard? @relation(fields: [complianceStandardId], references: [id])
 
   @@map("gap_assessments")
 }
 
-// Action Plans
 model ActionPlan {
-  id              Int           @id @default(autoincrement())
+  id              Int            @id @default(autoincrement())
   actionText      String
   priority        ActionPriority @default(MEDIUM)
-  status          ActionStatus  @default(PENDING)
+  status          ActionStatus   @default(PENDING)
   deadline        DateTime?
   completionNotes String?
   completedAt     DateTime?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-
-  // Relations
-  organizationId  Int
-  organization    Organization @relation(fields: [organizationId], references: [id])
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   gapId           Int
-  gap             GapAssessment @relation(fields: [gapId], references: [id])
-  responsibleId    Int
-  responsible     User          @relation("ActionAssignee", fields: [responsibleId], references: [id])
-  createdById      Int
-  createdBy       User          @relation(fields: [createdById], references: [id])
-  requirementId    Int
-  requirement     Requirement   @relation(fields: [requirementId], references: [id])
+  responsibleId   Int
+  createdById     Int
+  requirementId   Int
+  organizationId  Int
+  createdBy       User           @relation(fields: [createdById], references: [id])
+  gap             GapAssessment  @relation(fields: [gapId], references: [id])
+  organization    Organization   @relation(fields: [organizationId], references: [id])
+  requirement     Requirement    @relation(fields: [requirementId], references: [id])
+  responsible     User           @relation("ActionAssignee", fields: [responsibleId], references: [id])
 
   @@map("action_plans")
 }
 
-// Risk Management
 model Risk {
-  id          Int      @id @default(autoincrement())
-  description String
-  likelihood  Int      @default(1) // 1-5 scale
-  impact      Int      @default(1) // 1-5 scale
-  status      RiskStatus @default(ACTIVE)
-  mitigation  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Relations
-  organizationId Int
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  id             Int          @id @default(autoincrement())
+  description    String
+  likelihood     Int          @default(1)
+  impact         Int          @default(1)
+  status         RiskStatus   @default(ACTIVE)
+  mitigation     String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
   ownerId        Int
-  owner          User         @relation(fields: [ownerId], references: [id])
   branchId       Int
-  branch         Branch        @relation(fields: [branchId], references: [id])
+  organizationId Int
+  branch         Branch       @relation(fields: [branchId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  owner          User         @relation(fields: [ownerId], references: [id])
 
   @@map("risks")
 }
 
-// Schedule Management
 model Schedule {
-  id              Int            @id @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   type            ScheduleType
   title           String
   description     String
   dueDate         DateTime
   frequency       ScheduleFrequency @default(ANNUAL)
-  customInterval  Int?           // For custom frequency in days
-  status          ScheduleStatus @default(PENDING)
-  priority        Priority       @default(MEDIUM)
-  isRecurring     Boolean        @default(false)
+  customInterval  Int?
+  status          ScheduleStatus    @default(PENDING)
+  priority        Priority          @default(MEDIUM)
+  isRecurring     Boolean           @default(false)
   lastCompleted   DateTime?
   nextDueDate     DateTime?
-  reminderDays    Int[]          @default([7, 3, 1]) // Days before due to send reminders
+  reminderDays    Int[]             @default([7, 3, 1])
   completionNotes String?
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-
-  // Relations
-  organizationId  Int
-  organization    Organization @relation(fields: [organizationId], references: [id])
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
   branchId        Int
-  branch          Branch        @relation(fields: [branchId], references: [id])
-  responsibleId    Int
-  responsible     User          @relation("ScheduleResponsible", fields: [responsibleId], references: [id])
-  createdById      Int
-  createdBy       User          @relation(fields: [createdById], references: [id])
+  responsibleId   Int
+  createdById     Int
+  organizationId  Int
+  branch          Branch            @relation(fields: [branchId], references: [id])
+  createdBy       User              @relation(fields: [createdById], references: [id])
+  organization    Organization      @relation(fields: [organizationId], references: [id])
+  responsible     User              @relation("ScheduleResponsible", fields: [responsibleId], references: [id])
 
   @@map("schedules")
 }
 
-// Notifications
 model Notification {
-  id        Int                @id @default(autoincrement())
-  message   String
-  type      NotificationType   @default(EMAIL)
-  status    NotificationStatus @default(PENDING)
-  sentAt    DateTime?
-  createdAt DateTime           @default(now())
-
-  // Relations
-  organizationId Int
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  id             Int                @id @default(autoincrement())
+  message        String
+  type           NotificationType   @default(EMAIL)
+  status         NotificationStatus @default(PENDING)
+  sentAt         DateTime?
+  createdAt      DateTime           @default(now())
   userId         Int
-  user           User         @relation(fields: [userId], references: [id])
+  organizationId Int
+  organization   Organization       @relation(fields: [organizationId], references: [id])
+  user           User               @relation(fields: [userId], references: [id])
 
   @@map("notifications")
 }
 
-// Enums
+model Payment {
+  id             Int           @id @default(autoincrement())
+  amount         Decimal       @db.Decimal(10, 2)
+  currency       String        @default("KES")
+  status         PaymentStatus @default(PENDING)
+  paymentMethod  PaymentMethod
+  transactionId  String?       @unique
+  reference      String        @unique
+  description    String
+  metadata       Json?
+  processedAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  organizationId Int
+  userId         Int
+  subscriptionId Int?
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
+  user           User          @relation(fields: [userId], references: [id])
+
+  @@map("payments")
+}
+
+model Subscription {
+  id             Int                @id @default(autoincrement())
+  planType       SubscriptionPlan
+  status         SubscriptionStatus @default(ACTIVE)
+  startDate      DateTime
+  endDate        DateTime
+  autoRenew      Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  organizationId Int
+  payments       Payment[]
+  organization   Organization       @relation(fields: [organizationId], references: [id])
+
+  @@map("subscriptions")
+}
+
 enum UserRole {
-  SUPER_ADMIN
   ADMIN
   MANAGER
   COMPLIANCE_OFFICER
   STAFF
+  SUPER_ADMIN
 }
 
 enum Priority {
@@ -319,4 +332,67 @@ enum NotificationStatus {
   PENDING
   SENT
   FAILED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  MPESA
+  BANK_TRANSFER
+  CREDIT_CARD
+  PAYPAL
+  STRIPE
+}
+
+enum SubscriptionPlan {
+  BASIC
+  PROFESSIONAL
+  ENTERPRISE
+  CUSTOM
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  CANCELLED
+  EXPIRED
+}
+
+enum RequirementStatus {
+  NOT_IMPLEMENTED
+  PARTIALLY_IMPLEMENTED
+  MOSTLY_IMPLEMENTED
+  FULLY_IMPLEMENTED
+  NOT_APPLICABLE
+}
+
+// Compliance Standards Management
+model ComplianceStandard {
+  id          Int      @id @default(autoincrement())
+  name        String   // e.g., "ISO 27001:2022", "PCI DSS", "SOX", "GDPR"
+  version     String?  // e.g., "2022", "3.2.1", "2018"
+  description String?  // Brief description of the standard
+  category    String   // e.g., "Information Security", "Financial", "Privacy", "Quality"
+  isActive    Boolean  @default(true)
+  isDefault   Boolean  @default(false) // Default standard for new organizations
+  metadata    Json?    // Additional standard-specific data
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  requirements   Requirement[]
+  gapAssessments GapAssessment[]
+
+  @@unique([name, version, organizationId])
+  @@map("compliance_standards")
 }

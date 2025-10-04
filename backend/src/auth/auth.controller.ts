@@ -12,6 +12,7 @@ import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
+import { EmailService } from '../email/email.service';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -19,6 +20,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
+    private readonly emailService: EmailService,
   ) {}
 
   @Post('login')
@@ -34,7 +36,7 @@ export class AuthController {
       example: {
         user: {
           id: 1,
-          email: 'admin@bank.co.ke',
+          email: 'admin@company.com',
           firstName: 'System',
           lastName: 'Administrator',
           role: 'ADMIN',
@@ -94,8 +96,32 @@ export class AuthController {
     @Body() createUserDto: CreateUserDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    // Create user in default organization (ID: 1)
-    const newUser = await this.usersService.create(createUserDto, 1);
+    // Create user in specified organization or default organization (ID: 1)
+    const organizationId = createUserDto.organizationId || 1;
+    const newUser = await this.usersService.create(createUserDto, organizationId);
+    
+    // Send welcome email
+    try {
+      // Get organization and branch details for the email
+      const organization = await this.usersService.findOrganizationById(newUser.organizationId);
+      const branch = createUserDto.branchId ? 
+        await this.usersService.findBranchById(createUserDto.branchId) : null;
+      
+      const loginUrl = `${process.env.FRONTEND_URL || 'http://localhost:3001'}/auth/login`;
+      
+      await this.emailService.sendWelcomeEmail(
+        newUser.email,
+        newUser.firstName,
+        newUser.lastName,
+        organization?.name || 'Default Organization',
+        branch?.name || 'Not assigned',
+        loginUrl
+      );
+    } catch (error) {
+      // Log error but don't fail registration
+      console.error('Failed to send welcome email:', error);
+    }
+    
     return await this.authService.login(newUser, response);
   }
 
@@ -108,7 +134,7 @@ export class AuthController {
     description: 'Login with organization context',
     schema: {
       example: {
-        email: 'admin@bank.co.ke',
+        email: 'admin@company.com',
         password: 'admin123',
         organizationId: 1
       },
@@ -139,7 +165,7 @@ export class AuthController {
       example: {
         user: {
           id: 1,
-          email: 'admin@bank.co.ke',
+          email: 'admin@company.com',
           firstName: 'System',
           lastName: 'Administrator',
           role: 'ADMIN',
@@ -168,13 +194,13 @@ export class AuthController {
   @Post('login/domain')
   @ApiOperation({ 
     summary: 'Login by organization domain',
-    description: 'Login using organization domain/subdomain. Useful for subdomain-based multi-tenancy (e.g., equitybank.com, bankofkenya.com).'
+    description: 'Login using organization domain/subdomain. Useful for subdomain-based multi-tenancy (e.g., company1.com, company2.com).'
   })
   @ApiBody({
     description: 'Login with organization domain',
     schema: {
       example: {
-        email: 'admin@bank.co.ke',
+        email: 'admin@company.com',
         password: 'admin123',
         domain: 'default.local'
       },
@@ -205,7 +231,7 @@ export class AuthController {
       example: {
         user: {
           id: 1,
-          email: 'admin@bank.co.ke',
+          email: 'admin@company.com',
           firstName: 'System',
           lastName: 'Administrator',
           role: 'ADMIN',

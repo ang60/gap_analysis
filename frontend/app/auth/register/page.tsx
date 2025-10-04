@@ -6,43 +6,46 @@ import { Shield, Eye, EyeOff, Check, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import api from '@/lib/api';
 
-interface Branch {
+interface Organization {
   id: number;
   name: string;
-  region: string;
-  organizationId: number;
+  domain: string;
+  subdomain: string;
+  isActive: boolean;
 }
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [branches, setBranches] = useState<Branch[]>([]);
-  const [loadingBranches, setLoadingBranches] = useState(true);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [loadingOrganizations, setLoadingOrganizations] = useState(true);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    branchId: '',
+    organizationId: '',
     agreeToTerms: false,
   });
   const { register, isLoading, error, clearError } = useAuth();
 
-  // Fetch branches for the default organization
+  // Fetch organizations for registration
   useEffect(() => {
-    const fetchBranches = async () => {
+    const fetchOrganizations = async () => {
       try {
-        const response = await api.get('/branches?organizationId=1');
-        setBranches(response.data);
+        const response = await api.get('/organizations/public');
+        setOrganizations(response.data);
       } catch (error) {
-        console.error('Failed to fetch branches:', error);
+        console.error('Failed to fetch organizations:', error);
+        // Set empty array on error to show "No organizations available"
+        setOrganizations([]);
       } finally {
-        setLoadingBranches(false);
+        setLoadingOrganizations(false);
       }
     };
 
-    fetchBranches();
+    fetchOrganizations();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,7 +65,7 @@ export default function RegisterPage() {
         email: formData.email,
         password: formData.password,
         // Role will be set to STAFF by default on the backend
-        branchId: formData.branchId ? parseInt(formData.branchId) : undefined,
+        organizationId: formData.organizationId ? parseInt(formData.organizationId) : undefined,
       });
     } catch (error) {
       // Error is handled by the auth context
@@ -92,7 +95,7 @@ export default function RegisterPage() {
             Create your account
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Join GapAnalysis Pro and start your compliance journey
+            Join GapAnalysis and start your compliance journey
           </p>
           <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-sm text-blue-800">
@@ -143,7 +146,7 @@ export default function RegisterPage() {
                   value={formData.lastName}
                   onChange={handleInputChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Mwangi"
+                  placeholder="Doe"
                 />
               </div>
             </div>
@@ -160,33 +163,43 @@ export default function RegisterPage() {
                 required
                 value={formData.email}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="john.mwangi@bank.co.ke"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="john.doe@company.com"
               />
             </div>
 
 
             <div>
-              <label htmlFor="branchId" className="block text-sm font-medium text-gray-700">
-                Branch
+              <label htmlFor="organizationId" className="block text-sm font-medium text-gray-700">
+                Organization
               </label>
               <select
-                id="branchId"
-                name="branchId"
-                value={formData.branchId}
+                id="organizationId"
+                name="organizationId"
+                value={formData.organizationId}
                 onChange={handleInputChange}
-                disabled={loadingBranches}
+                disabled={loadingOrganizations || organizations.length === 0}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
               >
                 <option value="">
-                  {loadingBranches ? 'Loading branches...' : 'Select a branch'}
+                  {loadingOrganizations 
+                    ? 'Loading organizations...' 
+                    : organizations.length === 0 
+                      ? 'No organizations available' 
+                      : 'Select an organization'
+                  }
                 </option>
-                {branches.map((branch) => (
-                  <option key={branch.id} value={branch.id}>
-                    {branch.name} - {branch.region}
+                {organizations.map((organization) => (
+                  <option key={organization.id} value={organization.id}>
+                    {organization.name}
                   </option>
                 ))}
               </select>
+              {!loadingOrganizations && organizations.length === 0 && (
+                <p className="mt-1 text-sm text-amber-600">
+                  No organizations available. Please contact your administrator to set up organizations.
+                </p>
+              )}
             </div>
             
             <div>

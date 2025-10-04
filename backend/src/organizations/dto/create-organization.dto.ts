@@ -4,7 +4,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class CreateOrganizationDto {
   @ApiProperty({
     description: 'Organization name',
-    example: 'Bank of Kenya',
+    example: 'Acme Corporation',
     minLength: 2,
     maxLength: 100
   })
@@ -13,7 +13,7 @@ export class CreateOrganizationDto {
 
   @ApiProperty({
     description: 'Organization domain',
-    example: 'bankofkenya.com',
+    example: 'acme.com',
     pattern: '^[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
   })
   @IsString()

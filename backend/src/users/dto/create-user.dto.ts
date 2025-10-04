@@ -25,6 +25,11 @@ export class CreateUserDto {
   @IsOptional()
   role?: UserRole = UserRole.STAFF;
 
+  @ApiProperty({ example: 1, description: 'The ID of the organization the user belongs to (optional)', required: false })
+  @IsInt()
+  @IsOptional()
+  organizationId?: number;
+
   @ApiProperty({ example: 1, description: 'The ID of the branch the user belongs to (optional)', required: false })
   @IsInt()
   @IsOptional()

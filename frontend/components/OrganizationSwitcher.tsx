@@ -217,7 +217,7 @@ export default function OrganizationSwitcher({
               ) : (
                 <Building2 className="h-4 w-4 mr-2" />
               )}
-              Test Bank A
+              Test Organization A
             </Button>
             <Button
               variant="outline"
@@ -230,7 +230,7 @@ export default function OrganizationSwitcher({
               ) : (
                 <Building2 className="h-4 w-4 mr-2" />
               )}
-              Test Bank B
+              Test Organization B
             </Button>
           </div>
         </div>

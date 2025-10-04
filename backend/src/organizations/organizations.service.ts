@@ -83,6 +83,24 @@ export class OrganizationsService {
     });
   }
 
+  async getOrganizationsForRegistration(): Promise<Partial<Organization>[]> {
+    return this.prisma.organization.findMany({
+      where: {
+        isActive: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        domain: true,
+        subdomain: true,
+        isActive: true,
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    });
+  }
+
   async findAll(): Promise<Organization[]> {
     return this.prisma.organization.findMany({
       include: {

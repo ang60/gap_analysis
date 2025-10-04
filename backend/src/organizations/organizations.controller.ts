@@ -11,16 +11,16 @@ import { UserRole } from '@prisma/client';
 
 @ApiTags('organizations')
 @Controller('organizations')
-@UseGuards(JwtAuthGuard, TenantGuard)
-@ApiBearerAuth()
 export class OrganizationsController {
   constructor(private readonly organizationsService: OrganizationsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({ 
     summary: 'Create a new organization',
-    description: 'Create a new banking organization for multitenancy. Only ADMIN users can create organizations.'
+    description: 'Create a new organization for multitenancy. Only ADMIN users can create organizations.'
   })
   @ApiResponse({ 
     status: 201, 
@@ -28,9 +28,9 @@ export class OrganizationsController {
     schema: {
       example: {
         id: 1,
-        name: 'Bank of Kenya',
-        domain: 'bankofkenya.com',
-        subdomain: 'bok',
+        name: 'Acme Corporation',
+        domain: 'acme.com',
+        subdomain: 'acme',
         isActive: true,
         settings: { theme: 'blue', logo: 'bok-logo.png' },
         createdAt: '2025-09-25T10:00:00.000Z',
@@ -45,9 +45,9 @@ export class OrganizationsController {
     description: 'Organization creation data',
     schema: {
       example: {
-        name: 'Bank of Kenya',
-        domain: 'bankofkenya.com',
-        subdomain: 'bok',
+        name: 'Acme Corporation',
+        domain: 'acme.com',
+        subdomain: 'acme',
         isActive: true,
         settings: {
           theme: 'blue',
@@ -62,11 +62,44 @@ export class OrganizationsController {
     return this.organizationsService.create(createOrganizationDto);
   }
 
+  @Get('public')
+  @ApiOperation({ 
+    summary: 'Get all organizations for registration',
+    description: 'Retrieve all active organizations for user registration. Public endpoint.'
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'List of active organizations retrieved successfully',
+    schema: {
+      example: [
+        {
+          id: 1,
+          name: 'Acme Corporation',
+          domain: 'acme.com',
+          subdomain: 'acme',
+          isActive: true
+        },
+        {
+          id: 2,
+        name: 'Tech Solutions Inc',
+        domain: 'techsolutions.com',
+        subdomain: 'tech',
+          isActive: true
+        }
+      ]
+    }
+  })
+  async getOrganizationsForRegistration() {
+    return this.organizationsService.getOrganizationsForRegistration();
+  }
+
   @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({ 
     summary: 'Get all organizations',
-    description: 'Retrieve all banking organizations. Only ADMIN users can access this endpoint.'
+    description: 'Retrieve all organizations. Only ADMIN users can access this endpoint.'
   })
   @ApiResponse({ 
     status: 200, 
@@ -99,7 +132,9 @@ export class OrganizationsController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({ 
     summary: 'Get organization by ID',
     description: 'Retrieve a specific organization by its ID. Only ADMIN users can access this endpoint.'
@@ -116,9 +151,9 @@ export class OrganizationsController {
     schema: {
       example: {
         id: 1,
-        name: 'Bank of Kenya',
-        domain: 'bankofkenya.com',
-        subdomain: 'bok',
+        name: 'Acme Corporation',
+        domain: 'acme.com',
+        subdomain: 'acme',
         isActive: true,
         settings: { theme: 'blue', logo: 'bok-logo.png' },
         createdAt: '2025-09-25T10:00:00.000Z',
@@ -126,7 +161,7 @@ export class OrganizationsController {
         users: [
           {
             id: 1,
-            email: 'admin@bankofkenya.com',
+            email: 'admin@acme.com',
             firstName: 'John',
             lastName: 'Doe',
             role: 'ADMIN'
@@ -183,7 +218,9 @@ export class OrganizationsController {
   }
 
   @Get(':id/stats')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get organization statistics',
     description: 'Get detailed statistics for a specific organization including user count, requirements, branches, and risks.'
@@ -201,7 +238,7 @@ export class OrganizationsController {
       example: {
         organization: {
           id: 1,
-          name: 'Bank of Kenya',
+          name: 'Acme Corporation',
           domain: 'bankofkenya.com'
         },
         statistics: {
@@ -232,7 +269,9 @@ export class OrganizationsController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({ 
     summary: 'Update organization',
     description: 'Update an existing organization. Only ADMIN users can update organizations.'
@@ -249,9 +288,9 @@ export class OrganizationsController {
     schema: {
       example: {
         id: 1,
-        name: 'Bank of Kenya Updated',
-        domain: 'bankofkenya.com',
-        subdomain: 'bok',
+        name: 'Acme Corporation Updated',
+        domain: 'acme.com',
+        subdomain: 'acme',
         isActive: true,
         settings: { theme: 'green', logo: 'bok-logo-new.png' },
         createdAt: '2025-09-25T10:00:00.000Z',
@@ -267,7 +306,7 @@ export class OrganizationsController {
     description: 'Organization update data',
     schema: {
       example: {
-        name: 'Bank of Kenya Updated',
+        name: 'Acme Corporation Updated',
         isActive: true,
         settings: {
           theme: 'green',
@@ -286,7 +325,9 @@ export class OrganizationsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({ 
     summary: 'Delete organization',
     description: 'Delete an organization and all its associated data. This action cannot be undone. Only ADMIN users can delete organizations.'
@@ -305,7 +346,7 @@ export class OrganizationsController {
         message: 'Organization deleted successfully',
         deletedOrganization: {
           id: 1,
-          name: 'Bank of Kenya',
+          name: 'Acme Corporation',
           domain: 'bankofkenya.com'
         }
       }
