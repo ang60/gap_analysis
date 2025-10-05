@@ -37,19 +37,6 @@ export class EmailService {
     }
   }
 
-  async sendTestEmail(to: string): Promise<boolean> {
-    const subject = 'Test Email - Gap Analysis System';
-    const message = `
-      <h2>Test Email from Gap Analysis System</h2>
-      <p>This is a test email to verify that the email service is working correctly.</p>
-      <p>If you received this email, the email configuration is successful.</p>
-      <hr>
-      <p><small>Gap Analysis System - Kenyan Banking Compliance Platform</small></p>
-    `;
-
-    return this.sendEmail(to, subject, message);
-  }
-
   async sendGapAssessmentNotification(
     to: string,
     gapAssessment: any,
@@ -365,6 +352,56 @@ export class EmailService {
       this.logger.error('Email service connection failed:', error);
       return false;
     }
+  }
+
+  async sendTestEmail(to: string): Promise<boolean> {
+    const subject = 'Test Email - Gap Analysis System';
+    const message = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; color: white;">
+          <h1 style="margin: 0; font-size: 28px;">🎉 Email Service Test</h1>
+          <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;">Gap Analysis System Email Service</p>
+        </div>
+        
+        <div style="padding: 30px; background: #f8f9fa;">
+          <h2 style="color: #333; margin-top: 0;">Hello!</h2>
+          
+          <p style="color: #666; line-height: 1.6;">
+            This is a test email to verify that the email notification system is working correctly.
+          </p>
+          
+          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea;">
+            <h3 style="color: #333; margin-top: 0;">✅ Email Service Status:</h3>
+            <ul style="color: #666; line-height: 1.8;">
+              <li><strong>Status:</strong> Working correctly</li>
+              <li><strong>Timestamp:</strong> ${new Date().toISOString()}</li>
+              <li><strong>System:</strong> Gap Analysis System</li>
+              <li><strong>SMTP Host:</strong> ${this.configService.get('SMTP_HOST')}</li>
+            </ul>
+          </div>
+          
+          <div style="background: #e8f5e8; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h4 style="color: #2e7d32; margin-top: 0;">🎯 What this means:</h4>
+            <ul style="color: #666; line-height: 1.6;">
+              <li>Welcome emails will be sent after registration</li>
+              <li>Payment notifications will work correctly</li>
+              <li>System notifications are operational</li>
+            </ul>
+          </div>
+          
+          <p style="color: #666; line-height: 1.6;">
+            If you received this email, the email configuration is working properly and you will receive notifications for account creation and other system events.
+          </p>
+        </div>
+        
+        <div style="background: #f1f3f4; padding: 20px; text-align: center; color: #666; font-size: 14px;">
+          <p style="margin: 0;">Gap Analysis System - Email Service Test</p>
+          <p style="margin: 5px 0 0 0;">This is an automated test message.</p>
+        </div>
+      </div>
+    `;
+
+    return this.sendEmail(to, subject, message);
   }
 
   private getStatusText(status: number): string {

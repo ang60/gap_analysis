@@ -22,6 +22,7 @@ export interface RegisterData {
   password: string;
   role?: string;
   branchId?: number;
+  organizationId?: number;
 }
 
 export interface User {

@@ -24,10 +24,11 @@ const ProtectedRoute = ({ children, requiredRole })=>{
                 router.push('/auth/login');
                 return;
             }
-            if (requiredRole && user?.role !== requiredRole) {
-                router.push('/dashboard');
-                return;
-            }
+        // ROLE-BASED ACCESS TEMPORARILY DISABLED FOR TESTING
+        // if (requiredRole && user?.role !== requiredRole) {
+        //   router.push('/dashboard');
+        //   return;
+        // }
         }
     }, [
         isAuthenticated,
@@ -43,21 +44,22 @@ const ProtectedRoute = ({ children, requiredRole })=>{
                 className: "animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"
             }, void 0, false, {
                 fileName: "[project]/Sites/gapanalysis/frontend/components/ProtectedRoute.tsx",
-                lineNumber: 36,
+                lineNumber: 37,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0))
         }, void 0, false, {
             fileName: "[project]/Sites/gapanalysis/frontend/components/ProtectedRoute.tsx",
-            lineNumber: 35,
+            lineNumber: 36,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0));
     }
     if (!isAuthenticated) {
         return null;
     }
-    if (requiredRole && user?.role !== requiredRole) {
-        return null;
-    }
+    // ROLE-BASED ACCESS TEMPORARILY DISABLED FOR TESTING
+    // if (requiredRole && user?.role !== requiredRole) {
+    //   return null;
+    // }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
         children: children
     }, void 0, false);
@@ -211,7 +213,11 @@ function RoleBasedNavigation({ className }) {
     const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])();
     const pathname = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["usePathname"])();
     if (!user) return null;
-    const filteredItems = navigationItems.filter((item)=>item.roles.includes(user.role));
+    // ROLE-BASED ACCESS TEMPORARILY DISABLED FOR TESTING - SHOW ALL ITEMS
+    // const filteredItems = navigationItems.filter(item => 
+    //   item.roles.includes(user.role)
+    // );
+    const filteredItems = navigationItems;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
         className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])('space-y-1', className),
         children: filteredItems.map((item)=>{
@@ -224,20 +230,20 @@ function RoleBasedNavigation({ className }) {
                         className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])('mr-3 h-5 w-5 flex-shrink-0', isActive ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500')
                     }, void 0, false, {
                         fileName: "[project]/Sites/gapanalysis/frontend/components/RoleBasedNavigation.tsx",
-                        lineNumber: 127,
+                        lineNumber: 129,
                         columnNumber: 15
                     }, this),
                     item.name
                 ]
             }, item.name, true, {
                 fileName: "[project]/Sites/gapanalysis/frontend/components/RoleBasedNavigation.tsx",
-                lineNumber: 116,
+                lineNumber: 118,
                 columnNumber: 11
             }, this);
         })
     }, void 0, false, {
         fileName: "[project]/Sites/gapanalysis/frontend/components/RoleBasedNavigation.tsx",
-        lineNumber: 112,
+        lineNumber: 114,
         columnNumber: 5
     }, this);
 }
@@ -311,7 +317,7 @@ function DashboardLayout({ children }) {
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     className: "text-xl font-bold text-gray-900",
-                                                    children: "GapAnalysis Pro"
+                                                    children: "GapAnalysis"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/layout.tsx",
                                                     lineNumber: 43,
@@ -387,7 +393,7 @@ function DashboardLayout({ children }) {
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: "text-xl font-bold text-gray-900",
-                                            children: "GapAnalysis Pro"
+                                            children: "GapAnalysis"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/dashboard/layout.tsx",
                                             lineNumber: 64,

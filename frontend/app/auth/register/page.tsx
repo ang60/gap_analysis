@@ -29,6 +29,7 @@ export default function RegisterPage() {
     agreeToTerms: false,
   });
   const { register, isLoading, error, clearError } = useAuth();
+  const [localError, setLocalError] = useState<string | null>(null);
 
   // Fetch organizations for registration
   useEffect(() => {
@@ -51,10 +52,18 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     clearError();
+    setLocalError(null);
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      // You could set a local error state here
+      setLocalError('Passwords do not match');
+      return;
+    }
+
+    // Organization selection is now optional - will default to organization ID 1
+
+    if (!formData.agreeToTerms) {
+      setLocalError('Please agree to the terms and conditions');
       return;
     }
 
@@ -100,16 +109,17 @@ export default function RegisterPage() {
           <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-sm text-blue-800">
               <strong>Note:</strong> Your account will be created with Staff role by default. 
+              If you don't select an organization, you'll be assigned to the default organization.
               An administrator will assign your appropriate role after registration.
             </p>
           </div>
         </div>
 
         {/* Error Message */}
-        {error && (
+        {(error || localError) && (
           <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-2">
             <AlertCircle className="h-5 w-5 text-red-500" />
-            <p className="text-sm text-red-700">{error}</p>
+            <p className="text-sm text-red-700">{error || localError}</p>
           </div>
         )}
 
@@ -171,7 +181,7 @@ export default function RegisterPage() {
 
             <div>
               <label htmlFor="organizationId" className="block text-sm font-medium text-gray-700">
-                Organization
+                Organization <span className="text-gray-500">(Optional)</span>
               </label>
               <select
                 id="organizationId"
@@ -186,7 +196,7 @@ export default function RegisterPage() {
                     ? 'Loading organizations...' 
                     : organizations.length === 0 
                       ? 'No organizations available' 
-                      : 'Select an organization'
+                      : 'Select an organization (optional)'
                   }
                 </option>
                 {organizations.map((organization) => (
@@ -197,7 +207,12 @@ export default function RegisterPage() {
               </select>
               {!loadingOrganizations && organizations.length === 0 && (
                 <p className="mt-1 text-sm text-amber-600">
-                  No organizations available. Please contact your administrator to set up organizations.
+                  No organizations available. You will be assigned to the default organization.
+                </p>
+              )}
+              {!loadingOrganizations && organizations.length > 0 && (
+                <p className="mt-1 text-sm text-gray-500">
+                  If you don't select an organization, you will be assigned to the default organization.
                 </p>
               )}
             </div>

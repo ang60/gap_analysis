@@ -104,9 +104,11 @@ export function RoleBasedNavigation({ className }: RoleBasedNavigationProps) {
 
   if (!user) return null;
 
-  const filteredItems = navigationItems.filter(item => 
-    item.roles.includes(user.role)
-  );
+  // ROLE-BASED ACCESS TEMPORARILY DISABLED FOR TESTING - SHOW ALL ITEMS
+  // const filteredItems = navigationItems.filter(item => 
+  //   item.roles.includes(user.role)
+  // );
+  const filteredItems = navigationItems;
 
   return (
     <nav className={cn('space-y-1', className)}>

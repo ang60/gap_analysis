@@ -23,10 +23,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         return;
       }
 
-      if (requiredRole && user?.role !== requiredRole) {
-        router.push('/dashboard');
-        return;
-      }
+      // ROLE-BASED ACCESS TEMPORARILY DISABLED FOR TESTING
+      // if (requiredRole && user?.role !== requiredRole) {
+      //   router.push('/dashboard');
+      //   return;
+      // }
     }
   }, [isAuthenticated, isLoading, user, requiredRole, router]);
 
@@ -42,9 +43,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return null;
   }
 
-  if (requiredRole && user?.role !== requiredRole) {
-    return null;
-  }
+  // ROLE-BASED ACCESS TEMPORARILY DISABLED FOR TESTING
+  // if (requiredRole && user?.role !== requiredRole) {
+  //   return null;
+  // }
 
   return <>{children}</>;
 };

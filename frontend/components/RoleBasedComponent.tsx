@@ -16,9 +16,10 @@ export function RoleBasedComponent({
 }: RoleBasedComponentProps) {
   const { user } = useAuth();
 
-  if (!user || !allowedRoles.includes(user.role)) {
-    return <>{fallback}</>;
-  }
+  // ROLE-BASED ACCESS TEMPORARILY DISABLED FOR TESTING
+  // if (!user || !allowedRoles.includes(user.role)) {
+  //   return <>{fallback}</>;
+  // }
 
   return <>{children}</>;
 }

@@ -26,40 +26,47 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$fron
 function RegisterPage() {
     const [showPassword, setShowPassword] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [showConfirmPassword, setShowConfirmPassword] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [branches, setBranches] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [loadingBranches, setLoadingBranches] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true);
+    const [organizations, setOrganizations] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [loadingOrganizations, setLoadingOrganizations] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true);
     const [formData, setFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
         firstName: '',
         lastName: '',
         email: '',
         password: '',
         confirmPassword: '',
-        branchId: '',
+        organizationId: '',
         agreeToTerms: false
     });
     const { register, isLoading, error, clearError } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])();
-    // Fetch branches for the default organization
+    const [localError, setLocalError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    // Fetch organizations for registration
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        const fetchBranches = async ()=>{
+        const fetchOrganizations = async ()=>{
             try {
-                const response = await __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get('/branches/public?organizationId=1');
-                setBranches(response.data);
+                const response = await __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get('/organizations/public');
+                setOrganizations(response.data);
             } catch (error) {
-                console.error('Failed to fetch branches:', error);
-                // Set empty array on error to show "No branches available"
-                setBranches([]);
+                console.error('Failed to fetch organizations:', error);
+                // Set empty array on error to show "No organizations available"
+                setOrganizations([]);
             } finally{
-                setLoadingBranches(false);
+                setLoadingOrganizations(false);
             }
         };
-        fetchBranches();
+        fetchOrganizations();
     }, []);
     const handleSubmit = async (e)=>{
         e.preventDefault();
         clearError();
+        setLocalError(null);
         // Validate passwords match
         if (formData.password !== formData.confirmPassword) {
-            // You could set a local error state here
+            setLocalError('Passwords do not match');
+            return;
+        }
+        // Organization selection is now optional - will default to organization ID 1
+        if (!formData.agreeToTerms) {
+            setLocalError('Please agree to the terms and conditions');
             return;
         }
         try {
@@ -69,7 +76,7 @@ function RegisterPage() {
                 email: formData.email,
                 password: formData.password,
                 // Role will be set to STAFF by default on the backend
-                branchId: formData.branchId ? parseInt(formData.branchId) : undefined
+                organizationId: formData.organizationId ? parseInt(formData.organizationId) : undefined
             });
         } catch (error) {
             // Error is handled by the auth context
@@ -99,17 +106,17 @@ function RegisterPage() {
                                     className: "h-8 w-8 text-white"
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                    lineNumber: 90,
+                                    lineNumber: 100,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                lineNumber: 89,
+                                lineNumber: 99,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                            lineNumber: 88,
+                            lineNumber: 98,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -117,15 +124,15 @@ function RegisterPage() {
                             children: "Create your account"
                         }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                            lineNumber: 93,
+                            lineNumber: 103,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             className: "mt-2 text-sm text-gray-600",
-                            children: "Join GapAnalysis Pro and start your compliance journey"
+                            children: "Join GapAnalysis and start your compliance journey"
                         }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                            lineNumber: 96,
+                            lineNumber: 106,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -137,49 +144,49 @@ function RegisterPage() {
                                         children: "Note:"
                                     }, void 0, false, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                        lineNumber: 101,
+                                        lineNumber: 111,
                                         columnNumber: 15
                                     }, this),
-                                    " Your account will be created with Staff role by default. An administrator will assign your appropriate role after registration."
+                                    " Your account will be created with Staff role by default. If you don't select an organization, you'll be assigned to the default organization. An administrator will assign your appropriate role after registration."
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                lineNumber: 100,
+                                lineNumber: 110,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                            lineNumber: 99,
+                            lineNumber: 109,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                    lineNumber: 87,
+                    lineNumber: 97,
                     columnNumber: 9
                 }, this),
-                error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                (error || localError) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-2",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertCircle$3e$__["AlertCircle"], {
                             className: "h-5 w-5 text-red-500"
                         }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                            lineNumber: 110,
+                            lineNumber: 121,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             className: "text-sm text-red-700",
-                            children: error
+                            children: error || localError
                         }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                            lineNumber: 111,
+                            lineNumber: 122,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                    lineNumber: 109,
+                    lineNumber: 120,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -200,7 +207,7 @@ function RegisterPage() {
                                                     children: "First name"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                    lineNumber: 120,
+                                                    lineNumber: 131,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -215,13 +222,13 @@ function RegisterPage() {
                                                     placeholder: "John"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                    lineNumber: 123,
+                                                    lineNumber: 134,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 119,
+                                            lineNumber: 130,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -232,7 +239,7 @@ function RegisterPage() {
                                                     children: "Last name"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                    lineNumber: 136,
+                                                    lineNumber: 147,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -244,22 +251,22 @@ function RegisterPage() {
                                                     value: formData.lastName,
                                                     onChange: handleInputChange,
                                                     className: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-                                                    placeholder: "Mwangi"
+                                                    placeholder: "Doe"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                    lineNumber: 139,
+                                                    lineNumber: 150,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 135,
+                                            lineNumber: 146,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                    lineNumber: 118,
+                                    lineNumber: 129,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -270,7 +277,7 @@ function RegisterPage() {
                                             children: "Email address"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 154,
+                                            lineNumber: 165,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -282,75 +289,89 @@ function RegisterPage() {
                                             value: formData.email,
                                             onChange: handleInputChange,
                                             className: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-                                            placeholder: "john.mwangi@bank.co.ke"
+                                            placeholder: "john.doe@company.com"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 157,
+                                            lineNumber: 168,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                    lineNumber: 153,
+                                    lineNumber: 164,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                            htmlFor: "branchId",
+                                            htmlFor: "organizationId",
                                             className: "block text-sm font-medium text-gray-700",
-                                            children: "Branch"
-                                        }, void 0, false, {
+                                            children: [
+                                                "Organization ",
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "text-gray-500",
+                                                    children: "(Optional)"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
+                                                    lineNumber: 184,
+                                                    columnNumber: 30
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 172,
+                                            lineNumber: 183,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                            id: "branchId",
-                                            name: "branchId",
-                                            value: formData.branchId,
+                                            id: "organizationId",
+                                            name: "organizationId",
+                                            value: formData.organizationId,
                                             onChange: handleInputChange,
-                                            disabled: loadingBranches || branches.length === 0,
+                                            disabled: loadingOrganizations || organizations.length === 0,
                                             className: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "",
-                                                    children: loadingBranches ? 'Loading branches...' : branches.length === 0 ? 'No branches available' : 'Select a branch'
+                                                    children: loadingOrganizations ? 'Loading organizations...' : organizations.length === 0 ? 'No organizations available' : 'Select an organization (optional)'
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                    lineNumber: 183,
+                                                    lineNumber: 194,
                                                     columnNumber: 17
                                                 }, this),
-                                                branches.map((branch)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                        value: branch.id,
-                                                        children: [
-                                                            branch.name,
-                                                            " - ",
-                                                            branch.region
-                                                        ]
-                                                    }, branch.id, true, {
+                                                organizations.map((organization)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                        value: organization.id,
+                                                        children: organization.name
+                                                    }, organization.id, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                        lineNumber: 192,
+                                                        lineNumber: 203,
                                                         columnNumber: 19
                                                     }, this))
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 175,
+                                            lineNumber: 186,
                                             columnNumber: 15
                                         }, this),
-                                        !loadingBranches && branches.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        !loadingOrganizations && organizations.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             className: "mt-1 text-sm text-amber-600",
-                                            children: "No branches available. Please contact your administrator to set up branches for your organization."
+                                            children: "No organizations available. You will be assigned to the default organization."
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 198,
+                                            lineNumber: 209,
+                                            columnNumber: 17
+                                        }, this),
+                                        !loadingOrganizations && organizations.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "mt-1 text-sm text-gray-500",
+                                            children: "If you don't select an organization, you will be assigned to the default organization."
+                                        }, void 0, false, {
+                                            fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
+                                            lineNumber: 214,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                    lineNumber: 171,
+                                    lineNumber: 182,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -361,7 +382,7 @@ function RegisterPage() {
                                             children: "Password"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 205,
+                                            lineNumber: 221,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -379,7 +400,7 @@ function RegisterPage() {
                                                     placeholder: "Create a strong password"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                    lineNumber: 209,
+                                                    lineNumber: 225,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -390,30 +411,30 @@ function RegisterPage() {
                                                         className: "h-5 w-5 text-gray-400"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                        lineNumber: 226,
+                                                        lineNumber: 242,
                                                         columnNumber: 21
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
                                                         className: "h-5 w-5 text-gray-400"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                        lineNumber: 228,
+                                                        lineNumber: 244,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                    lineNumber: 220,
+                                                    lineNumber: 236,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 208,
+                                            lineNumber: 224,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                    lineNumber: 204,
+                                    lineNumber: 220,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -424,7 +445,7 @@ function RegisterPage() {
                                             children: "Confirm password"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 235,
+                                            lineNumber: 251,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -442,7 +463,7 @@ function RegisterPage() {
                                                     placeholder: "Confirm your password"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                    lineNumber: 239,
+                                                    lineNumber: 255,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -453,36 +474,36 @@ function RegisterPage() {
                                                         className: "h-5 w-5 text-gray-400"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                        lineNumber: 256,
+                                                        lineNumber: 272,
                                                         columnNumber: 21
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
                                                         className: "h-5 w-5 text-gray-400"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                        lineNumber: 258,
+                                                        lineNumber: 274,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                                    lineNumber: 250,
+                                                    lineNumber: 266,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 238,
+                                            lineNumber: 254,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                    lineNumber: 234,
+                                    lineNumber: 250,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                            lineNumber: 117,
+                            lineNumber: 128,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -498,7 +519,7 @@ function RegisterPage() {
                                     className: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                                 }, void 0, false, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                    lineNumber: 266,
+                                    lineNumber: 282,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -513,7 +534,7 @@ function RegisterPage() {
                                             children: "Terms of Service"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 277,
+                                            lineNumber: 293,
                                             columnNumber: 15
                                         }, this),
                                         ' ',
@@ -525,19 +546,19 @@ function RegisterPage() {
                                             children: "Privacy Policy"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 281,
+                                            lineNumber: 297,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                    lineNumber: 275,
+                                    lineNumber: 291,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                            lineNumber: 265,
+                            lineNumber: 281,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -552,24 +573,24 @@ function RegisterPage() {
                                             className: "h-5 w-5 text-blue-500 group-hover:text-blue-400"
                                         }, void 0, false, {
                                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                            lineNumber: 294,
+                                            lineNumber: 310,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                        lineNumber: 293,
+                                        lineNumber: 309,
                                         columnNumber: 15
                                     }, this),
                                     isLoading ? 'Creating account...' : 'Create account'
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                lineNumber: 288,
+                                lineNumber: 304,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                            lineNumber: 287,
+                            lineNumber: 303,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Sites$2f$gapanalysis$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -585,35 +606,35 @@ function RegisterPage() {
                                         children: "Sign in"
                                     }, void 0, false, {
                                         fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                        lineNumber: 303,
+                                        lineNumber: 319,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                                lineNumber: 301,
+                                lineNumber: 317,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                            lineNumber: 300,
+                            lineNumber: 316,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-                    lineNumber: 116,
+                    lineNumber: 127,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-            lineNumber: 85,
+            lineNumber: 95,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/Sites/gapanalysis/frontend/app/auth/register/page.tsx",
-        lineNumber: 84,
+        lineNumber: 94,
         columnNumber: 5
     }, this);
 }

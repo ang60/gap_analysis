@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/gap/api",
   withCredentials: true, // Important for cookies
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -13,8 +13,8 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // Get token from localStorage if available
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('accessToken');
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("accessToken");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -37,16 +37,18 @@ api.interceptors.response.use(
 
       try {
         // Try to refresh the token
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = localStorage.getItem("refreshToken");
         if (refreshToken) {
           const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/auth/refresh`,
+            `${
+              process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/gap/api"
+            }/auth/refresh`,
             { refreshToken },
             { withCredentials: true }
           );
 
           const { accessToken } = response.data;
-          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem("accessToken", accessToken);
 
           // Retry the original request with new token
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
@@ -54,10 +56,10 @@ api.interceptors.response.use(
         }
       } catch {
         // Refresh failed, redirect to login
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-          window.location.href = '/auth/login';
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          window.location.href = "/auth/login";
         }
       }
     }
